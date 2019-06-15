@@ -17,6 +17,7 @@
         "davejamesmiller/laravel-breadcrumbs": "^5.0",
         "divineomega/laravel-password-exposed-validation-rule": "^2.0.1",
         "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "^6.3",
         "hieu-le/active": "^3.5",
         "laravel/framework": "5.8.*",
         "laravel/socialite": "^4.1",

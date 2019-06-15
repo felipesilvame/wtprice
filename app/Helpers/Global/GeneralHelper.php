@@ -41,3 +41,20 @@ if (! function_exists('home_route')) {
         return 'frontend.index';
     }
 }
+
+if (! function_exists('dot_to_array')) {
+  function dot_to_array($str) {
+      $output = '';
+      $chucks = explode('.', $str);
+      for($i = 0; $i < count($chucks); $i++){
+        if (is_numeric($chucks[$i])) {
+          $output .= '['.$chucks[$i].']';
+        }
+        else{
+          $output .= '["'.$chucks[$i].'"]';
+        }
+      }
+
+      return $output;
+  }
+}
