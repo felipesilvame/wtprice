@@ -7,6 +7,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Models\Producto;
+use App\Jobs\ProcessProduct;
+use \Carbon\Carbon;
 
 /**
 *
@@ -39,6 +42,14 @@ class ProcessMonitorQueueWorker implements ShouldQueue
      */
     public function handle()
     {
-        //
+        // traer todos los productos, cuyo estado sea "activo"
+        $productos = Producto::whereEstado('Activo')->get();
+        foreach ($productos as $key => $producto) {
+          //check if needs to be updated
+          if ((!$producto->ultima_actualizacion) || $producto->ultima_actualizacion->diffInMinutes() >= $producto->intervalo_actualizacion) {
+            ProcessProduct::dispatch($producto);
+          }
+        }
+
     }
 }

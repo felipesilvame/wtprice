@@ -37,7 +37,11 @@ class Producto extends Model implements AuditableInterface
         'precio_referencia',
         'precio_oferta',
         'precio_tarjeta',
-        'sku'
+        'sku',
+        'ultima_actualizacion',
+        'intervalo_actualizacion',
+        'umbral_descuento',
+        'url_compra',
     ];
 
     /**
@@ -69,13 +73,15 @@ class Producto extends Model implements AuditableInterface
         'precio_referencia' => 'double',
         'precio_tarjeta' => 'double',
         'precio_oferta' => 'double',
+        'intervalo_actualizacion' => 'integer',
+        'umbral_descuento' => 'float',
     ];
 
     /**
      * @var array
      */
     protected $dates = [
-
+      'ultima_actualizacion'
     ];
 
     /**
@@ -106,6 +112,6 @@ class Producto extends Model implements AuditableInterface
      * @return mixed
      */
     public function minimo(){
-      return $this->hasMany(MinimoPrecio::class, 'id_producto');
+      return $this->hasOne(MinimoPrecio::class, 'id_producto');
     }
 }

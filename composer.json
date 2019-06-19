@@ -20,6 +20,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "hieu-le/active": "^3.5",
         "laravel/framework": "5.8.*",
+        "laravel/slack-notification-channel": "^2.0",
         "laravel/socialite": "^4.1",
         "laravel/tinker": "^1.0",
         "owen-it/laravel-auditing": "^9.0",

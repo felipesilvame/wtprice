@@ -16,4 +16,9 @@ class User extends BaseUser
         UserMethod,
         UserRelationship,
         UserScope;
+
+    // Specify Slack Webhook URL to route notifications to
+    public function routeNotificationForSlack() {
+      return env('SLACK_WEBHOOK_URL');
+    }
 }

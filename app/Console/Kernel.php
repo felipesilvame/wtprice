@@ -4,6 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\ProcessMonitorQueueWorker;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Kernel.
@@ -27,6 +29,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->runInBackground();
     }
 
     /**
