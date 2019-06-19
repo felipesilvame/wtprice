@@ -26,6 +26,7 @@ class Tienda extends Model implements AuditableInterface
     protected $fillable = [
         'nombre',
         'protocolo',
+        'method',
         'prefix_api',
         'suffix_api',
         'headers',

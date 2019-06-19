@@ -53,12 +53,14 @@ class ProcessProduct implements ShouldQueue
         if ($tienda->prefix_api) {
           $url .= $tienda->suffix_api;
         }
+        
         if ($tienda->headers) {
-          $request = $client->get($url, ['headers' => $tienda->headers]);
+          $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url, $tienda->headers);
+          //$request = $client->get($url, ['headers' => $tienda->headers]);
         }else {
-          $request = $client->get($url);
+          $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url);
         }
-        $response = (string) $request->getBody();
+        $response = (string) $client->send($request)->getBody();
         $data = null;
         try {
           $data = json_decode($response, true);
@@ -148,13 +150,13 @@ class ProcessProduct implements ShouldQueue
               'fecha' => Carbon::now(),
             ]);
           } else {
-            if ((!$minimo->precio_referencia) || $minimo->precio_referencia < $this->product->precio_referencia) {
+            if ((!$minimo->precio_referencia) || $minimo->precio_referencia > $this->product->precio_referencia) {
               $minimo->precio_referencia = $this->product->precio_referencia;
             }
-            if ((!$minimo->precio_oferta) || $minimo->precio_oferta < $this->product->precio_oferta) {
+            if ((!$minimo->precio_oferta) || $minimo->precio_oferta > $this->product->precio_oferta) {
               $minimo->precio_oferta = $this->product->precio_oferta;
             }
-            if ((!$minimo->precio_tarjeta) || $minimo->precio_tarjeta < $this->product->precio_tarjeta) {
+            if ((!$minimo->precio_tarjeta) || $minimo->precio_tarjeta > $this->product->precio_tarjeta) {
               $minimo->precio_tarjeta = $this->product->precio_tarjeta;
             }
           }

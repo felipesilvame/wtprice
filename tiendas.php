@@ -45,11 +45,24 @@ $tienda = \App\Models\Tienda::create(
   [
     'nombre' => 'Jumbo',
     'protocolo' => 'https',
-    'prefix_api' => 'api.smdigital.cl:8443/v0/cl/jumbo/vtex/front/dev/proxy/api/v1/catalog_system/pub/products/search/', 
+    'prefix_api' => 'api.smdigital.cl:8443/v0/cl/jumbo/vtex/front/dev/proxy/api/v1/catalog_system/pub/products/search/',
     'suffix_api' => '/p?sc=11',
     'headers' => [
       'x-api-key' => 'IuimuMneIKJd3tapno2Ag1c1WcAES97j',
     ],
+    'campo_nombre_producto' => '0.productName',
+    'campo_precio_referencia' => '0.items.0.sellers.0.commertialOffer.ListPrice',
+    'campo_precio_oferta' => '0.items.0.sellers.0.commertialOffer.Price',
+    'campo_precio_tarjeta' => null
+  ]
+);
+
+$tienda = \App\Models\Tienda::create(
+  [
+    'nombre' => 'Corona',
+    'protocolo' => 'https',
+    'prefix_api' => 'www.corona.cl/api/catalog_system/pub/products/search/?fq=productId:',
+    'suffix_api' => null,
     'campo_nombre_producto' => '0.productName',
     'campo_precio_referencia' => '0.items.0.sellers.0.commertialOffer.ListPrice',
     'campo_precio_oferta' => '0.items.0.sellers.0.commertialOffer.Price',
