@@ -9,7 +9,10 @@ $tienda = \App\Models\Tienda::create(
     'campo_nombre_producto' => '0.displayName',
     'campo_precio_referencia' => '0.price.BasePriceReference',
     'campo_precio_oferta' => '0.price.BasePriceSales',
-    'campo_precio_tarjeta' => '0.price.BasePriceTLMC'
+    'campo_precio_tarjeta' => '0.price.BasePriceTLMC',
+    'campo_slug_compra' => '0.sku',
+    'url_prefix_compra' => 'https://www.lider.cl/product/sku/',
+    'url_suffix_compra' => null,
   ]
 );
 
@@ -24,7 +27,8 @@ $tienda = \App\Models\Tienda::create(
     ],
     'campo_nombre_producto' => 'data.products.0.name',
     'campo_precio_referencia' => 'data.products.0.price.commerce',
-    'campo_precio_tarjeta' => 'data.products.0.price.card'
+    'campo_precio_tarjeta' => 'data.products.0.price.card',
+    'url_prefix_compra' => 'https://www.abcdin.cl/tienda/search/'
   ]
 );
 
@@ -37,7 +41,10 @@ $tienda = \App\Models\Tienda::create(
     'campo_nombre_producto' => 'name',
     'campo_precio_referencia' => 'prices.listPrice',
     'campo_precio_oferta' => 'prices.offerPrice',
-    'campo_precio_tarjeta' => 'prices.cardPrice'
+    'campo_precio_tarjeta' => 'prices.cardPrice',
+    'campo_slug_compra' => 'productString',
+    'url_prefix_compra' => 'https://simple.ripley.cl/',
+    'url_suffix_compra' => null,
   ]
 );
 
@@ -53,7 +60,10 @@ $tienda = \App\Models\Tienda::create(
     'campo_nombre_producto' => '0.productName',
     'campo_precio_referencia' => '0.items.0.sellers.0.commertialOffer.ListPrice',
     'campo_precio_oferta' => '0.items.0.sellers.0.commertialOffer.Price',
-    'campo_precio_tarjeta' => null
+    'campo_precio_tarjeta' => null,
+    'campo_slug_compra' => '0.linkText',
+    'url_prefix_compra' => 'https://www.jumbo.cl/',
+    'url_suffix_compra' => '/p',
   ]
 );
 
@@ -66,6 +76,30 @@ $tienda = \App\Models\Tienda::create(
     'campo_nombre_producto' => '0.productName',
     'campo_precio_referencia' => '0.items.0.sellers.0.commertialOffer.ListPrice',
     'campo_precio_oferta' => '0.items.0.sellers.0.commertialOffer.Price',
-    'campo_precio_tarjeta' => null
+    'campo_precio_tarjeta' => null,
+    'campo_slug_compra' => '0.linkText',
+    'url_prefix_compra' => 'https://www.corona.cl/',
+    'url_suffix_compra' => '/p',
+  ]
+);
+
+$tienda = \App\Models\Tienda::create(
+  [
+    'nombre' => 'Linio',
+    'protocolo' => 'https',
+    'prefix_api' => 'api.linio.com/mapi/p/',
+    'suffix_api' => null,
+    'campo_nombre_producto' => 'name',
+    'campo_precio_referencia' => 'simples.0.originalPrice',
+    'campo_precio_oferta' => 'simples.0.price',
+    'campo_precio_tarjeta' => 'simples.0.promotionalPrices.0.amount',
+    'campo_slug_compra' => 'slug',
+    'url_prefix_compra' => 'https://www.linio.cl/p/',
+    'method' => 'POST',
+    'headers' => [
+      'Accept' => 'application/json',
+      'X-Version' => '2',
+      'X-Auth-Store' => 'cl'
+    ],
   ]
 );

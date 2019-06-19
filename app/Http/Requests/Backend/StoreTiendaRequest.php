@@ -59,6 +59,9 @@ class StoreTiendaRequest extends BaseFormRequest
           'campo_precio_referencia' => 'trim|strip_tags|escape',
           'campo_precio_oferta' => 'trim|strip_tags|escape',
           'campo_precio_tarjeta' => 'trim|strip_tags|escape',
+          'url_prefix_compra' => 'trim|lowercase',
+          'url_suffix_compra' => 'trim|lowercase',
+          'campo_slug_compra' => 'trim|lowercase',
 
       ];
   }

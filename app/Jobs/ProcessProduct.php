@@ -53,7 +53,7 @@ class ProcessProduct implements ShouldQueue
         if ($tienda->prefix_api) {
           $url .= $tienda->suffix_api;
         }
-        
+
         if ($tienda->headers) {
           $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url, $tienda->headers);
           //$request = $client->get($url, ['headers' => $tienda->headers]);
@@ -89,6 +89,30 @@ class ProcessProduct implements ShouldQueue
           if ($tienda->campo_precio_tarjeta) {
             $campo_precio_tarjeta = '$data'.dot_to_array($tienda->campo_precio_tarjeta);
           }
+          $campo_slug_compra = null;
+          if ($tienda->campo_slug_compra) {
+            $campo_slug_compra = '$data'.dot_to_array($tienda->campo_slug_compra);
+          }
+          if (!$this->product->url_compra) {
+            try {
+              if ($campo_slug_compra) {
+                $url_compra = eval("return ".$campo_slug_compra.";");
+                if ($url_compra) {
+                  $this->product->url_compra = $tienda->url_prefix_compra.$url_compra.$tienda->url_suffix_compra;
+                  $this->product->save();
+                }
+              } else if ((boolean)$tienda->url_prefix_compra) {
+                //try to guess url compra with the sku
+                $this->product->url_compra = $tienda->url_prefix_compra.(string)$this->product->sku.$tienda->url_suffix_compra;
+                $this->product->save();
+              }
+            } catch (\Exception $e) {
+              //does nothing... maybe log this?
+              Log::warning("Producto id".$this->product->id.": No se ha podido aplicar la url de compra");
+            }
+            // code...
+          }
+
           try {
             if ($campo_precio_tarjeta) {
               $precio_tarjeta = eval("return ".$campo_precio_tarjeta.";");
