@@ -40,7 +40,11 @@ class ProcessProduct implements ShouldQueue
     public function handle()
     {
       //check if needs to be updated
-      if ((!$this->product->ultima_actualizacion) || $this->product->ultima_actualizacion->diffInMinutes() >= $this->product->intervalo_actualizacion) {
+      if ($this->product->intentos_fallidos >= 3) {
+        $this->product->intentos_fallidos = 0;
+        $this->product->estado = "Detenido";
+        $this->product->save();
+      }else if ((!$this->product->ultima_actualizacion) || $this->product->ultima_actualizacion->diffInMinutes() >= $this->product->intervalo_actualizacion) {
         $client = new \GuzzleHttp\Client();
         $tienda = Tienda::findOrFail($this->product->id_tienda);
         $url = "";
@@ -69,7 +73,13 @@ class ProcessProduct implements ShouldQueue
           $response = $client->post($url, $options)->getBody()->getContents();
         }
         else {
-          $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url, $tienda->headers);
+          if ($tienda->headers) {
+            $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url, $tienda->headers);
+          }
+          else{
+            $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url);
+          }
+
           $response = (string) $client->send($request)->getBody();
         }
         // if ($tienda->headers) {
