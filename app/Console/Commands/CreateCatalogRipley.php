@@ -59,7 +59,7 @@ class CreateCatalogRipley extends Command
                 'id_tienda' => $ripley->id,
                 'sku' => $part_number,
                 'nombre' => (string)$key,
-                'intervalo_actualizacion' => random_int(1,60)
+                'intervalo_actualizacion' => random_int(1,20)
               ]);
             }
           }

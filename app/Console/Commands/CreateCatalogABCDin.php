@@ -59,7 +59,7 @@ class CreateCatalogABCDin extends Command
                 'id_tienda' => $abcdin->id,
                 'sku' => $part_number,
                 'nombre' => (string)$key,
-                'intervalo_actualizacion' => random_int(1,60)
+                'intervalo_actualizacion' => random_int(1,35)
               ]);
             }
           }
