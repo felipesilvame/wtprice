@@ -147,6 +147,7 @@ class SeedTiendas extends Command
           'campo_precio_tarjeta' => 'state.product.prices:type,1,originalPrice',
           'campo_slug_compra' => null,
           'url_prefix_compra' => 'https://www.falabella.com/falabella-cl/product/',
+          'url_suffix_compra' => '/',
           'method' => 'POST',
           'headers' => [
             'Accept' => 'application/json',
