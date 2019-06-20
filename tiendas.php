@@ -103,3 +103,27 @@ $tienda = \App\Models\Tienda::create(
     ],
   ]
 );
+
+$tienda = \App\Models\Tienda::create(
+  [
+    'nombre' => 'Falabella',
+    'protocolo' => 'https',
+    'prefix_api' => 'www.falabella.com/rest/model/falabella/rest/browse/BrowseActor/product-details-get-state',
+    'suffix_api' => null,
+    'request_body_sku' => 'productId',
+    'campo_nombre_producto' => 'state.product.displayName',
+    'campo_precio_referencia' => 'state.product.prices:label,,originalPrice',
+    'campo_precio_oferta' => 'state.product.prices:label,(Oferta),originalPrice',
+    'campo_precio_tarjeta' => 'state.product.prices:type,1,originalPrice',
+    'campo_slug_compra' => null,
+    'url_prefix_compra' => 'https://www.falabella.com/falabella-cl/product/',
+    'method' => 'POST',
+    'headers' => [
+      'Accept' => 'application/json',
+      'Accept-encoding' => 'gzip',
+      'User-Agent' => 'okhttp/3.10.0',
+      'X-cmRef' => 'FalabellaMobileApp',
+      'Content-Type' => 'application/json',
+    ],
+  ]
+);

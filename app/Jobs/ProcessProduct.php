@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
 use \Carbon\Carbon;
+use App\Helpers\General\Arr as ArrHelper;
 
 class ProcessProduct implements ShouldQueue
 {
@@ -49,18 +50,32 @@ class ProcessProduct implements ShouldQueue
         if ($tienda->prefix_api) {
           $url .= $tienda->prefix_api;
         }
-        $url .= $this->product->sku;
+        if ($tienda->method == "GET") {
+          $url .= $this->product->sku;
+        } else if ($tienda->method == "POST" && !$tienda->request_body_sku) {
+          $url .= $this->product->sku;
+        }
         if ($tienda->prefix_api) {
           $url .= $tienda->suffix_api;
         }
-
+        $options = [];
         if ($tienda->headers) {
-          $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url, $tienda->headers);
-          //$request = $client->get($url, ['headers' => $tienda->headers]);
-        }else {
-          $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url);
+          $options['headers'] = $tienda->headers;
         }
-        $response = (string) $client->send($request)->getBody();
+        if ($tienda->request_body_sku && $tienda->method == "POST") {
+          $options['body'] = json_encode([$tienda->request_body_sku => $this->product->sku]);
+        }
+        if ($tienda->method == "POST") {
+          $response = $client->post($url, $options)->getBody()->getContents();
+        }
+        else {
+          $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url, $tienda->headers);
+          $response = (string) $client->send($request)->getBody();
+        }
+        // if ($tienda->headers) {
+        // }else {
+        //   $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url);
+        // }
         $data = null;
         try {
           $data = json_decode($response, true);
@@ -73,30 +88,10 @@ class ProcessProduct implements ShouldQueue
         $precio_tarjeta = null;
         $nombre_producto = null;
         if ($data) {
-          $campo_precio_referencia = null;
-          if ($tienda->campo_precio_referencia) {
-            $campo_precio_referencia = '$data'.dot_to_array($tienda->campo_precio_referencia);
-          }
-          $campo_nombre_producto = null;
-          if ($tienda->campo_nombre_producto) {
-            $campo_nombre_producto = '$data'.dot_to_array($tienda->campo_nombre_producto);
-          }
-          $campo_precio_oferta = null;
-          if ($tienda->campo_precio_oferta) {
-            $campo_precio_oferta = '$data'.dot_to_array($tienda->campo_precio_oferta);
-          }
-          $campo_precio_tarjeta = null;
-          if ($tienda->campo_precio_tarjeta) {
-            $campo_precio_tarjeta = '$data'.dot_to_array($tienda->campo_precio_tarjeta);
-          }
-          $campo_slug_compra = null;
-          if ($tienda->campo_slug_compra) {
-            $campo_slug_compra = '$data'.dot_to_array($tienda->campo_slug_compra);
-          }
           if (!$this->product->url_compra) {
             try {
-              if ($campo_slug_compra) {
-                $url_compra = eval("return ".$campo_slug_compra.";");
+              if ($tienda->campo_slug_compra) {
+                $url_compra = ArrHelper::get_pipo($data, $tienda->campo_slug_compra);
                 if ($url_compra) {
                   $this->product->url_compra = $tienda->url_prefix_compra.$url_compra.$tienda->url_suffix_compra;
                   $this->product->save();
@@ -110,40 +105,46 @@ class ProcessProduct implements ShouldQueue
               //does nothing... maybe log this?
               Log::warning("Producto id".$this->product->id.": No se ha podido aplicar la url de compra");
             }
-            // code...
           }
 
           try {
-            if ($campo_precio_tarjeta) {
-              $precio_tarjeta = eval("return ".$campo_precio_tarjeta.";");
-              $this->product->precio_tarjeta = $precio_tarjeta;
+            if ($tienda->campo_precio_tarjeta) {
+              $p_tarjeta = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_tarjeta));
+              if ($p_tarjeta) {
+                $this->product->precio_tarjeta = $p_tarjeta;
+              }
+
             }
           } catch (\Exception $e) {
             //Log::warning("Producto id ".$this->product->id.": No se ha podido obtener el precio de tarjeta");
             //$this->product->intentos_fallidos +=1 ;
           }
           try {
-            if ($campo_precio_referencia) {
-              $precio_referencia = eval("return ".$campo_precio_referencia.";");
-              $this->product->precio_referencia = $precio_referencia;
+            if ($tienda->campo_precio_referencia) {
+              $p_referencia = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_referencia));
+              if ($p_referencia) {
+                $this->product->precio_referencia = $p_referencia;
+              }
             }
           } catch (\Exception $e) {
             Log::warning("Producto id ".$this->product->id.": No se ha podido obtener el precio de referencia");
             $this->product->intentos_fallidos +=1 ;
           }
           try {
-            if ($campo_precio_oferta) {
-              $precio_oferta = eval("return ".$campo_precio_oferta.";");
-              $this->product->precio_oferta = $precio_oferta;
+            if ($tienda->campo_precio_oferta) {
+              $p_oferta = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_oferta));
+              if ($p_oferta) {
+                $this->product->precio_oferta = $p_oferta;
+              }
+
             }
           } catch (\Exception $e) {
             //Log::warning("Producto id ".$this->product->id.": No se ha podido obtener el precio oferta");
             //$this->product->intentos_fallidos +=1 ;
           }
           try {
-            if ($campo_nombre_producto) {
-              $nombre_producto = eval("return ".$campo_nombre_producto.";");
-              $this->product->nombre = $nombre_producto;
+            if ($tienda->campo_nombre_producto) {
+              $this->product->nombre = ArrHelper::get_pipo($data, $tienda->campo_nombre_producto);
             }
           } catch (\Exception $e) {
             Log::warning("Producto id ".$this->product->id.": No se ha podido obtener el nombre del producto");
@@ -175,12 +176,40 @@ class ProcessProduct implements ShouldQueue
             ]);
           } else {
             if ((!$minimo->precio_referencia) || $minimo->precio_referencia > $this->product->precio_referencia) {
+              if ((boolean)$minimo->precio_referencia && $minimo->precio_referencia > $this->product->precio_referencia) {
+                //check how much it changes
+                $percentage_rata = (int)$minimo->precio_referencia-(int)$this->product->precio_referencia/(float)$minimo->precio_referencia;
+                if ($percentage_rata >= 0.5) {
+                  \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                    ->notify(new App\Notifications\AlertaRata($this->product, $minimo->precio_referencia, $this->product->precio_referencia));
+                }
+              }
               $minimo->precio_referencia = $this->product->precio_referencia;
             }
             if ((!$minimo->precio_oferta) || $minimo->precio_oferta > $this->product->precio_oferta) {
+              if ((boolean)$minimo->precio_oferta && $minimo->precio_oferta > $this->product->precio_oferta) {
+                //check how much it changes
+                $percentage_rata = (int)$minimo->precio_oferta-(int)$this->product->precio_oferta/(float)$minimo->precio_oferta;
+                //compare between the oferta parameter with the reference...
+                $percentage_rata_relativo = (int)$minimo->precio_referencia-(int)$this->product->precio_oferta/(float)$minimo->precio_referencia;
+                if ($percentage_rata >= 0.25 && $percentage_rata_relativo >= 0.6) {
+                  \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                    ->notify(new App\Notifications\AlertaRata($this->product, $minimo->precio_oferta, $this->product->precio_oferta));
+                }
+              }
               $minimo->precio_oferta = $this->product->precio_oferta;
             }
             if ((!$minimo->precio_tarjeta) || $minimo->precio_tarjeta > $this->product->precio_tarjeta) {
+              if ((boolean)$minimo->precio_tarjeta && $minimo->precio_tarjeta > $this->product->precio_tarjeta) {
+                //check how much it changes
+                $percentage_rata = (int)$minimo->precio_tarjeta-(int)$this->product->precio_tarjeta/(float)$minimo->precio_tarjeta;
+                //compare between the oferta parameter with the reference...
+                $percentage_rata_relativo = (int)$minimo->precio_referencia-(int)$this->product->precio_tarjeta/(float)$minimo->precio_referencia;
+                if ($percentage_rata >= 0.10 && $percentage_rata_relativo >= 0.7) {
+                  \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                    ->notify(new App\Notifications\AlertaRata($this->product, $minimo->precio_tarjeta, $this->product->precio_tarjeta));
+                }
+              }
               $minimo->precio_tarjeta = $this->product->precio_tarjeta;
             }
           }
