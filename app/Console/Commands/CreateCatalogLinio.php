@@ -51,7 +51,7 @@ class CreateCatalogLinio extends Command
           $sku = [];
           foreach ($catalog as $key => $row) {
             $p = null;
-            $part_number = \Arr::get($row, 'partNumber');
+            $part_number = \Arr::get($row, 'path');
             $part_number = substr($part_number, strrpos($part_number, '/') + 1);
             //add to the database if not exists
             $p = \App\Models\Producto::where('id_tienda',$linio->id)->where('sku', $part_number)->first();
