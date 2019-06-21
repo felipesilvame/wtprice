@@ -88,6 +88,7 @@ class ProcessProduct implements ShouldQueue
         } catch (\Exception $e) {
           Log::error("No se ha podido obtener respuesta del servidor para el producto ".$this->product->id." Tienda ".$tienda->nombre);
           $this->product->intentos_fallidos += 1;
+          $this->product->save();
         }
         if ((boolean) $response){
           $data = null;
@@ -172,7 +173,7 @@ class ProcessProduct implements ShouldQueue
                 $this->product->nombre = ArrHelper::get_pipo($data, $tienda->campo_nombre_producto);
               }
             } catch (\Exception $e) {
-              Log::warning("Producto id ".$this->product->id.": No se ha podido obtener el nombre del producto");
+              Log::warning("Producto id ".$this->product->id.": No se ha podido obtener el nombre del producto. Tienda ".$tienda->nombre);
               $this->product->nombre = '-';
               $this->product->intentos_fallidos +=1 ;
             }
@@ -242,8 +243,8 @@ class ProcessProduct implements ShouldQueue
             // TODO: create historical, check minimum, etc etc
             $minimo->save();
           }
+          $this->product->save();
         }
-        $this->product->save();
       }
     }
 }
