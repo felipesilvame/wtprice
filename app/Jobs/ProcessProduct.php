@@ -158,6 +158,7 @@ class ProcessProduct implements ShouldQueue
             }
           } catch (\Exception $e) {
             Log::warning("Producto id ".$this->product->id.": No se ha podido obtener el nombre del producto");
+            $this->product->nombre = '-';
             $this->product->intentos_fallidos +=1 ;
           }
           // create historical data
