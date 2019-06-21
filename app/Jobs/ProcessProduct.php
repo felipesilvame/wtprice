@@ -102,7 +102,8 @@ class ProcessProduct implements ShouldQueue
           $precio_oferta = null;
           $precio_tarjeta = null;
           $nombre_producto = null;
-          if ($data) {
+          //quickfix: ArrHelper::get_pipo($data, $tienda->campo_nombre_producto) checks if the product exists.
+          if ($data && ArrHelper::get_pipo($data, $tienda->campo_nombre_producto)) {
             if (!$this->product->url_compra) {
               try {
                 if ($tienda->campo_slug_compra) {
@@ -242,6 +243,9 @@ class ProcessProduct implements ShouldQueue
             }
             // TODO: create historical, check minimum, etc etc
             $minimo->save();
+          } else {
+            Log::warning("Advertencia producto ".$this->product->id.": puede que ya no haya stock o sea descontinuado. Tienda".$tienda->nombre);
+            $this->product->intentos_fallidos += 1;
           }
           $this->product->save();
         }
