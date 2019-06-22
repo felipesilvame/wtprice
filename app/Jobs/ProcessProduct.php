@@ -47,6 +47,7 @@ class ProcessProduct implements ShouldQueue
       }else if ((!$this->product->ultima_actualizacion) || $this->product->ultima_actualizacion->diffInMinutes() >= $this->product->intervalo_actualizacion) {
         $client = new \GuzzleHttp\Client();
         $tienda = Tienda::findOrFail($this->product->id_tienda);
+        $old = $this->product->replicate();
         $request = null;
         $response = null;
         $url = "";
@@ -206,8 +207,8 @@ class ProcessProduct implements ShouldQueue
               if ((!$minimo->precio_referencia) || $minimo->precio_referencia > $this->product->precio_referencia) {
                 if ((boolean)$minimo->precio_referencia && $minimo->precio_referencia > $this->product->precio_referencia) {
                   //check how much it changes
-                  $percentage_rata = (int)$minimo->precio_referencia-(int)$this->product->precio_referencia/(float)$minimo->precio_referencia;
-                  if ($percentage_rata >= 0.5) {
+                  $percentage_rata = ((int)$minimo->precio_referencia-(int)$this->product->precio_referencia)/(float)$minimo->precio_referencia;
+                  if ($percentage_rata >= 0.6) {
                     \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
                     ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_referencia, $this->product->precio_referencia));
                   }
@@ -217,9 +218,9 @@ class ProcessProduct implements ShouldQueue
               if ((!$minimo->precio_oferta) || $minimo->precio_oferta > $this->product->precio_oferta) {
                 if ((boolean)$minimo->precio_oferta && $minimo->precio_oferta > $this->product->precio_oferta) {
                   //check how much it changes
-                  $percentage_rata = (int)$minimo->precio_oferta-(int)$this->product->precio_oferta/(float)$minimo->precio_oferta;
+                  $percentage_rata = ((int)$minimo->precio_oferta-(int)$this->product->precio_oferta)/(float)$minimo->precio_oferta;
                   //compare between the oferta parameter with the reference...
-                  $percentage_rata_relativo = (int)$minimo->precio_referencia-(int)$this->product->precio_oferta/(float)$minimo->precio_referencia;
+                  $percentage_rata_relativo = ((int)$minimo->precio_referencia-(int)$this->product->precio_oferta)/(float)$minimo->precio_referencia;
                   if ($percentage_rata >= 0.4 && $percentage_rata_relativo >= 0.6) {
                     \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
                     ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_oferta, $this->product->precio_oferta));
@@ -230,9 +231,9 @@ class ProcessProduct implements ShouldQueue
               if ((!$minimo->precio_tarjeta) || $minimo->precio_tarjeta > $this->product->precio_tarjeta) {
                 if ((boolean)$minimo->precio_tarjeta && $minimo->precio_tarjeta > $this->product->precio_tarjeta) {
                   //check how much it changes
-                  $percentage_rata = (int)$minimo->precio_tarjeta-(int)$this->product->precio_tarjeta/(float)$minimo->precio_tarjeta;
+                  $percentage_rata = ((int)$minimo->precio_tarjeta-(int)$this->product->precio_tarjeta)/(float)$minimo->precio_tarjeta;
                   //compare between the oferta parameter with the reference...
-                  $percentage_rata_relativo = (int)$minimo->precio_referencia-(int)$this->product->precio_tarjeta/(float)$minimo->precio_referencia;
+                  $percentage_rata_relativo = ((int)$minimo->precio_referencia-(int)$this->product->precio_tarjeta)/(float)$minimo->precio_referencia;
                   if ($percentage_rata >= 0.25 && $percentage_rata_relativo >= 0.7) {
                     \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
                     ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_tarjeta, $this->product->precio_tarjeta));
