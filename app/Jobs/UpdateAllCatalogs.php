@@ -7,6 +7,12 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Jobs\UpdateCatalogAbcdin;
+use App\Jobs\UpdateCatalogCorona;
+use App\Jobs\UpdateCatalogFalabella;
+use App\Jobs\UpdateCatalogJumbo;
+use App\Jobs\UpdateCatalogLider;
+use App\Jobs\UpdateCatalogRipley;
 
 class UpdateAllCatalogs implements ShouldQueue
 {
@@ -30,11 +36,11 @@ class UpdateAllCatalogs implements ShouldQueue
     public function handle()
     {
         //dispatches catalogs
-        \App\Jobs\UpdateCatalogAbcdin::dispatch();
-        \App\Jobs\UpdateCatalogCorona::dispatch();
-        \App\Jobs\UpdateCatalogFalabella::dispatch();
-        \App\Jobs\UpdateCatalogJumbo::dispatch();
-        \App\Jobs\UpdateCatalogLider::dispatch();
-        \App\Jobs\UpdateCatalogRipley::dispatch();
+        UpdateCatalogAbcdin::dispatch();
+        UpdateCatalogCorona::dispatch();
+        UpdateCatalogFalabella::dispatch();
+        UpdateCatalogJumbo::dispatch();
+        UpdateCatalogLider::dispatch();
+        UpdateCatalogRipley::dispatch();
     }
 }
