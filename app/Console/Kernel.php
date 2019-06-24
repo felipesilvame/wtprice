@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\ProcessMonitorQueueWorker;
+use App\Jobs\UpdateAllCatalogs;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -30,6 +31,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->runInBackground();
+        $schedule->job(new UpdateAllCatalogs)->dailyAt('08:08')->runInBackground();
     }
 
     /**
