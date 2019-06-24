@@ -151,9 +151,9 @@ class UpdateCatalogLider implements ShouldQueue
         $results = ArrHelper::get($data, $this->results_field, []);
         foreach ($results as $key => $row) {
           $sku = (string)ArrHelper::get($row, $this->sku_field, null);
-          if (!$sku) return;
+          if (!$sku) continue;
           $producto = \App\Models\Producto::where('id_tienda', $this->tienda->id)->where('sku', $sku)->first();
-          if ((boolean) $producto) return;
+          if ((boolean) $producto) continue;
           //create new producto
           $producto  = \App\Models\Producto::create([
             'id_tienda' => $this->tienda->id,
