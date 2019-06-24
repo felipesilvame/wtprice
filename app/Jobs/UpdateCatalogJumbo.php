@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Log;
 * se tendrá que realizar su propio parser
 *
 */
-class UpdateCatalogCorona implements ShouldQueue
+
+class UpdateCatalogJumbo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -43,16 +44,13 @@ class UpdateCatalogCorona implements ShouldQueue
     public function __construct()
     {
       $this->categories = [
-        '/9/56/57/', //consolas
-        '/9/39/40/', //notebook
-        '/9/39/41/', //All in one
-        '/9/39/42/', //tablets
-        '/9/56/', //consolas
-        '/44/45/', //telefonos
+        '/298/302/300/', //celulares
+        '/298/302/309/', //computacion y accesorios
+        '/298/303/431/', //televisores
       ];
       $this->protocol = 'https';
       $this->method = 'GET';
-      $this->uri = 'www.corona.cl/api/catalog_system/pub/products/search/';
+      $this->uri = 'api.smdigital.cl:8443/v0/cl/jumbo/vtex/front/dev/proxy/api/v1/catalog_system/pub/products/search/';
       $this->page_start = 0;
       $this->page_end = 0;
       $this->total_pages = 0;
@@ -60,7 +58,7 @@ class UpdateCatalogCorona implements ShouldQueue
       $this->total_pages_field = null;
       $this->results_field = null;
       $this->current_page_field = null;
-      $this->sku_field = 'productId';
+      $this->sku_field = 'linkText';
       $this->client = new \GuzzleHttp\Client();
     }
 
@@ -110,7 +108,7 @@ class UpdateCatalogCorona implements ShouldQueue
     *
     */
     private function Tienda(){
-      $tienda = \App\Models\Tienda::whereNombre('Corona')->first();
+      $tienda = \App\Models\Tienda::whereNombre('Jumbo')->first();
       if ($tienda) {
         $this->tienda = $tienda;
         return true;
@@ -124,8 +122,10 @@ class UpdateCatalogCorona implements ShouldQueue
       $url .= "?fq=C:$category&_from=$from&_to=$to";
       $response = null;
       $data = null;
+      $options = [];
+      $options['headers'] = ['x-api-key' => 'IuimuMneIKJd3tapno2Ag1c1WcAES97j'];
       try {
-        $res = $this->client->get($url);
+        $res = $this->client->get($url, $options);
         $response = $res->getBody()->getContents();
         $this->total_pages = (int)ceil((float)explode("/",$res->getHeader('resources')[0])[1]/(float)50);
       } catch (\Exception $e) {
