@@ -10,6 +10,16 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use App\Helpers\General\Arr as ArrHelper;
 use Illuminate\Support\Facades\Log;
 
+/*
+*
+* Si estas leyendo esto, pido de antemano disculpas,
+* ha sido un tremendo chombo querer actualizar de forma automatica los
+* catálogos de cada tienda de forma dinamica, por lo que esta parte
+* está hardcodeada y variará dependiendo de la tienda, por lo tanto,
+* si se incorpora otra tienda además de las creadas en el comando seed:tiendas
+* se tendrá que realizar su propio parser
+*
+*/
 class UpdateCatalogAbcdin implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
