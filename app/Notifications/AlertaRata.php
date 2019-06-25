@@ -8,6 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Producto;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
+use NotificationChannels\Twitter\TwitterChannel;
+use NotificationChannels\Twitter\TwitterStatusUpdate;
 
 class AlertaRata extends Notification implements ShouldQueue
 {
@@ -38,7 +40,7 @@ class AlertaRata extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['slack'];
+        return ['slack', TwitterChannel::class];
     }
 
     /**
@@ -68,6 +70,23 @@ class AlertaRata extends Notification implements ShouldQueue
                  'Precio ahora' => $precio_despues ?? '-',
                ]);
            });
+    }
+
+    /**
+    * Get the Twitter representation of the notification.
+    *
+    * @param  mixed  $notifiable
+    * @return \NotificationChannels\Twitter\TwitterStatusUpdate
+    */
+    public function toTwitter($notifiable)
+    {
+      $product = $this->product;
+      $precio_antes = $this->precio_antes;
+      $precio_despues = $this->precio_despues;
+
+      $str = "(TEST) Oferta rata! $product->nombre. Antes $precio_antes, ahora $precio_despues. ";
+      $str .= "$product->url_compra";
+      return (new TwitterStatusUpdate($str));
     }
 
     /**
