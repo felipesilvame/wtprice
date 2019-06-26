@@ -137,7 +137,7 @@ class UpdateCatalogLider implements ShouldQueue
             Log::debug("total pages for category: $total_pages");
             if ($page_start < $total_pages) {
               for ($pages = $page_start+1; $pages < $total_pages ; $pages++) {
-                Log::debug("making request for page ".$pages+1." of $total_pages for cat $category");
+                Log::debug("making request for page ".($pages+1)." of $total_pages for cat $category");
                 $options = [];
                 $options['headers'] = [
                   'Content-type' => 'application/json',
