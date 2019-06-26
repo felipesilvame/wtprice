@@ -249,8 +249,9 @@ class ProcessProduct implements ShouldQueue
                     \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
                     ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_tarjeta, $this->product->precio_tarjeta, $percentage_rata, true));
                   }
-                }else if (!(boolean)$minimo->precio_tarjeta) {
+                }else if ((!$minimo->precio_tarjeta) && (boolean)$this->product->precio_tarjeta) {
                   // if is not  already notified by rata before...
+                  // antes no tenia precio tarjeta y ahora si tiene precio con tarjeta...
                   $percentage_rata = ((int)$this->product->precio_referencia-(int)$this->product->precio_tarjeta)/(float)$this->product->precio_referencia;
                   if ($percentage_rata >= 0.40) {
                     \Notification::route(TwitterChannel::class, '')

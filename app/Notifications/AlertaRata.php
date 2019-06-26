@@ -26,7 +26,7 @@ class AlertaRata extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Producto $product, int $precio_antes, int $precio_despues, float $porcentaje_rata = null, boolean $is_tarjeta = null)
+    public function __construct(Producto $product, int $precio_antes, int $precio_despues, $porcentaje_rata = null, $is_tarjeta = null)
     {
         $this->product = $product;
         $this->product->load('tienda');
