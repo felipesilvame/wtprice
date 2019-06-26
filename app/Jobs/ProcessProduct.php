@@ -269,6 +269,9 @@ class ProcessProduct implements ShouldQueue
             $this->product->intentos_fallidos += 1;
           }
         }
+        //el producto ha actualizado correctamente su precio, por lo tanto, tiene hora de ultima actualizacion
+        //se puede volver a encolar
+        $this->product->actualizacion_pendiente = true;
       }
       $this->product->save();
     }

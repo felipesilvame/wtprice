@@ -42,7 +42,8 @@ class Producto extends Model implements AuditableInterface
         'intervalo_actualizacion',
         'umbral_descuento',
         'url_compra',
-        'intentos_fallidos'
+        'intentos_fallidos',
+        'actualizacion_pendiente',
     ];
 
     /**
@@ -76,6 +77,7 @@ class Producto extends Model implements AuditableInterface
         'precio_oferta' => 'double',
         'intervalo_actualizacion' => 'integer',
         'umbral_descuento' => 'float',
+        'actualizacion_pendiente' => 'boolean',
     ];
 
     /**

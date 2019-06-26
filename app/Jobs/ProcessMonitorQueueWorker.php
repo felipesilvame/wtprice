@@ -46,6 +46,7 @@ class ProcessMonitorQueueWorker implements ShouldQueue
         //$productos = Producto::whereEstado('Activo')->get();
         //optimizated query
         $productos = \App\Models\Producto::where('estado', 'Activo')
+          ->where('actualizacion_pendiente', true)
           ->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.now().'") >= intervalo_actualizacion)')
           ->orderBy('intervalo_actualizacion', 'DESC')->get();
         foreach ($productos as $key => $producto) {
@@ -74,6 +75,8 @@ class ProcessMonitorQueueWorker implements ShouldQueue
                 ProcessProduct::dispatch($producto);
                 break;
             }
+            $producto->actualizacion_pendiente = false;
+            $producto->save();
           }
         }
 
