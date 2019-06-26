@@ -50,6 +50,10 @@ class ProcessProduct implements ShouldQueue
       }else if ($product->estado === "Activo" && ((!$product->ultima_actualizacion) || $product->ultima_actualizacion->diffInMinutes() >= $product->intervalo_actualizacion)) {
         $client = new \GuzzleHttp\Client();
         $tienda = Tienda::findOrFail($product->id_tienda);
+        if ($tienda->nombre === "Falabella") {
+          //FALABELLA BLOCKS THE F*KING REQUESTS!!!!
+          usleep(300000);
+        }
         $old = $product->replicate();
         $request = null;
         $response = null;
@@ -204,7 +208,12 @@ class ProcessProduct implements ShouldQueue
               //save ultima actualizacion
             }
             $product->ultima_actualizacion = \Carbon\Carbon::now();
-            $product->intervalo_actualizacion = random_int(15, 45);
+            if ($tienda->nombre === "Falabella" || $tienda->nombre === "Linio") {
+              $product->intervalo_actualizacion = random_int(180, 120);
+            } else {
+              $product->intervalo_actualizacion = random_int(40, 100);
+            }
+            $product->save();
 
             // check and create minimum
             $minimo = $product->minimo;

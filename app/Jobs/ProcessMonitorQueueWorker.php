@@ -42,18 +42,26 @@ class ProcessMonitorQueueWorker implements ShouldQueue
      */
     public function handle()
     {
+        $now = now();
         // traer todos los productos, cuyo estado sea "activo"
         //$productos = Producto::whereEstado('Activo')->get();
         //optimizated query
         $productos = \App\Models\Producto::where('estado', 'Activo')
           ->where('actualizacion_pendiente', true)
-          ->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.now().'") >= intervalo_actualizacion)')
-          ->orderBy('intervalo_actualizacion', 'DESC')->get();
+          ->where(function ($builder){
+            $builder->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.$now.'") >= intervalo_actualizacion)')
+              ->orWhereNull('ultima_actualizacion');
+          })
+          ->orderBy('intervalo_actualizacion', 'DESC')->orderBy('ultima_actualizacion', 'ASC')->get();
+
         //all of these productos will update the status to actualizacion_pendiente = false;
         \App\Models\Producto::where('estado', 'Activo')
           ->where('actualizacion_pendiente', true)
-          ->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.now().'") >= intervalo_actualizacion)')
-          ->orderBy('intervalo_actualizacion', 'DESC')->update(['actualizacion_pendiente' => false]);
+          ->where(function ($builder){
+            $builder->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.$now.'") >= intervalo_actualizacion)')
+              ->orWhereNull('ultima_actualizacion');
+          })
+          ->orderBy('intervalo_actualizacion', 'DESC')->orderBy('ultima_actualizacion', 'ASC')->update(['actualizacion_pendiente' => false]);
         foreach ($productos as $key => $producto) {
           //check if needs to be updated
           if ((!$producto->ultima_actualizacion) || $producto->ultima_actualizacion->diffInMinutes() >= $producto->intervalo_actualizacion) {
