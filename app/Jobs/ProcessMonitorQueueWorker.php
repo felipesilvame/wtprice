@@ -53,7 +53,7 @@ class ProcessMonitorQueueWorker implements ShouldQueue
         \App\Models\Producto::where('estado', 'Activo')
           ->where('actualizacion_pendiente', true)
           ->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.now().'") >= intervalo_actualizacion)')
-          ->orderBy('intervalo_actualizacion', 'DESC')->update(['actualizacion_pendiente', false]);
+          ->orderBy('intervalo_actualizacion', 'DESC')->update(['actualizacion_pendiente' => false]);
         foreach ($productos as $key => $producto) {
           //check if needs to be updated
           if ((!$producto->ultima_actualizacion) || $producto->ultima_actualizacion->diffInMinutes() >= $producto->intervalo_actualizacion) {
