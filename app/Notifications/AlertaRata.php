@@ -8,8 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Producto;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
-use NotificationChannels\Twitter\TwitterChannel;
-use NotificationChannels\Twitter\TwitterStatusUpdate;
+use \NotificationChannels\Twitter\TwitterChannel;
+use \NotificationChannels\Twitter\TwitterStatusUpdate;
 
 class AlertaRata extends Notification implements ShouldQueue
 {
@@ -40,7 +40,7 @@ class AlertaRata extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['slack', TwitterChannel::class];
+        return ['slack', 'twitter'];
     }
 
     /**

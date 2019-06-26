@@ -42,6 +42,7 @@ class Producto extends Model implements AuditableInterface
         'intervalo_actualizacion',
         'umbral_descuento',
         'url_compra',
+        'intentos_fallidos'
     ];
 
     /**

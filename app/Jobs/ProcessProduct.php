@@ -41,7 +41,6 @@ class ProcessProduct implements ShouldQueue
     {
       //check if needs to be updated
       if ($this->product->intentos_fallidos >= 3) {
-        $this->product->intentos_fallidos = 0;
         $this->product->estado = "Detenido";
         $this->product->save();
       }else if ((!$this->product->ultima_actualizacion) || $this->product->ultima_actualizacion->diffInMinutes() >= $this->product->intervalo_actualizacion) {
@@ -97,7 +96,8 @@ class ProcessProduct implements ShouldQueue
             $data = json_decode($response, true);
           } catch (\Exception $e) {
             Log::warning("Producto id ".$this->product->id.": No se ha podido convertir la respuesta a JSON");
-            $this->product->intentos_fallidos +=1 ;
+            $this->product->intentos_fallidos +=1;
+            $this->product->save();
           }
           $precio_referencia = null;
           $precio_oferta = null;
@@ -248,8 +248,8 @@ class ProcessProduct implements ShouldQueue
             Log::warning("Advertencia producto ".$this->product->id.": puede que ya no haya stock o sea descontinuado. Tienda".$tienda->nombre);
             $this->product->intentos_fallidos += 1;
           }
-          $this->product->save();
         }
       }
+      $this->product->save();
     }
 }

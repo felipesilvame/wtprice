@@ -43,11 +43,29 @@ class ProcessMonitorQueueWorker implements ShouldQueue
     public function handle()
     {
         // traer todos los productos, cuyo estado sea "activo"
-        $productos = Producto::whereEstado('Activo')->get();
+        //$productos = Producto::whereEstado('Activo')->get();
+        //optimizated query
+        $productos = \App\Models\Producto::with('tienda')->where('estado', 'Activo')
+          ->whereRaw('TIMESTAMPDIFF(MINUTE, ultima_actualizacion, NOW()) >= intervalo_actualizacion')
+          ->orderBy('intervalo_actualizacion', 'DESC')->get();
         foreach ($productos as $key => $producto) {
           //check if needs to be updated
           if ((!$producto->ultima_actualizacion) || $producto->ultima_actualizacion->diffInMinutes() >= $producto->intervalo_actualizacion) {
-            ProcessProduct::dispatch($producto);
+            switch ($producto->tienda->nombre) {
+              case 'Falabella':
+                ProcessProduct::dispatch($producto)->onQueue('falabella');
+                break;
+              case 'ABCDin':
+                ProcessProduct::dispatch($producto)->onQueue('abcdin');
+                break;
+              case 'Lider':
+                ProcessProduct::dispatch($producto)->onQueue('lider');
+              case 'Ripley':
+                ProcessProduct::dispatch($producto)->onQueue('ripley');
+              default:
+                ProcessProduct::dispatch($producto);
+                break;
+            }
           }
         }
 

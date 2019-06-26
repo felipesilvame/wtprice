@@ -162,7 +162,7 @@ class UpdateCatalogFalabella implements ShouldQueue
             'id_tienda' => $this->tienda->id,
             'sku' => $sku,
             'nombre' => $sku,
-            'intervalo_actualizacion' => random_int(1,20)
+            'intervalo_actualizacion' => random_int(4,25)
           ]);
         }
       }
