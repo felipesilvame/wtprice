@@ -45,8 +45,8 @@ class ProcessMonitorQueueWorker implements ShouldQueue
         // traer todos los productos, cuyo estado sea "activo"
         //$productos = Producto::whereEstado('Activo')->get();
         //optimizated query
-        $productos = \App\Models\Producto::with('tienda')->where('estado', 'Activo')
-          ->whereRaw('TIMESTAMPDIFF(MINUTE, ultima_actualizacion, NOW()) >= intervalo_actualizacion')
+        $productos = \App\Models\Producto::where('estado', 'Activo')
+          ->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.now().'") >= intervalo_actualizacion)')
           ->orderBy('intervalo_actualizacion', 'DESC')->get();
         foreach ($productos as $key => $producto) {
           //check if needs to be updated
