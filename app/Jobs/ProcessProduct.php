@@ -14,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
 use \Carbon\Carbon;
 use NotificationChannels\Twitter\TwitterChannel;
+use App\Notifications\ProductoAhoraEnOferta;
 use App\Helpers\General\Arr as ArrHelper;
 
 class ProcessProduct implements ShouldQueue
