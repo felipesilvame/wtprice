@@ -156,7 +156,14 @@ class UpdateCatalogFalabella implements ShouldQueue
           $sku = (string)ArrHelper::get($row, $this->sku_field, null);
           if (!$sku) continue;
           $producto = \App\Models\Producto::where('id_tienda', $this->tienda->id)->where('sku', $sku)->first();
-          if ((boolean) $producto) continue;
+          if ((boolean) $producto){
+            if ($producto->estado == "Detenido") {
+              $producto->estado = "Activo";
+              $producto->intentos_fallidos = 0;
+              $producto->save();
+            }
+            continue;
+          }
           //create new producto
           $producto  = \App\Models\Producto::create([
             'id_tienda' => $this->tienda->id,

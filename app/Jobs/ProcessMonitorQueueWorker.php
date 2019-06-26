@@ -60,8 +60,16 @@ class ProcessMonitorQueueWorker implements ShouldQueue
                 break;
               case 'Lider':
                 ProcessProduct::dispatch($producto)->onQueue('lider');
+                break;
               case 'Ripley':
                 ProcessProduct::dispatch($producto)->onQueue('ripley');
+                break;
+              case 'Corona':
+                ProcessProduct::dispatch($producto)->onQueue('corona');
+                break;
+              case 'Jumbo':
+                ProcessProduct::dispatch($producto)->onQueue('jumbo');
+                break;
               default:
                 ProcessProduct::dispatch($producto);
                 break;

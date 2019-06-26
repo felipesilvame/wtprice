@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a19137333bd88ce26f28a4b2dc330fe",
+    "content-hash": "8ef61054894ed6f0e55729b4cbdf55e1",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -1111,6 +1111,54 @@
             ],
             "description": "A PHP class to ping hosts.",
             "time": "2017-02-02T15:38:40+00:00"
+        },
+        {
+            "name": "gerardojbaez/money",
+            "version": "v0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gerardojbaez/money.git",
+                "reference": "1a29ca19899fad8ae559e9f2c982815ea21f8a6c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gerardojbaez/money/zipball/1a29ca19899fad8ae559e9f2c982815ea21f8a6c",
+                "reference": "1a29ca19899fad8ae559e9f2c982815ea21f8a6c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gerardojbaez\\Money\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gerardo Báez",
+                    "email": "gerardojbaez@gmail.com"
+                }
+            ],
+            "description": "A simple and cross-platform alternative to PHP money_format(). 91 currencies supported, including INR.",
+            "keywords": [
+                "currency",
+                "formatter",
+                "money",
+                "money_format"
+            ],
+            "time": "2018-02-24T18:59:00+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
