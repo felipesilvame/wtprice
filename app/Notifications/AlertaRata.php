@@ -8,8 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Producto;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
-use \NotificationChannels\Twitter\TwitterChannel;
-use \NotificationChannels\Twitter\TwitterStatusUpdate;
+use NotificationChannels\Twitter\TwitterChannel;
+use NotificationChannels\Twitter\TwitterStatusUpdate;
 
 class AlertaRata extends Notification implements ShouldQueue
 {
@@ -40,7 +40,7 @@ class AlertaRata extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['slack', 'twitter'];
+        return ['slack', TwitterChannel::class];
     }
 
     /**
@@ -84,7 +84,7 @@ class AlertaRata extends Notification implements ShouldQueue
       $precio_antes = $this->precio_antes;
       $precio_despues = $this->precio_despues;
 
-      $str = "(TEST) Oferta rata! $product->nombre. Antes $precio_antes, ahora $precio_despues. ";
+      $str = "Nuestro bot ha encontrado una oferta! Tienda: {$product->tienda->nombre}. $product->nombre. Antes $precio_antes, ahora $precio_despues. ";
       $str .= "$product->url_compra";
       return (new TwitterStatusUpdate($str));
     }

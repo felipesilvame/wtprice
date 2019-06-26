@@ -39,11 +39,12 @@ class ProcessProduct implements ShouldQueue
      */
     public function handle()
     {
+      $this->product->refresh();
       //check if needs to be updated
       if ($this->product->intentos_fallidos >= 3) {
         $this->product->estado = "Detenido";
         $this->product->save();
-      }else if ((!$this->product->ultima_actualizacion) || $this->product->ultima_actualizacion->diffInMinutes() >= $this->product->intervalo_actualizacion) {
+      }else if ($this->product->estado === "Activo" && ((!$this->product->ultima_actualizacion) || $this->product->ultima_actualizacion->diffInMinutes() >= $this->product->intervalo_actualizacion)) {
         $client = new \GuzzleHttp\Client();
         $tienda = Tienda::findOrFail($this->product->id_tienda);
         $old = $this->product->replicate();
@@ -192,6 +193,7 @@ class ProcessProduct implements ShouldQueue
               //save ultima actualizacion
             }
             $this->product->ultima_actualizacion = \Carbon\Carbon::now();
+            $this->product->intervalo_actualizacion = random_int(15, 45);
 
             // check and create minimum
             $minimo = $this->product->minimo;

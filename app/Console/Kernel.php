@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->job(new ProcessMonitorQueueWorker)->everyFiveMinutes()->withoutOverlapping()->runInBackground();
+        $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
         $schedule->job(new UpdateAllCatalogs)->dailyAt('08:08')->runInBackground();
     }
 
