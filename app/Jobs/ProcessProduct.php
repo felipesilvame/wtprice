@@ -214,7 +214,7 @@ class ProcessProduct implements ShouldQueue
                   $percentage_rata = ((int)$minimo->precio_referencia-(int)$this->product->precio_referencia)/(float)$minimo->precio_referencia;
                   if ($percentage_rata >= 0.6) {
                     \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-                    ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_referencia, $this->product->precio_referencia, $porcentaje_rata));
+                    ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_referencia, $this->product->precio_referencia, $percentage_rata));
                   }
                 }
                 $minimo->precio_referencia = $this->product->precio_referencia;
@@ -227,14 +227,14 @@ class ProcessProduct implements ShouldQueue
                   $percentage_rata_relativo = ((int)$minimo->precio_referencia-(int)$this->product->precio_oferta)/(float)$minimo->precio_referencia;
                   if ($percentage_rata >= 0.4 && $percentage_rata_relativo >= 0.6) {
                     \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-                    ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_oferta, $this->product->precio_oferta, $porcentaje_rata));
+                    ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_oferta, $this->product->precio_oferta, $percentage_rata));
                   }
                 } else if (!(boolean)$minimo->precio_oferta && !(boolean)$this->product->precio_tarjeta) {
                   //si antes no tenia precio oferta y ahora no tiene precio con tarjeta...
                   $percentage_rata = ((int)$this->product->precio_referencia-(int)$this->product->precio_oferta)/(float)$this->product->precio_referencia;
                   if ($percentage_rata >= 0.33) {
                     \Notification::route(TwitterChannel::class, '')
-                      ->notify(new ProductoAhoraEnOferta($this->product, $this->product->precio_referencia, $this->product->precio_oferta, $porcentaje_rata));
+                      ->notify(new ProductoAhoraEnOferta($this->product, $this->product->precio_referencia, $this->product->precio_oferta, $percentage_rata));
                   }
                 }
                 $minimo->precio_oferta = $this->product->precio_oferta;
@@ -247,14 +247,14 @@ class ProcessProduct implements ShouldQueue
                   $percentage_rata_relativo = ((int)$minimo->precio_referencia-(int)$this->product->precio_tarjeta)/(float)$minimo->precio_referencia;
                   if ($percentage_rata >= 0.25 && $percentage_rata_relativo >= 0.7) {
                     \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-                    ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_tarjeta, $this->product->precio_tarjeta, $porcentaje_rata, true));
+                    ->notify(new \App\Notifications\AlertaRata($this->product, $minimo->precio_tarjeta, $this->product->precio_tarjeta, $percentage_rata, true));
                   }
                 }else if (!(boolean)$minimo->precio_tarjeta) {
                   // if is not  already notified by rata before...
                   $percentage_rata = ((int)$this->product->precio_referencia-(int)$this->product->precio_tarjeta)/(float)$this->product->precio_referencia;
                   if ($percentage_rata >= 0.40) {
                     \Notification::route(TwitterChannel::class, '')
-                      ->notify(new ProductoAhoraEnOferta($this->product, $this->product->precio_referencia, $this->product->precio_tarjeta, $porcentaje_rata, true));
+                      ->notify(new ProductoAhoraEnOferta($this->product, $this->product->precio_referencia, $this->product->precio_tarjeta, $percentage_rata, true));
                   }
 
                 }
