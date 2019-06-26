@@ -36,11 +36,11 @@ class UpdateAllCatalogs implements ShouldQueue
     public function handle()
     {
         //dispatches catalogs
-        UpdateCatalogAbcdin::dispatch();
-        UpdateCatalogCorona::dispatch();
-        UpdateCatalogFalabella::dispatch();
-        UpdateCatalogJumbo::dispatch();
-        UpdateCatalogLider::dispatch();
-        UpdateCatalogRipley::dispatch();
+        UpdateCatalogAbcdin::dispatch()->onQueue('abcdin');
+        UpdateCatalogCorona::dispatch()->onQueue('corona');
+        UpdateCatalogFalabella::dispatch()->onQueue('falabella');
+        UpdateCatalogJumbo::dispatch()->onQueue('jumbo');
+        UpdateCatalogLider::dispatch()->onQueue('lider');
+        UpdateCatalogRipley::dispatch()->onQueue('ripley');
     }
 }
