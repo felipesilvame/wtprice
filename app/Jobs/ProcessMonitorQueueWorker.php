@@ -57,7 +57,7 @@ class ProcessMonitorQueueWorker implements ShouldQueue
         //all of these productos will update the status to actualizacion_pendiente = false;
         \App\Models\Producto::where('estado', 'Activo')
           ->where('actualizacion_pendiente', true)
-          ->where(function ($builder){
+          ->where(function ($builder) use ($now){
             $builder->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.$now.'") >= intervalo_actualizacion)')
               ->orWhereNull('ultima_actualizacion');
           })
