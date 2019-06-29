@@ -45,10 +45,12 @@ class UpdateCatalogLider implements ShouldQueue
     {
       $this->categories = [
         'Videojuegos',
+        'Consolas',
         'Televisores',
         'Smartphones',
         'Computación',
         'Smartwatch',
+        'Fotografía'
       ];
       $this->protocol = 'https';
       $this->method = 'POST';

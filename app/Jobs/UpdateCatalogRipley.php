@@ -44,7 +44,11 @@ class UpdateCatalogRipley implements ShouldQueue
     public function __construct()
     {
       $this->categories = [
-        '945205',
+        '945203', // notebooks
+        '945204', // 2 en 1 convertibles
+        '945205', //notebooks gamer
+        '945206', //tablets
+        '945220',
         '947841',
         '945153',
         '945155',

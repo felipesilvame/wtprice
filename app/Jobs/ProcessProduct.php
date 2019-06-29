@@ -157,6 +157,7 @@ class ProcessProduct implements ShouldQueue
                 }
                 if ($p_referencia && $p_referencia < 10000000) {
                   $product->precio_referencia = $p_referencia;
+                  $product->intentos_fallidos = 0;
                 } else {
                   $product->intentos_fallidos +=1;
                 }
@@ -251,8 +252,13 @@ class ProcessProduct implements ShouldQueue
                   //si antes no tenia precio oferta y ahora no tiene precio con tarjeta...
                   $percentage_rata = ((int)$product->precio_referencia-(int)$product->precio_oferta)/(float)$product->precio_referencia;
                   if ($percentage_rata >= 0.33) {
-                    \Notification::route(TwitterChannel::class, '')
+                    try {
+                      \Notification::route(TwitterChannel::class, '')
                       ->notify(new ProductoAhoraEnOferta($product, $product->precio_referencia, $product->precio_oferta, $percentage_rata));
+                    } catch (\Exception $e) {
+                      Log::error("No se ha podido enviar notificacion para el producto $product->id");
+                    }
+
                   }
                 }
                 $minimo->precio_oferta = $product->precio_oferta;
@@ -264,16 +270,26 @@ class ProcessProduct implements ShouldQueue
                   //compare between the oferta parameter with the reference...
                   $percentage_rata_relativo = ((int)$minimo->precio_referencia-(int)$product->precio_tarjeta)/(float)$minimo->precio_referencia;
                   if ($percentage_rata >= 0.25 && $percentage_rata_relativo >= 0.7) {
-                    \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-                    ->notify(new \App\Notifications\AlertaRata($product, $minimo->precio_tarjeta, $product->precio_tarjeta, $percentage_rata, true));
+                    try {
+                      \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                      ->notify(new \App\Notifications\AlertaRata($product, $minimo->precio_tarjeta, $product->precio_tarjeta, $percentage_rata, true));
+                    } catch (\Exception $e) {
+                      Log::error("No se ha podido enviar notificacion para el producto $product->id");
+                    }
+
                   }
                 }else if ((!$minimo->precio_tarjeta) && (boolean)$product->precio_tarjeta) {
                   // if is not  already notified by rata before...
                   // antes no tenia precio tarjeta y ahora si tiene precio con tarjeta...
                   $percentage_rata = ((int)$product->precio_referencia-(int)$product->precio_tarjeta)/(float)$product->precio_referencia;
                   if ($percentage_rata >= 0.40) {
-                    \Notification::route(TwitterChannel::class, '')
+                    try {
+                      \Notification::route(TwitterChannel::class, '')
                       ->notify(new ProductoAhoraEnOferta($product, $product->precio_referencia, $product->precio_tarjeta, $percentage_rata, true));
+                    } catch (\Exception $e) {
+                      Log::error("No se ha podido enviar notificacion para el producto $product->id");
+                    }
+
                   }
 
                 }
