@@ -70,19 +70,19 @@ class ProcessMonitorQueueWorker implements ShouldQueue
                 ProcessProduct::dispatch($producto)->onQueue('falabella');
                 break;
               case 'ABCDin':
-                ProcessProduct::dispatch($producto)->onQueue('abcdin');
+                ProcessProduct::dispatch($producto);
                 break;
               case 'Lider':
-                ProcessProduct::dispatch($producto)->onQueue('lider');
+                ProcessProduct::dispatch($producto);
                 break;
               case 'Ripley':
                 ProcessProduct::dispatch($producto)->onQueue('ripley');
                 break;
               case 'Corona':
-                ProcessProduct::dispatch($producto)->onQueue('corona');
+                ProcessProduct::dispatch($producto);
                 break;
               case 'Jumbo':
-                ProcessProduct::dispatch($producto)->onQueue('jumbo');
+                ProcessProduct::dispatch($producto);
                 break;
               default:
                 ProcessProduct::dispatch($producto);
