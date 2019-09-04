@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Models\Producto;
 use App\Jobs\ProcessProduct;
+use App\Jobs\ProcessParisProduct;
 use \Carbon\Carbon;
 
 /**
@@ -83,6 +84,9 @@ class ProcessMonitorQueueWorker implements ShouldQueue
                 break;
               case 'Jumbo':
                 ProcessProduct::dispatch($producto);
+                break;
+              case 'Paris':
+                ProcessParisProduct::dispatch($producto);
                 break;
               default:
                 ProcessProduct::dispatch($producto);
