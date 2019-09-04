@@ -214,6 +214,9 @@ class ProcessProduct implements ShouldQueue
             } else {
               $product->intervalo_actualizacion = random_int(15, 100);
             }
+            //el producto ha actualizado correctamente su precio, por lo tanto, tiene hora de ultima actualizacion
+            //se puede volver a encolar
+            $product->actualizacion_pendiente = true;
             $product->save();
 
             // check and create minimum
@@ -304,9 +307,6 @@ class ProcessProduct implements ShouldQueue
             $product->intentos_fallidos += 1;
           }
         }
-        //el producto ha actualizado correctamente su precio, por lo tanto, tiene hora de ultima actualizacion
-        //se puede volver a encolar
-        $product->actualizacion_pendiente = true;
       }
       $product->save();
     }
