@@ -246,6 +246,7 @@ class ProcessParisProduct implements ShouldQueue
           // TODO: create historical, check minimum, etc etc
           $minimo->save();
           //save again por si acaso xd xd xd
+          $product->actualizacion_pendiente = true;
           $product->save();
 
         }

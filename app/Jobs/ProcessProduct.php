@@ -308,6 +308,7 @@ class ProcessProduct implements ShouldQueue
           }
         }
       }
+      $product->actualizacion_pendiente = true;
       $product->save();
     }
 }
