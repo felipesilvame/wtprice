@@ -252,6 +252,8 @@ class ProcessParisProduct implements ShouldQueue
         }
       } catch (\Exception $e) {
         //do not nothing xdd
+        $product->actualizacion_pendiente = true;
+        $product->save();
       }
 
     }
