@@ -89,9 +89,10 @@ class AlertaRata extends Notification implements ShouldQueue
       $precio_despues = $this->precio_despues;
       $is_tarjeta = $this->is_tarjeta;
       $porcentaje_rata = $this->porcentaje_rata;
+      $nombre = mb_strimwidth($product->nombre, 0, 30 '...');
 
       $str = "Hemos detectado una oferta!\n";
-      $str .= "Tienda: {$product->tienda->nombre}. $product->nombre. Antes {$precio_antes}, ahora {$precio_despues}.\n";
+      $str .= "Tienda: {$product->tienda->nombre}. $nombre. Antes {$precio_antes}, ahora {$precio_despues}.\n";
       $str .= $is_tarjeta ? "(Precio sólo con tarjeta) ": "";
       $str .= "Descuento: {$porcentaje_rata} %.";
       $str .= "$product->url_compra";

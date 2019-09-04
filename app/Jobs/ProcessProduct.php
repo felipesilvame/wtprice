@@ -192,7 +192,7 @@ class ProcessProduct implements ShouldQueue
               }
               try {
                 if ($tienda->campo_nombre_producto) {
-                  $product->nombre = ArrHelper::get_pipo($data, $tienda->campo_nombre_producto);
+                  $product->nombre = mb_strimwidth(ArrHelper::get_pipo($data, $tienda->campo_nombre_producto),0, 250, '...');
                 }
               } catch (\Exception $e) {
                 Log::warning("Producto id ".$product->id.": No se ha podido obtener el nombre del producto. Tienda ".$tienda->nombre);

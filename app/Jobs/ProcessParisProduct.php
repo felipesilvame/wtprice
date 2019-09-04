@@ -84,7 +84,7 @@ class ProcessParisProduct implements ShouldQueue
           //check nombre producto, cancel if fails
           try {
              $nombre_producto = trim($crawler->filter($tienda->campo_nombre_producto)->first()->text());
-             $product->nombre = $nombre_producto;
+             $product->nombre = mb_strimwidth($nombre_producto, 250, '...');
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener el nombre para el producto ".$product->id." Tienda ".$tienda->nombre);
             $product->intentos_fallidos += 1;
