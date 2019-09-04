@@ -13,6 +13,7 @@ use App\Jobs\UpdateCatalogFalabella;
 use App\Jobs\UpdateCatalogJumbo;
 use App\Jobs\UpdateCatalogLider;
 use App\Jobs\UpdateCatalogRipley;
+use App\Jobs\UpdateCatalogParis;
 
 class UpdateAllCatalogs implements ShouldQueue
 {
@@ -36,11 +37,12 @@ class UpdateAllCatalogs implements ShouldQueue
     public function handle()
     {
         //dispatches catalogs
-        UpdateCatalogAbcdin::dispatch()->onQueue('abcdin');
-        UpdateCatalogCorona::dispatch()->onQueue('corona');
+        UpdateCatalogAbcdin::dispatch();
+        UpdateCatalogCorona::dispatch();
         UpdateCatalogFalabella::dispatch()->onQueue('falabella');
-        UpdateCatalogJumbo::dispatch()->onQueue('jumbo');
-        UpdateCatalogLider::dispatch()->onQueue('lider');
+        UpdateCatalogJumbo::dispatch();
+        UpdateCatalogLider::dispatch();
         UpdateCatalogRipley::dispatch()->onQueue('ripley');
+        UpdateCatalogParis::dispatch();
     }
 }

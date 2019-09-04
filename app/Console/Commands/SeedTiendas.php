@@ -158,5 +158,21 @@ class SeedTiendas extends Command
           ],
         ]
       );
+
+      \App\Models\Tienda::updateOrcreate(['nombre' => 'Paris'],
+        [
+          'protocolo' => 'https',
+          'prefix_api' => 'www.paris.cl/',
+          'suffix_api' => '.html',
+          'request_body_sku' => 'html > body #pdpMain',
+          'campo_nombre_producto' => 'html > body p.short-description',
+          'campo_precio_oferta' => 'html > body div#product-content div.price-internet span[itemprop=price], html > body div#product-content div.offer-price.default-price',
+          'campo_precio_referencia' => 'html > body .price-normal > span[itemprop=price], html > body div#product-content div.offer-price.default-price',
+          'campo_precio_tarjeta' => 'html > body .price-tc.cencosud-price',
+          'url_prefix_compra' => 'https://www.paris.cl/',
+          'url_suffix_compra' => '.html',
+          'campo_slug_compra' => 'html > body div#product-content span.visually-hidden[itemprop=url]',
+        ]
+      );
     }
 }

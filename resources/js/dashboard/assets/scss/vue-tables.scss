@@ -1,0 +1,136 @@
+@import 'variables';
+
+.VueTables {
+  font-size: 13px;
+
+  table {
+    margin: 0 !important;
+
+    // Fix ugly scrollbar glitch.
+    td:last-of-type {
+      border-right: none !important;
+    }
+  }
+
+  // Table Top Row - Filter & Records Display
+  div.row:first-of-type {
+    margin: 0 !important;
+
+    .col-md-12 {
+      padding: 0 !important;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+
+      .form-group {
+        margin: 0;
+        padding: 10px 20px;
+      }
+    }
+  }
+
+  // Search Field
+  &__search-field {
+
+    // Search field label
+    label { display: none; }
+
+    // Search field input
+    input {
+      background: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjQ0FDRURCIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0MxNS40MSAxMi41OSAxNiAxMS4xMSAxNiA5LjUgMTYgNS45MSAxMy4wOSAzIDkuNSAzUzMgNS45MSAzIDkuNSA1LjkxIDE2IDkuNSAxNmMxLjYxIDAgMy4wOS0uNTkgNC4yMy0xLjU3bC4yNy4yOHYuNzlsNSA0Ljk5TDIwLjQ5IDE5bC00Ljk5LTV6bS02IDBDNy4wMSAxNCA1IDExLjk5IDUgOS41UzcuMDEgNSA5LjUgNSAxNCA3LjAxIDE0IDkuNSAxMS45OSAxNCA5LjUgMTR6Ii8+ICAgIDxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz48L3N2Zz4=);
+      background-position: left 7px center;
+      background-repeat: no-repeat;
+      background-size: 10%;
+      padding: .4375rem .625rem .4375rem 1.75rem !important;
+    }
+  }
+
+  // Limit
+  &__limit-field {
+    display: flex;
+    margin-right: auto;
+    color: #818ea3;
+    font-size: 13px;
+
+    // Limit select
+    select.form-control {
+      border: $pagination-border;
+      font-size: .625rem;
+      color: #818ea3;
+      height: 1.5625rem !important;
+      background-color: #fff;
+      border-radius: .375rem;
+      margin: 0 .1875rem;
+      padding: 0 5px;
+    }
+  }
+
+  // Pagination element.
+  .VuePagination {
+    margin: 0;
+    padding: 13px 20px;
+    background: #fbfbfb;
+    border-radius: 0 0 .375rem .375rem;
+
+    // Pagination items wrapper.
+    nav {
+      display: flex;
+      flex-direction: row-reverse;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    // Pagination count.
+    &__count {
+      width: auto !important;
+      max-width: max-content !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      margin-top: auto !important;
+      margin-bottom: auto !important;
+      color: #818ea3;
+    }
+
+    ul.pagination {
+      margin: 0;
+
+      // Page items.
+      .page-item {
+        box-shadow: none;
+
+        // Page links.
+        a.page-link {
+          padding: .4286rem .875rem;
+          border: $pagination-border;
+          border-right: 0;
+          font-size: 13px;
+        }
+
+        // Pagination first and last children.
+        &:first-child,
+        &:last-child {
+          border-radius: .25rem;
+        }
+
+        // Pagination first child.
+        &:first-child {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+
+        // Pagination last child.
+        &:last-child {
+          border-right: $pagination-border;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+
+        // Disabled page links.
+        &.disabled a.page-link {
+          background-color: #f2f4f5;
+          color: #3d5170;
+        }
+      }
+    }
+  }
+}

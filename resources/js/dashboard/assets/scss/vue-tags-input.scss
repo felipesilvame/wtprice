@@ -1,0 +1,25 @@
+.vue-tags-input {
+  li.tag {
+    display: flex;
+    background: #fbfbfb;
+    padding: .125rem .625rem;
+    margin-bottom: .3125rem;
+    border-radius: 1.25rem;
+    font-size: .6875rem;
+    position: relative;
+    text-transform: uppercase;
+    border: 1px solid #e1e5eb;
+    color: #818ea3;
+    font-weight: 500;
+
+    &.deletion-mark {
+      background: #f5f5f5 !important;
+    }
+  }
+
+  div.input {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+}

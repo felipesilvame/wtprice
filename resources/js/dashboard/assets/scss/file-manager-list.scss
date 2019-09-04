@@ -1,0 +1,30 @@
+@import 'variables';
+
+// Style adjustments for vue-tables-2.
+.file-manager-list {
+
+  // Row icon
+  th:first-child {
+    width: 10px !important;
+    .VueTables__heading {
+      display: none !important;
+    }
+  }
+
+  // Row name
+  td:nth-child(2),
+  th:nth-child(2) {
+    text-align: left !important;
+  }
+
+  th:last-child { text-align: right !important; }
+  td { vertical-align: middle; }
+
+  .dropzone-wrapper {
+    padding: .75rem 1.0625rem !important;
+  }
+
+  div.row:first-of-type {
+    border-bottom: $pagination-border;
+  }
+}
