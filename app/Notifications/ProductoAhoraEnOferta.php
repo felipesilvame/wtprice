@@ -59,7 +59,7 @@ class ProductoAhoraEnOferta extends Notification implements ShouldQueue
       $precio_despues = $this->precio_despues;
       $is_tarjeta = $this->is_tarjeta;
       $porcentaje_rata = $this->porcentaje_rata;
-      $nombre = mb_strimwidth($product->nombre, 0, 30 '...');
+      $nombre = mb_strimwidth($product->nombre, 0, 30, '...');
 
       $str = "Un producto que nunca ha estado en oferta... ahora lo está! \n";
       $str .= "Tienda: {$product->tienda->nombre}. $nombre. Antes {$precio_antes}, ahora {$precio_despues}.\n";
