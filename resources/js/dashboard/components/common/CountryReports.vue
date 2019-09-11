@@ -49,22 +49,22 @@
 
 <script>
 const defaultCountriesData = [{
-  flag: require('@/assets/images/flags/flag-us.png'),
+  flag: require('@/dashboard/assets/images/flags/flag-us.png'),
   title: 'United States',
   visitorsAmount: '12,291',
   visitorsPercentage: '23.32%',
 }, {
-  flag: require('@/assets/images/flags/flag-uk.png'),
+  flag: require('@/dashboard/assets/images/flags/flag-uk.png'),
   title: 'United Kingdom',
   visitorsAmount: '11,192',
   visitorsPercentage: '18.8%',
 }, {
-  flag: require('@/assets/images/flags/flag-au.png'),
+  flag: require('@/dashboard/assets/images/flags/flag-au.png'),
   title: 'Australia',
   visitorsAmount: '9,291',
   visitorsPercentage: '12.3%',
 }, {
-  flag: require('@/assets/images/flags/flag-jp.png'),
+  flag: require('@/dashboard/assets/images/flags/flag-jp.png'),
   title: 'Japan',
   visitorsAmount: '2,291',
   visitorsPercentage: '8.14%',

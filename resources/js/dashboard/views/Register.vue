@@ -5,7 +5,7 @@
         <d-card>
           <d-card-body>
             <!-- Logo -->
-            <img class="auth-form__logo d-table mx-auto mb-3" src="@/assets/images/shards-dashboards-logo.svg" alt="Shards Dashboards - Register Template">
+            <img class="auth-form__logo d-table mx-auto mb-3" src="@/dashboard/assets/images/shards-dashboards-logo.svg" alt="Shards Dashboards - Register Template">
 
             <!-- Title -->
             <h5 class="auth-form__title text-center mb-4">Create New Account</h5>

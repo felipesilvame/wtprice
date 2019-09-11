@@ -64,8 +64,8 @@
 
 <script>
 const defaultUserData = {
-  coverImg: require('@/assets/images/user-profile/up-user-details-background.jpg'),
-  avatarImg: require('@/assets/images/avatars/0.jpg'),
+  coverImg: require('@/dashboard/assets/images/user-profile/up-user-details-background.jpg'),
+  avatarImg: require('@/dashboard/assets/images/avatars/0.jpg'),
   name: 'Sierra Brooks',
   bio: 'I\'m a design focused engineer.',
   email: 'sierra@example.com',

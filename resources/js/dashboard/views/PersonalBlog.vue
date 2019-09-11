@@ -65,12 +65,12 @@
 </template>
 
 <script>
-import SmallStats from '@/components/common/SmallStats.vue';
-import TopReferrals from '@/components/common/TopReferrals.vue';
-import UsersOverview from '@/components/blog/UsersOverview.vue';
-import UsersByDevice from '@/components/blog/UsersByDeviceLite.vue';
-import NewDraft from '@/components/blog/NewDraft.vue';
-import Discussions from '@/components/blog/Discussions.vue';
+import SmallStats from '@/dashboard/components/common/SmallStats.vue';
+import TopReferrals from '@/dashboard/components/common/TopReferrals.vue';
+import UsersOverview from '@/dashboard/components/blog/UsersOverview.vue';
+import UsersByDevice from '@/dashboard/components/blog/UsersByDeviceLite.vue';
+import NewDraft from '@/dashboard/components/blog/NewDraft.vue';
+import Discussions from '@/dashboard/components/blog/Discussions.vue';
 
 export default {
   components: {

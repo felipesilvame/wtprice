@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import UserDetails from '@/components/user-profile/UserDetails.vue';
-import UserContact from '@/components/user-profile/UserContact.vue';
-import UserTeams from '@/components/user-profile/UserTeams.vue';
-import UserStats from '@/components/user-profile/UserStats.vue';
-import UserPerformance from '@/components/user-profile/UserPerformance.vue';
-import UserActivity from '@/components/user-profile/UserActivity.vue';
+import UserDetails from '@/dashboard/components/user-profile/UserDetails.vue';
+import UserContact from '@/dashboard/components/user-profile/UserContact.vue';
+import UserTeams from '@/dashboard/components/user-profile/UserTeams.vue';
+import UserStats from '@/dashboard/components/user-profile/UserStats.vue';
+import UserPerformance from '@/dashboard/components/user-profile/UserPerformance.vue';
+import UserActivity from '@/dashboard/components/user-profile/UserActivity.vue';
 
 export default {
   name: 'user-profile',

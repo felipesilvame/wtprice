@@ -44,7 +44,7 @@ class AlertaRata extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['slack', TwitterChannel::class];
+        return ['slack'];
     }
 
     /**
@@ -63,7 +63,7 @@ class AlertaRata extends Notification implements ShouldQueue
            ->from('iRata App', ':mouse:')
            ->to('#i-rata')
            ->image('https://banner2.kisspng.com/20180530/jea/kisspng-ratatouille-mouse-the-walt-disney-company-remy-rec-rat-mouse-5b0f70a4353a97.309237151527738532218.jpg')
-           ->content("ALERTA RATA!!!!!")
+           ->content("ALERTA RATA!!")
            ->attachment(function ($attachment) use ($product, $precio_antes, $precio_despues){
              $attachment->title($product->nombre, $product->url_compra)
               ->fields([

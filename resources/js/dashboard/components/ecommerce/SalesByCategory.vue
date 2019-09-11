@@ -49,27 +49,27 @@
 
 <script>
 const defaultCategoriesData = [{
-  image: require('@/assets/images/sales-overview/product-shoes.jpg'),
+  image: require('@/dashboard/assets/images/sales-overview/product-shoes.jpg'),
   title: 'Shoes',
   value: '12,281',
   percentage: '32.4%',
 }, {
-  image: require('@/assets/images/sales-overview/no-product-image.jpg'),
+  image: require('@/dashboard/assets/images/sales-overview/no-product-image.jpg'),
   title: 'Men\'s Jeans',
   value: '8,129',
   percentage: '28.4%',
 }, {
-  image: require('@/assets/images/sales-overview/product-sportswear.jpg'),
+  image: require('@/dashboard/assets/images/sales-overview/product-sportswear.jpg'),
   title: 'Sportswear',
   value: '812',
   percentage: '12.2%',
 }, {
-  image: require('@/assets/images/sales-overview/product-basics.jpg'),
+  image: require('@/dashboard/assets/images/sales-overview/product-basics.jpg'),
   title: 'Basics',
   value: '29',
   percentage: '7.1%',
 }, {
-  image: require('@/assets/images/sales-overview/product-basics.jpg'),
+  image: require('@/dashboard/assets/images/sales-overview/product-basics.jpg'),
   title: 'Sweaters',
   value: '3',
   percentage: '1.2%',

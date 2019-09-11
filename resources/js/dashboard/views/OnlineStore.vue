@@ -61,11 +61,11 @@
 </template>
 
 <script>
-import SmallStats from '@/components/common/SmallStats.vue';
-import CountryReports from '@/components/common/CountryReports.vue';
-import SalesReport from '@/components/ecommerce/SalesReport.vue';
-import SalesByCategory from '@/components/ecommerce/SalesByCategory.vue';
-import LatestOrders from '@/components/ecommerce/LatestOrders.vue';
+import SmallStats from '@/dashboard/components/common/SmallStats.vue';
+import CountryReports from '@/dashboard/components/common/CountryReports.vue';
+import SalesReport from '@/dashboard/components/ecommerce/SalesReport.vue';
+import SalesByCategory from '@/dashboard/components/ecommerce/SalesByCategory.vue';
+import LatestOrders from '@/dashboard/components/ecommerce/LatestOrders.vue';
 
 import colors from '../utils/colors';
 

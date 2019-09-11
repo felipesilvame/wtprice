@@ -7,7 +7,7 @@
 
             <!-- User Details - Background -->
             <div class="edit-user-details__bg">
-              <img src="@/assets/images/user-profile/up-user-details-background.jpg" alt="User Details Background Image">
+              <img src="@/dashboard/assets/images/user-profile/up-user-details-background.jpg" alt="User Details Background Image">
               <label class="edit-user-details__change-background">
                             <i class="material-icons mr-1">&#xE439;</i> Change Background Photo
                             <d-input class="d-none" type="file" />
@@ -97,7 +97,7 @@
                 <d-col lg="4">
                   <label for="userProfilePicture" class="text-center w-100 mb-4">Profile Picture</label>
                   <div class="edit-user-details__avatar m-auto">
-                    <img src="@/assets/images/avatars/0.jpg" alt="User Avatar">
+                    <img src="@/dashboard/assets/images/avatars/0.jpg" alt="User Avatar">
                     <label class="edit-user-details__avatar__change">
                                 <i class="material-icons mr-1">&#xE439;</i>
                                 <d-input type="file" id="userProfilePicture" class="d-none" />
@@ -301,7 +301,7 @@
 
 <script>
 import TagsInput from '@johmun/vue-tags-input';
-import '@/assets/scss/vue-tags-input.scss';
+import '@/dashboard/assets/scss/vue-tags-input.scss';
 
 export default {
   components: {

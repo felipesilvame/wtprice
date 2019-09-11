@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import getSidebarItems from '@/data/sidebar-nav-items';
+import getSidebarItems from '@/dashboard/data/sidebar-nav-items';
 
 // Main layout components
-import MainNavbar from '@/components/layout/MainNavbar/MainNavbar.vue';
-import MainSidebar from '@/components/layout/MainSidebar/MainSidebar.vue';
-import MainFooter from '@/components/layout/MainFooter/MainFooter.vue';
+import MainNavbar from '@/dashboard/components/layout/MainNavbar/MainNavbar.vue';
+import MainSidebar from '@/dashboard/components/layout/MainSidebar/MainSidebar.vue';
+import MainFooter from '@/dashboard/components/layout/MainFooter/MainFooter.vue';
 
 export default {
   name: 'analytics',

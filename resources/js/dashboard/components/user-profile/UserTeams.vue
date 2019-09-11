@@ -26,17 +26,17 @@
 <script>
 const defaultTeamsData = [
   {
-    image: require('@/assets/images/user-profile/team-thumb-1.png'),
+    image: require('@/dashboard/assets/images/user-profile/team-thumb-1.png'),
     name: 'Team Edison',
     members: '21 Members',
   },
   {
-    image: require('@/assets/images/user-profile/team-thumb-2.png'),
+    image: require('@/dashboard/assets/images/user-profile/team-thumb-2.png'),
     name: 'Team Shelby',
     members: '21 Members',
   },
   {
-    image: require('@/assets/images/user-profile/team-thumb-3.png'),
+    image: require('@/dashboard/assets/images/user-profile/team-thumb-3.png'),
     name: 'Team Dante',
     members: '21 Members',
   },

@@ -125,14 +125,15 @@ class UpdateCatalogLider implements ShouldQueue
                     $producto->save();
                   }
                   continue;
+                } else {
+                  //create new producto
+                  $producto  = \App\Models\Producto::create([
+                    'id_tienda' => $tienda->id,
+                    'sku' => $sku,
+                    'nombre' => $sku,
+                    'intervalo_actualizacion' => random_int(15,45)
+                  ]);
                 }
-                //create new producto
-                $producto  = \App\Models\Producto::create([
-                  'id_tienda' => $tienda->id,
-                  'sku' => $sku,
-                  'nombre' => $sku,
-                  'intervalo_actualizacion' => random_int(15,45)
-                ]);
               }
             }
             //total pages is fullfilled
@@ -182,14 +183,17 @@ class UpdateCatalogLider implements ShouldQueue
                         $producto->save();
                       }
                       continue;
+                    } else {
+                      //create new producto
+                      $producto  = \App\Models\Producto::create([
+                        'id_tienda' => $tienda->id,
+                        'sku' => $sku,
+                        'nombre' => $sku,
+                        'intervalo_actualizacion' => random_int(15,45)
+                      ]);
+                      \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                      ->notify(new \App\Notifications\ProductAdded($producto));
                     }
-                    //create new producto
-                    $producto  = \App\Models\Producto::create([
-                      'id_tienda' => $tienda->id,
-                      'sku' => $sku,
-                      'nombre' => $sku,
-                      'intervalo_actualizacion' => random_int(15,45)
-                    ]);
                   }
                 }
 
