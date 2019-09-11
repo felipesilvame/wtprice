@@ -234,7 +234,7 @@ class ProcessProduct implements ShouldQueue
                 'fecha' => Carbon::now(),
                 ]);
                 //no habia nunca antes un minimo, producto agregado
-                \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                \Notification::route('slack', env('SLACK_NUEVA_URL'))
                   ->notify(new \App\Notifications\ProductAdded($product));
               } else {
                 if ((!$minimo->precio_referencia) || $minimo->precio_referencia > $product->precio_referencia) {
@@ -263,7 +263,7 @@ class ProcessProduct implements ShouldQueue
                     $percentage_rata = ((int)$product->precio_referencia-(int)$product->precio_oferta)/(float)$product->precio_referencia;
                     if ($percentage_rata >= 0.50) {
                       try {
-                        \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                        \Notification::route('slack', env('SLACK_OFERTA_URL'))
                         ->notify(new ProductoAhoraEnOferta($product, $product->precio_referencia, $product->precio_oferta, $percentage_rata));
                       } catch (\Exception $e) {
                         Log::error("No se ha podido enviar notificacion para el producto $product->id");
@@ -294,7 +294,7 @@ class ProcessProduct implements ShouldQueue
                     $percentage_rata = ((int)$product->precio_referencia-(int)$product->precio_tarjeta)/(float)$product->precio_referencia;
                     if ($percentage_rata >= 0.60) {
                       try {
-                        \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                        \Notification::route('slack', env('SLACK_OFERTA_URL'))
                         ->notify(new ProductoAhoraEnOferta($product, $product->precio_referencia, $product->precio_tarjeta, $percentage_rata, true));
                       } catch (\Exception $e) {
                         Log::error("No se ha podido enviar notificacion para el producto $product->id");
