@@ -191,8 +191,6 @@ class UpdateCatalogLider implements ShouldQueue
                         'nombre' => $sku,
                         'intervalo_actualizacion' => random_int(15,45)
                       ]);
-                      \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-                      ->notify(new \App\Notifications\ProductAdded($producto));
                     }
                   }
                 }
