@@ -214,9 +214,9 @@ class ProcessProduct implements ShouldQueue
               }
               $product->ultima_actualizacion = \Carbon\Carbon::now();
               if ($tienda->nombre === "Falabella" || $tienda->nombre === "Linio") {
-                $product->intervalo_actualizacion = random_int(20, 180);
+                $product->intervalo_actualizacion = random_int(10, 60);
               } else {
-                $product->intervalo_actualizacion = random_int(15, 100);
+                $product->intervalo_actualizacion = random_int(5, 45);
               }
               //el producto ha actualizado correctamente su precio, por lo tanto, tiene hora de ultima actualizacion
               //se puede volver a encolar
