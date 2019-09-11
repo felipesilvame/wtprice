@@ -79,7 +79,7 @@
 const defaultOrdersData = [{
   id: '#19280',
   date: '21 February 2018 20:32',
-  image: require('@/assets/images/sales-overview/product-sweaters.jpg'),
+  image: require('@/dashboard/assets/images/sales-overview/product-sweaters.jpg'),
   status: 'Complete',
   items: '7',
   total: '$199',
@@ -87,7 +87,7 @@ const defaultOrdersData = [{
 {
   id: '#19279',
   date: '21 February 2018 20:32',
-  image: require('@/assets/images/sales-overview/product-order-1.jpg'),
+  image: require('@/dashboard/assets/images/sales-overview/product-order-1.jpg'),
   status: 'Pending',
   items: '7',
   total: '$612',
@@ -95,7 +95,7 @@ const defaultOrdersData = [{
 {
   id: '#19278',
   date: '21 February 2018 20:32',
-  image: require('@/assets/images/sales-overview/product-order-2.jpg'),
+  image: require('@/dashboard/assets/images/sales-overview/product-order-2.jpg'),
   status: 'Canceled',
   items: '18',
   total: '$1211',
@@ -103,7 +103,7 @@ const defaultOrdersData = [{
 {
   id: '#19277',
   date: '21 February 2018 20:32',
-  image: require('@/assets/images/sales-overview/product-order-3.jpg'),
+  image: require('@/dashboard/assets/images/sales-overview/product-order-3.jpg'),
   status: 'Pending',
   items: '7',
   total: '$612',

@@ -66,12 +66,12 @@
 </template>
 
 <script>
-import SmallStats from '@/components/common/SmallStats.vue';
-import CountryReports from '@/components/common/CountryReports.vue';
-import TopReferrals from '@/components/common/TopReferrals.vue';
-import Sessions from '@/components/analytics/Sessions.vue';
-import UsersByDevice from '@/components/analytics/UsersByDevice.vue';
-import GoalsOverview from '@/components/analytics/GoalsOverview/GoalsOverview.vue';
+import SmallStats from '@/dashboard/components/common/SmallStats.vue';
+import CountryReports from '@/dashboard/components/common/CountryReports.vue';
+import TopReferrals from '@/dashboard/components/common/TopReferrals.vue';
+import Sessions from '@/dashboard/components/analytics/Sessions.vue';
+import UsersByDevice from '@/dashboard/components/analytics/UsersByDevice.vue';
+import GoalsOverview from '@/dashboard/components/analytics/GoalsOverview/GoalsOverview.vue';
 
 import colors from '../utils/colors';
 

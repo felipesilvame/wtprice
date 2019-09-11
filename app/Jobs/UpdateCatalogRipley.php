@@ -117,14 +117,15 @@ class UpdateCatalogRipley implements ShouldQueue
                     $producto->save();
                   }
                   continue;
+                } else {
+                  //create new producto
+                  $producto  = \App\Models\Producto::create([
+                    'id_tienda' => $tienda->id,
+                    'sku' => $sku,
+                    'nombre' => $sku,
+                    'intervalo_actualizacion' => random_int(15,45)
+                  ]);
                 }
-                //create new producto
-                $producto  = \App\Models\Producto::create([
-                  'id_tienda' => $tienda->id,
-                  'sku' => $sku,
-                  'nombre' => $sku,
-                  'intervalo_actualizacion' => random_int(15,45)
-                ]);
               }
             }
             //total pages is fullfilled

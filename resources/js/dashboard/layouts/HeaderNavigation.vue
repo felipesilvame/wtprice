@@ -8,7 +8,7 @@
             <d-navbar type="light" class="align-items-stretch flex-md-nowrap p-0">
               <a class="navbar-brand" href="#" style="line-height: 25px;">
                 <div class="d-table m-auto">
-                  <img id="main-logo" class="d-inline-block align-top mr-1 ml-3" style="max-width: 25px;" src="@/assets/images/shards-dashboards-logo.svg" alt="Shards Dashboard">
+                  <img id="main-logo" class="d-inline-block align-top mr-1 ml-3" style="max-width: 25px;" src="@/dashboard/assets/images/shards-dashboards-logo.svg" alt="Shards Dashboard">
                   <span class="d-none d-md-inline ml-1">Shards Dashboard</span>
                 </div>
               </a>
@@ -33,14 +33,14 @@
 </template>
 
 <script>
-import getHeaderNavbarItems from '@/data/header-nav-items';
+import getHeaderNavbarItems from '@/dashboard/data/header-nav-items';
 
-import MainNavbar from '@/components/layout/MainNavbar/MainNavbar.vue';
-import NavbarSearch from '@/components/layout/MainNavbar/NavbarSearch.vue';
-import NavbarNav from '@/components/layout/MainNavbar/NavbarNav.vue';
-import NavbarToggle from '@/components/layout/MainNavbar/NavbarToggle.vue';
-import HeaderNavbar from '@/components/layout/HeaderNavbar/HeaderNavbar.vue';
-import MainFooter from '@/components/layout/MainFooter/MainFooter.vue';
+import MainNavbar from '@/dashboard/components/layout/MainNavbar/MainNavbar.vue';
+import NavbarSearch from '@/dashboard/components/layout/MainNavbar/NavbarSearch.vue';
+import NavbarNav from '@/dashboard/components/layout/MainNavbar/NavbarNav.vue';
+import NavbarToggle from '@/dashboard/components/layout/MainNavbar/NavbarToggle.vue';
+import HeaderNavbar from '@/dashboard/components/layout/HeaderNavbar/HeaderNavbar.vue';
+import MainFooter from '@/dashboard/components/layout/MainFooter/MainFooter.vue';
 
 export default {
   components: {

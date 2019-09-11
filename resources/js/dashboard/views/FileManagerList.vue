@@ -65,8 +65,8 @@ import Vue from 'vue';
 import { ClientTable } from 'vue-tables-2';
 import VueDropzone from 'vue2-dropzone';
 
-import '@/assets/scss/vue-tables.scss';
-import '@/assets/scss/file-manager-list.scss';
+import '@/dashboard/assets/scss/vue-tables.scss';
+import '@/dashboard/assets/scss/file-manager-list.scss';
 
 Vue.use(ClientTable);
 

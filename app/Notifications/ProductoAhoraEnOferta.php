@@ -43,7 +43,7 @@ class ProductoAhoraEnOferta extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return [TwitterChannel::class];
+        return ['slack'];
     }
 
     /**
@@ -80,5 +80,36 @@ class ProductoAhoraEnOferta extends Notification implements ShouldQueue
         return [
             //
         ];
+    }
+
+    /**
+    * Get the Slack representation of the notification.
+    *
+    * @param  mixed  $notifiable
+    * @return \Illuminate\Notifications\Messages\SlackMessage
+    */
+    public function toSlack($notifiable)
+    {
+      $product = $this->product;
+      $precio_antes = $this->precio_antes;
+      $precio_despues = $this->precio_despues;
+      $tarjeta = $this->is_tarjeta;
+
+       return (new SlackMessage)
+           ->from('iRata App', ':mouse:')
+           ->to('#i-rata')
+           ->image('https://banner2.kisspng.com/20180530/jea/kisspng-ratatouille-mouse-the-walt-disney-company-remy-rec-rat-mouse-5b0f70a4353a97.309237151527738532218.jpg')
+           ->content("Producto en oferta")
+           ->attachment(function ($attachment) use ($product, $precio_antes, $precio_despues, $tarjeta){
+             $attachment->title($product->nombre, $product->url_compra)
+              ->fields([
+                 'Nivel rata' => ':rat::rat:',
+                 'Nombre del producto' => $product->nombre,
+                 'Tienda' => $product->tienda->nombre,
+                 'Precio antes' => $precio_antes ?? '-',
+                 'Precio ahora' => $precio_despues ?? '-',
+                 'Tarjeta?' => $tarjeta ? 'Si' : 'No',
+               ]);
+           });
     }
 }

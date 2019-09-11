@@ -5,7 +5,7 @@
         <d-card>
           <d-card-body>
             <!-- Logo -->
-            <img class="auth-form__logo d-table mx-auto mb-3" src="@/assets/images/shards-dashboards-logo.svg" alt="Shards Dashboards - Login Template">
+            <img class="auth-form__logo d-table mx-auto mb-3" src="@/dashboard/assets/images/shards-dashboards-logo.svg" alt="Shards Dashboards - Login Template">
 
             <!-- Title -->
             <h5 class="auth-form__title text-center mb-4">Access Your Account</h5>

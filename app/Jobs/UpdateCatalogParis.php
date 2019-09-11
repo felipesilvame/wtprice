@@ -81,8 +81,19 @@ class UpdateCatalogParis implements ShouldQueue
                   foreach ($list as $sku) {
                     try {
                       $product = \App\Models\Producto::where('sku', $sku)->where('id_tienda', $tienda->id)->first();
-                      if (!$product) {
-                        \App\Models\Producto::create(['sku' => $sku, 'id_tienda' => $tienda->id, 'nombre' => $sku]);
+                      if ((boolean) $product){
+                        if ($product->estado == "Detenido") {
+                          $product->estado = "Activo";
+                          $product->intentos_fallidos = 0;
+                          $product->save();
+                        }
+                      } else {
+                        $product = \App\Models\Producto::create([
+                          'sku' => $sku,
+                          'id_tienda' => $tienda->id,
+                          'nombre' => $sku,
+                          'intervalo_actualizacion' => random_int(15,45)
+                        ]);
                       }
                     } catch (\Exception $e) {
                       //nothing

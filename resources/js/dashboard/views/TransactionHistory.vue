@@ -55,8 +55,8 @@
 <script>
 import Vue from 'vue';
 import { ClientTable } from 'vue-tables-2';
-import transactionHistoryData from '@/data/transaction-history-data.json';
-import '@/assets/scss/vue-tables.scss';
+import transactionHistoryData from '@/dashboard/data/transaction-history-data.json';
+import '@/dashboard/assets/scss/vue-tables.scss';
 
 Vue.use(ClientTable);
 

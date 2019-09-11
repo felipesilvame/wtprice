@@ -62,7 +62,7 @@ const defaultDiscussionsData = [{
   id: 1,
   date: '3 days ago',
   author: {
-    image: require('@/assets/images/avatars/1.jpg'),
+    image: require('@/dashboard/assets/images/avatars/1.jpg'),
     name: 'John Doe',
     url: '#',
   },
@@ -75,7 +75,7 @@ const defaultDiscussionsData = [{
   id: 2,
   date: '4 days ago',
   author: {
-    image: require('@/assets/images/avatars/2.jpg'),
+    image: require('@/dashboard/assets/images/avatars/2.jpg'),
     name: 'John Doe',
     url: '#',
   },
@@ -88,7 +88,7 @@ const defaultDiscussionsData = [{
   id: 3,
   date: '5 days ago',
   author: {
-    image: require('@/assets/images/avatars/3.jpg'),
+    image: require('@/dashboard/assets/images/avatars/3.jpg'),
     name: 'John Doe',
     url: '#',
   },

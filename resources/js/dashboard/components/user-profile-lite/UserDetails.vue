@@ -46,7 +46,7 @@
 <script>
 const defaultUserDetails = {
   name: 'Sierra Brooks',
-  avatar: require('@/assets/images/avatars/0.jpg'),
+  avatar: require('@/dashboard/assets/images/avatars/0.jpg'),
   jobTitle: 'Project Manager',
   performanceReportTitle: 'Workload',
   performanceReportValue: 74,

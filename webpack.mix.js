@@ -32,6 +32,8 @@ mix.setPublicPath('public')
         'resources/js/backend/app.js',
         'resources/js/backend/after.js'
     ], 'js/backend.js')
+    .js('resources/js/dashboard/main.js', 'js/ratboard.js')
+    .sass('resources/js/dashboard/assets/shards-dashboard-pro/shards-dashboards.scss', 'css/ratboard.css')
     .extract([
         /* Extract packages from node_modules, only those used by front and
         backend, to vendor.js */
