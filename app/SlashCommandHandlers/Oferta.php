@@ -5,6 +5,7 @@ namespace App\SlashCommandHandlers;
 use Spatie\SlashCommand\Handlers\BaseHandler;
 use Spatie\SlashCommand\Request;
 use Spatie\SlashCommand\Response;
+use App\Jobs\SendSlackOfertas;
 
 class Oferta extends BaseHandler
 {
@@ -31,6 +32,7 @@ class Oferta extends BaseHandler
      */
     public function handle(Request $request): Response
     {
-        return $this->respondToSlack("You have typed this text: `{$request->text}`");
+        $this->dispatch(new SendSlackOfertas($request->text));
+        return $this->respondToSlack("Estamos preparando la data...`");
     }
 }
