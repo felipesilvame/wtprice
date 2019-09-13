@@ -2,7 +2,7 @@
 
 namespace App\SlashCommandHandlers;
 
-use App\SlashCommand\BaseHandler;
+use Spatie\SlashCommand\Handlers\BaseHandler;
 use Spatie\SlashCommand\Request;
 use Spatie\SlashCommand\Response;
 
