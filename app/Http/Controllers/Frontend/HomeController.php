@@ -28,11 +28,13 @@ class HomeController extends Controller
       }, 'producto.tienda' => function($query){
         $query->select('nombre', 'id');
       }])->orderBy($orderBy, $sort);
-      if ($request->has('tienda')) {
-        $query->whereHas('producto', function($q) use ($request){
+      $query->whereHas('producto', function($q) use ($request){
+        $q->where('estado', 'Activo');
+        if ($request->has('tienda')) {
           $q->where('id_tienda', $request->input('tienda'));
-        });
-      }
+        }
+      });
+      
       $results = $query->paginate($paged);
       //dd($results->toArray());
         return view('frontend.index')->with([
