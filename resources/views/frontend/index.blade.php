@@ -31,6 +31,6 @@
     </div><!--row-->
     <nav aria-label="Page navigation example" class="table-responsive mb-2">
 
-        {{ $items->links() }}
+        {{ $items->appends(request()->except('page'))->links() }}
     </nav>
 @endsection
