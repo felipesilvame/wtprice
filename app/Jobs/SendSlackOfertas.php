@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Spatie\SlashCommand\Jobs\SlashCommandResponseJob;
 
-class SendSlackOfertas implements SlashCommandResponseJob
+class SendSlackOfertas extends SlashCommandResponseJob
 {
     //use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
