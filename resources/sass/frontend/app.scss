@@ -4,10 +4,13 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
 // Bootstrap Overrides
-@import 'variables';
+$popover-arrow-outer-width: 2px !default;
 
+// Base Shards UI Kit
+@import "node_modules/shards-ui/src/scss/shards";
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
 
 // Pages
 @import 'pages/dashboard';

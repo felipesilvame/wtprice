@@ -22,7 +22,23 @@ mix.webpackConfig({
  |
  */
 
-mix.js('resources/js/dashboard/main.js', 'public/js/ratboard.js')
+mix //.js('resources/js/dashboard/main.js', 'public/js/ratboard.js')
+    .js('resources/js/frontend/app.js', 'public/js/frontend.js')
+    .js([
+        'resources/js/backend/before.js',
+        'resources/js/backend/app.js',
+        'resources/js/backend/after.js'
+    ], 'public/js/backend.js')
+    .extract([
+        // Extract packages from node_modules to vendor.js
+        'jquery',
+        'bootstrap',
+        'popper.js',
+        'axios',
+        'sweetalert2',
+        'lodash'
+    ])
+  .sass('resources/sass/frontend/app.scss', 'public/css/app.css')
     ;
 
 if (mix.inProduction()) {

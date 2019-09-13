@@ -22,7 +22,9 @@ class OfertasController extends Controller
         $query->select('nombre', 'id');
       }])->orderBy($orderBy, $sort);
       if ($request->has('tienda')) {
-        $query = $query->where('id_tienda', $request->input('tienda'));
+        $query->whereHas('producto', function($q) use ($request){
+          $q->where('id_tienda', $request->input('tienda'));
+        });
       }
 
       return response()->json($query->paginate($paged));

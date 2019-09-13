@@ -18,7 +18,7 @@
 
         <!-- Check if the language is set to RTL, so apply the RTL layouts -->
         <!-- Otherwise apply the normal LTR layouts -->
-        {{ style(mix('css/frontend.css')) }}
+        {{ style(mix('css/app.css')) }}
 
         @stack('after-styles')
     </head>
