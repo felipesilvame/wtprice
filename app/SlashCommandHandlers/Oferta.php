@@ -33,6 +33,6 @@ class Oferta extends BaseHandler
     public function handle(Request $request): Response
     {
         $this->dispatch(new SendSlackOfertas($request->text));
-        return $this->respondToSlack("Estamos preparando la data...`");
+        return $this->respondToSlack("Estamos preparando la data...");
     }
 }
