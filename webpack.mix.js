@@ -22,29 +22,8 @@ mix.webpackConfig({
  |
  */
 
-mix.setPublicPath('public')
-    .setResourceRoot('../') // turns assets paths in css relative to css file
-    .sass('resources/sass/frontend/app.scss', 'css/frontend.css')
-    .sass('resources/sass/backend/app.scss', 'css/backend.css')
-    .js('resources/js/frontend/app.js', 'js/frontend.js')
-    .js([
-        'resources/js/backend/before.js',
-        'resources/js/backend/app.js',
-        'resources/js/backend/after.js'
-    ], 'js/backend.js')
-    .js('resources/js/dashboard/main.js', 'js/ratboard.js')
-    .sass('resources/js/dashboard/assets/shards-dashboard-pro/shards-dashboards.scss', 'css/ratboard.css')
-    .extract([
-        /* Extract packages from node_modules, only those used by front and
-        backend, to vendor.js */
-        'jquery',
-        'bootstrap',
-        'popper.js',
-        'axios',
-        'sweetalert2',
-        'lodash'
-    ])
-    .sourceMaps();
+mix.js('resources/js/dashboard/main.js', 'public/js/ratboard.js')
+    ;
 
 if (mix.inProduction()) {
     mix.version()

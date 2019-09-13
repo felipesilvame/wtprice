@@ -23,7 +23,10 @@ Route::group(['prefix' => 'auth',], function () {
     Route::post('me', 'Api\AuthController@me');
 });
 Route::group(['middleware' => ['jwt']], function(){
-  Route::apiResource('tienda', 'Api\TiendaController');  
+  Route::apiResource('tienda', 'Api\TiendaController');
+  Route::get('producto/{id}/toggle-status', 'Api\ProductoController@toggleProducto');
+  Route::apiResource('producto', 'Api\ProductoController');
+  Route::get('ofertas', 'Api\OfertasController@index');
 });
 
 

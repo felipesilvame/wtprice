@@ -1,4 +1,5 @@
 /* eslint-disable */
+import '../bootstrap';
 import Vue from 'vue';
 import ShardsVue from 'shards-vue';
 
@@ -27,8 +28,9 @@ Vue.component('icon-sidebar-layout', IconSidebar);
 Vue.config.productionTip = false;
 Vue.prototype.$eventHub = new Vue();
 
-
-new Vue({
+console.log('export VUE');
+window.app = new Vue({
   router,
   render: h => h(App),
-}).$mount('#app');
+  el: '#app'
+});
