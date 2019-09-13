@@ -32,7 +32,7 @@ class SendSlackOfertas extends SlashCommandResponseJob
      */
     public function handle()
     {
-      $response = $this->commando;
+      $response = $this->comando;
       $this
          ->respondToSlack("Here is your response: {$response}")
          ->send();
