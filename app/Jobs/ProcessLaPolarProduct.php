@@ -129,6 +129,7 @@ class ProcessLaPolarProduct implements ShouldQueue
                 $product->precio_oferta = $p_oferta;
                 $product->intentos_fallidos = 0;
               }
+              $product->save();
             }
           } catch (\Exception $e) {
             // si no se pudo obtener el precio oferta de un producto, y antes tenia... se elimina
@@ -143,6 +144,7 @@ class ProcessLaPolarProduct implements ShouldQueue
                 $product->precio_tarjeta = $p_tarjeta;
                 $product->intentos_fallidos = 0;
               }
+              $product->save();
             }
           } catch (\Exception $e) {
             // si no se pudo obtener el precio tarjeta de un producto, y antes tenia... se elimina
