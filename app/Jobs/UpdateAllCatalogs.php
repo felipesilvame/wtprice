@@ -14,6 +14,7 @@ use App\Jobs\UpdateCatalogJumbo;
 use App\Jobs\UpdateCatalogLider;
 use App\Jobs\UpdateCatalogRipley;
 use App\Jobs\UpdateCatalogParis;
+use App\Jobs\UpdateCatalogLaPolar;
 
 class UpdateAllCatalogs implements ShouldQueue
 {
@@ -44,5 +45,6 @@ class UpdateAllCatalogs implements ShouldQueue
         UpdateCatalogLider::dispatch();
         UpdateCatalogRipley::dispatch()->onQueue('ripley');
         UpdateCatalogParis::dispatch();
+        UpdateCatalogLaPolar::dispatch();
     }
 }
