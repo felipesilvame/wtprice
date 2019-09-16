@@ -115,6 +115,8 @@ class ProcessLaPolarProduct implements ShouldQueue
             if ($tienda->campo_slug_compra) {
               $url_compra = trim($crawler->filter($tienda->campo_slug_compra)->first()->text());
               $product->url_compra = $url_compra;
+            } else {
+              $product->url_compra = $url;
             }
           } catch (\Exception $e) {
           }
