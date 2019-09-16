@@ -40,7 +40,7 @@ class SeedTiendas extends Command
       \App\Models\Tienda::updateOrcreate(['nombre' => 'Lider'],
         [
           'protocolo' => 'https',
-          'prefix_api' => 'api.lider.cl/black-cyber/products/?sku=',
+          'prefix_api' => 'buysmart-landing-bff-production.lider.cl/buysmart-checkout-bff/products/?sku=',
           'suffix_api' => '&appId=BuySmart',
           'campo_nombre_producto' => '0.displayName',
           'campo_precio_referencia' => '0.price.BasePriceReference',
@@ -172,6 +172,22 @@ class SeedTiendas extends Command
           'url_prefix_compra' => 'https://www.paris.cl/',
           'url_suffix_compra' => '.html',
           'campo_slug_compra' => 'html > body div#product-content span.visually-hidden[itemprop=url]',
+        ]
+      );
+
+      \App\Models\Tienda::updateOrcreate(['nombre' => 'LaPolar'],
+        [
+          'protocolo' => 'https',
+          'prefix_api' => 'www.lapolar.cl/',
+          'suffix_api' => '.html',
+          'request_body_sku' => 'html > body .product-detail',
+          'campo_nombre_producto' => 'html > body .product-name',
+          'campo_precio_oferta' => 'html > body .price.js-internet-price:not([itemprop=priceSpecification]) span.price-value',
+          'campo_precio_referencia' => 'html > body .js-normal-price span.price-value, html > body p[itemprop=priceSpecification]',
+          'campo_precio_tarjeta' => 'html > body .price.js-tlp-price span.price-value',
+          'url_prefix_compra' => 'https://www.lapolar.cl/',
+          'url_suffix_compra' => '.html',
+          'campo_slug_compra' => null,
         ]
       );
     }

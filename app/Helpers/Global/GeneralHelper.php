@@ -82,6 +82,9 @@ if (! function_exists('logo_tienda')) {
       case 'Ripley';
         return 'https://upload.wikimedia.org/wikipedia/en/0/0c/Ripley_logo.svg';
         break;
+      case 'LaPolar':
+        return 'https://upload.wikimedia.org/wikipedia/commons/7/76/Logotipo_La_Polar.svg';
+        break;
       default:
         return '#';
         break;
