@@ -31,10 +31,11 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
-        $schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();
-        $schedule->job(new UpdateAllCatalogs)->dailyAt('08:08')->runInBackground();
-        $schedule->job(new UpdateAllCatalogs)->dailyAt('14:11')->runInBackground();
-        $schedule->job(new UpdateAllCatalogs)->dailyAt('20:44')->runInBackground();
+        $schedule->job(new UpdateAllCatalogs)->hourlyAt(8)->runInBackground();
+        //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();
+        //$schedule->job(new UpdateAllCatalogs)->dailyAt('08:08')->runInBackground();
+        //$schedule->job(new UpdateAllCatalogs)->dailyAt('14:11')->runInBackground();
+        //$schedule->job(new UpdateAllCatalogs)->dailyAt('20:44')->runInBackground();
     }
 
     /**
