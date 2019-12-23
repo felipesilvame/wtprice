@@ -92,6 +92,18 @@ class ProcessParisProduct implements ShouldQueue
             $product->save();
             throw $e;
           }
+          // 22-12-2019: updated url img
+          if (!$product->imagen_url) {
+            try {
+              if ($tienda->campo_imagen_url) {
+                // Alto harcoding por aca
+                $product->imagen_url = trim($crawler->filter($tienda->campo_imagen_url)->first()->attr('data-src'));
+              }
+            } catch (\Exception $e) {
+
+            }
+
+          }
           // check precio referencia, cancel if fails
           try {
             $precio_referencia = trim($crawler->filter($tienda->campo_precio_referencia)->first()->text());
