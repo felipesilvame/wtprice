@@ -115,6 +115,26 @@ class ProcessProduct implements ShouldQueue
             $nombre_producto = null;
             //quickfix: ArrHelper::get_pipo($data, $tienda->campo_nombre_producto) checks if the product exists.
             if ($data && ArrHelper::get_pipo($data, $tienda->campo_nombre_producto)) {
+              // 22-12-2019: updated url img
+              if (!$product->imagen_url) {
+                try {
+                  if ($tienda->campo_imagen_url) {
+                    // try to get url img
+                    $imagen_url = ArrHelper::get_pipo($data, $tienda->campo_imagen_url);
+                    // Alto harcoding por aca
+                    if ($tienda->nombre === 'Lider') {
+                      $product->imagen_url = 'https://images.lider.cl/wmtcl?source=url[file:/productos/'.$product->sku.$imagen_url.']&sink';
+                    } elseif ($tienda->nombre === 'Falabella') {
+                      $product->imagen_url = $imagen_url.$product->sku.'_1';
+                    } else {
+                      $product->imagen_url = $imagen_url;
+                    }
+                  }
+                } catch (\Exception $e) {
+
+                }
+
+              }
               if (!$product->url_compra) {
                 try {
                   if ($tienda->campo_slug_compra) {

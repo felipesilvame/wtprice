@@ -49,6 +49,7 @@ class SeedTiendas extends Command
           'campo_slug_compra' => '0.sku',
           'url_prefix_compra' => 'https://www.lider.cl/product/sku/',
           'url_suffix_compra' => null,
+          'campo_imagen_url' => '0.imagesAvailables.0',
         ]
       );
 
@@ -63,7 +64,8 @@ class SeedTiendas extends Command
           'campo_nombre_producto' => 'data.products.0.name',
           'campo_precio_referencia' => 'data.products.0.price.commerce',
           'campo_precio_tarjeta' => 'data.products.0.price.card',
-          'url_prefix_compra' => 'https://www.abcdin.cl/tienda/search/'
+          'url_prefix_compra' => 'https://www.abcdin.cl/tienda/search/',
+          'campo_imagen_url' => 'data.products.0.thumbnail',
         ]
       );
 
@@ -79,6 +81,7 @@ class SeedTiendas extends Command
           'campo_slug_compra' => 'productString',
           'url_prefix_compra' => 'https://simple.ripley.cl/',
           'url_suffix_compra' => null,
+          'campo_imagen_url' => 'fullImage',
         ]
       );
 
@@ -97,6 +100,7 @@ class SeedTiendas extends Command
           'campo_slug_compra' => '0.linkText',
           'url_prefix_compra' => 'https://www.jumbo.cl/',
           'url_suffix_compra' => '/p',
+          'campo_imagen_url' => '0.items.0.images.0.imageUrl',
         ]
       );
 
@@ -112,6 +116,7 @@ class SeedTiendas extends Command
           'campo_slug_compra' => '0.linkText',
           'url_prefix_compra' => 'https://www.corona.cl/',
           'url_suffix_compra' => '/p',
+          'campo_imagen_url' => '0.items.0.images.0.imageUrl',
         ]
       );
 
@@ -156,6 +161,7 @@ class SeedTiendas extends Command
             'X-cmRef' => 'FalabellaMobileApp',
             'Content-Type' => 'application/json',
           ],
+          'campo_imagen_url' => 'https://falabella.scene7.com/is/image/Falabella/'
         ]
       );
 
@@ -172,6 +178,7 @@ class SeedTiendas extends Command
           'url_prefix_compra' => 'https://www.paris.cl/',
           'url_suffix_compra' => '.html',
           'campo_slug_compra' => 'html > body div#product-content span.visually-hidden[itemprop=url]',
+          'campo_imagen_url' => 'html > body #thumbnails img'
         ]
       );
 
@@ -188,6 +195,7 @@ class SeedTiendas extends Command
           'url_prefix_compra' => 'https://www.lapolar.cl/',
           'url_suffix_compra' => '.html',
           'campo_slug_compra' => null,
+          'campo_imagen_url' => 'html > body .product-detail .primary-image img'
         ]
       );
     }
