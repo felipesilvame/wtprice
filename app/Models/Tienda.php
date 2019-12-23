@@ -41,6 +41,7 @@ class Tienda extends Model implements AuditableInterface
         'url_suffix_compra',
         'campo_slug_compra',
         'request_body_sku',
+        'campo_imagen_url'
     ];
 
     /**

@@ -44,6 +44,7 @@ class Producto extends Model implements AuditableInterface
         'url_compra',
         'intentos_fallidos',
         'actualizacion_pendiente',
+        'imagen_url',
     ];
 
     /**
