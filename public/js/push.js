@@ -19,7 +19,7 @@ function initSW() {
     //register the service worker
     navigator.serviceWorker.register('/sw.js')
         .then(() => {
-            console.log('serviceWorker installed!')
+            //console.log('serviceWorker installed!')
             initPush();
         })
         .catch((err) => {
@@ -42,7 +42,7 @@ function initPush() {
         }
     })
         .then((permissionResult) => {
-	    console.log(permissionResult);
+	    //console.log(permissionResult);
             if (permissionResult !== 'granted') {
                 throw new Error('We weren\'t granted permission.');
             }
@@ -54,7 +54,7 @@ function initPush() {
  * Subscribe the user to push
  */
 function subscribeUser() {
-    console.log('subscribing...');
+    //console.log('subscribing...');
     swReady.then((registration) => {
             const subscribeOptions = {
                 userVisibleOnly: true,
@@ -63,11 +63,11 @@ function subscribeUser() {
                     window.Laravel.vapidPublicKey
                 )
             };
-	    console.log(`vapidpublic key is: ${window.Laravel.vapidPublicKey}`);
+	    //console.log(`vapidpublic key is: ${window.Laravel.vapidPublicKey}`);
             return registration.pushManager.subscribe(subscribeOptions);
         })
         .then((pushSubscription) => {
-            console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+            //console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
             storePushSubscription(pushSubscription);
         });
 }

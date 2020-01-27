@@ -35,14 +35,14 @@
      * @param {NotificationEvent} event
      */
     notificationClick (event) {
-      // console.log(event.notification)
-
-      if (event.action === 'view_product') {
-        console.log(event.data.url);
-        self.clients.openWindow(event.data.url)
-      }
+      event.notification.close();
+      console.log("lotificanding...");
+      console.log(event.notification.data);
+      //event.notification.close();
+      event.waitUntil(
+         self.clients.openWindow(event.notification.data.url)
+      );
     },
-
     /**
      * Handle notification close event (Chrome 50+, Firefox 55+).
      *
