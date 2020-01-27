@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\User\DashboardController;
  * All route names are prefixed with 'frontend.'.
  */
 Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::post('/push', 'PushController@store')->name('push.store');
 
 
 /*

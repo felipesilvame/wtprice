@@ -7,9 +7,10 @@
 
 import '../bootstrap';
 import '../plugins';
-import Vue from 'vue';
+//import Vue from 'vue';
+import Fingerprint2 from 'fingerprintjs2'
 
-window.Vue = Vue;
+//window.Vue = Vue;
 
 /**
  * The following block of code may be used to automatically register your
@@ -22,7 +23,7 @@ window.Vue = Vue;
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+//Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -30,6 +31,33 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app'
-});
+// const app = new Vue({
+//     el: '#app'
+// });
+const options = {
+  excludes: {
+    webdriver: true,
+    plugins: true,
+    canvas: true,
+    webgl: true,
+    adBlock: true,
+    audio: true,
+  }
+};
+if (window.requestIdleCallback) {
+    requestIdleCallback(function () {
+        Fingerprint2.get(options, function (components) {
+          var values = components.map(function (component) { return component.value; });
+          var murmur = Fingerprint2.x64hash128(values.join(''), 31);
+          window.Laravel.hashid = murmur;
+        })
+    })
+} else {
+    setTimeout(function () {
+        Fingerprint2.get(options, function (components) {
+          var values = components.map(function (component) { return component.value; });
+          var murmur = Fingerprint2.x64hash128(values.join(''), 31);
+          window.Laravel.hashid = murmur;
+        })
+    }, 500)
+}

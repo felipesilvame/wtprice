@@ -11,6 +11,14 @@
         <title>@yield('title', app_name())</title>
         <meta name="description" content="@yield('meta_description', 'Laravel 5 Boilerplate')">
         <meta name="author" content="@yield('meta_author', 'Anthony Rappa')">
+
+        <script>
+          window.Laravel = {!! json_encode([
+              'hashid' => null,
+              'csrfToken' => csrf_token(),
+              'vapidPublicKey' => config('webpush.vapid.public_key'),
+          ]) !!};
+        </script>
         @yield('meta')
 
         {{-- See https://laravel.com/docs/5.5/blade#stacks for usage --}}
@@ -41,6 +49,7 @@
         {!! script(mix('js/vendor.js')) !!}
         {!! script(mix('js/frontend.js')) !!}
         @stack('after-scripts')
+        {!! script('js/push.js') !!}
 
         @include('includes.partials.ga')
     </body>
