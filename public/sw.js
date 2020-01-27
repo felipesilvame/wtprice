@@ -38,7 +38,8 @@
       // console.log(event.notification)
 
       if (event.action === 'view_product') {
-        self.clients.openWindow(event.notification.data.url)
+        console.log(event.data.url);
+        self.clients.openWindow(event.data.url)
       }
     },
 
