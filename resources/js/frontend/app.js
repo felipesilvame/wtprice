@@ -50,6 +50,7 @@ if (window.requestIdleCallback) {
           var values = components.map(function (component) { return component.value; });
           var murmur = Fingerprint2.x64hash128(values.join(''), 31);
           window.Laravel.hashid = murmur;
+          initSW();
         })
     })
 } else {
@@ -58,6 +59,7 @@ if (window.requestIdleCallback) {
           var values = components.map(function (component) { return component.value; });
           var murmur = Fingerprint2.x64hash128(values.join(''), 31);
           window.Laravel.hashid = murmur;
+          initSW();
         })
     }, 500)
 }
