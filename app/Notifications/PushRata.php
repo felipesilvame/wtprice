@@ -24,14 +24,12 @@ class PushRata extends Notification
      *
      * @return void
      */
-    public function __construct(Producto $product, int $precio_antes, int $precio_despues, $porcentaje_rata = null, $is_tarjeta = null)
+    public function __construct(Producto $product, int $precio_antes, int $precio_despues)
     {
         $this->product = $product;
         $this->product->load('tienda');
         $this->precio_antes = moneyFormat($precio_antes, 'CLP');
         $this->precio_despues = moneyFormat($precio_despues, 'CLP');
-        $this->is_tarjeta = (boolean)$is_tarjeta;
-        $this->porcentaje_rata = (boolean)$porcentaje_rata ? (int)(round($porcentaje_rata*100)) : 0;
     }
 
     /**
