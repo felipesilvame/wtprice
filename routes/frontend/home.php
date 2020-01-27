@@ -12,6 +12,7 @@ use App\Http\Controllers\Frontend\User\DashboardController;
  */
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::post('/push', 'PushController@store')->name('push.store');
+Route::get('/example', 'PushController@push');
 
 
 /*
