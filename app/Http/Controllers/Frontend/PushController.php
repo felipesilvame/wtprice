@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Notifications\PushRata;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Device;
@@ -43,7 +44,7 @@ class PushController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function push(){
-      Notification::send(Device::all(),new PushDemo);
+      Notification::send(Device::all(),new PushRata);
       return response('OK');
   }
 }
