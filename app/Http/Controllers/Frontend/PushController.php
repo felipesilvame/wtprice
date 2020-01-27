@@ -29,7 +29,7 @@ class PushController extends Controller
       $key = $request->sub['keys']['p256dh'];
       $hashid = $request->hashid;
       $user = Device::firstOrCreate([
-          'hashid' => $hashid
+          'fingerprint' => $hashid
       ]);
 
       $user->updatePushSubscription($endpoint, $key, $token);
