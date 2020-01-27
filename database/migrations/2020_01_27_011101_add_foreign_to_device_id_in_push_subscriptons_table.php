@@ -13,7 +13,7 @@ class AddForeignToDeviceIdInPushSubscriptonsTable extends Migration
      */
     public function up()
     {
-        Schema::table('push_subscriptons', function (Blueprint $table) {
+        Schema::table('push_subscriptions', function (Blueprint $table) {
           $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade');
         });
     }
@@ -25,7 +25,7 @@ class AddForeignToDeviceIdInPushSubscriptonsTable extends Migration
      */
     public function down()
     {
-        Schema::table('push_subscriptons', function (Blueprint $table) {
+        Schema::table('push_subscriptions', function (Blueprint $table) {
           $table->dropForeign(['device_id']);
         });
     }
