@@ -44,7 +44,7 @@ class PushController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function push(){
-      $product = \App\Models\Producto::where('updated_at', 'DESC')->first();
+      $product = \App\Models\Producto::orderBy('updated_at', 'DESC')->first();
       Notification::send(Device::all(),new PushRata($product, 199900, 19990));
       return response('OK');
   }
