@@ -49,7 +49,7 @@ class Device extends Model implements AuditableInterface
      * @return bool
      */
     public function pushSubscriptionBelongsToUser($subscription){
-        return (int) $subscription->guest_id === (int) $this->id;
+        return (int) $subscription->device_id === (int) $this->id;
     }
 
 
