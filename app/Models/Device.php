@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Models\Traits\Uuid;
+use OwenIt\Auditing\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable as AuditableInterface;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 use Illuminate\Notifications\Notifiable;
 
-class Device extends Model
+class Device extends Model implements AuditableInterface
 {
     use HasPushSubscriptions,
         Notifiable,
