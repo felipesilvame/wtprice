@@ -21,7 +21,6 @@ class CreateDevicesTable extends Migration
             $table->string('browser')->nullable();
             $table->string('operating_system')->nullable();
             $table->string('user_device')->nullable();
-            $table->string('endpoint', 255)->nullable()->unique();
             $table->timestamps();
             $table->softDeletes();
         });
