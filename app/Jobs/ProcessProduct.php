@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use App\Models\Device;
 use App\Models\HistorialPrecio;
 use App\Models\MinimoPrecio;
 use App\Models\Producto;
@@ -16,6 +17,8 @@ use \Carbon\Carbon;
 use NotificationChannels\Twitter\TwitterChannel;
 use App\Notifications\ProductoAhoraEnOferta;
 use App\Helpers\General\Arr as ArrHelper;
+use Notification;
+use App\Notifications\PushRata;
 
 class ProcessProduct implements ShouldQueue
 {
@@ -262,6 +265,10 @@ class ProcessProduct implements ShouldQueue
                     //check how much it changes
                     $percentage_rata = ((int)$minimo->precio_referencia-(int)$product->precio_referencia)/(float)$minimo->precio_referencia;
                     if ($percentage_rata >= 0.7) {
+                      try {
+                        Notification::send(Device::all(),new PushRata($product, $minimo->precio_referencia, $product->precio_referencia));
+                      } catch (\Exception $e) {
+                      }
                       \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
                       ->notify(new \App\Notifications\AlertaRata($product, $minimo->precio_referencia, $product->precio_referencia, $percentage_rata));
                     }
@@ -275,8 +282,17 @@ class ProcessProduct implements ShouldQueue
                     //compare between the oferta parameter with the reference...
                     $percentage_rata_relativo = ((int)$minimo->precio_referencia-(int)$product->precio_oferta)/(float)$minimo->precio_referencia;
                     if ($percentage_rata >= 0.55 && $percentage_rata_relativo >= 0.6) {
-                      \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-                      ->notify(new \App\Notifications\AlertaRata($product, $minimo->precio_oferta, $product->precio_oferta, $percentage_rata));
+                      try {
+                        Notification::send(Device::all(),new PushRata($product, $minimo->precio_oferta, $product->precio_oferta));
+                      } catch (\Exception $e) {
+                        Log::error("No se ha podido enviar notificacion para el producto $product->id");
+                      }
+                      try {
+                        \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                        ->notify(new \App\Notifications\AlertaRata($product, $minimo->precio_oferta, $product->precio_oferta, $percentage_rata));
+                      } catch (\Exception $e) {
+                        Log::error("No se ha podido enviar notificacion para el producto $product->id");
+                      }
                     }
                   } else if (!(boolean)$minimo->precio_oferta && (boolean)$product->precio_oferta &&!(boolean)$product->precio_tarjeta) {
                     //si antes no tenia precio oferta y ahora no tiene precio con tarjeta...
@@ -300,6 +316,10 @@ class ProcessProduct implements ShouldQueue
                     //compare between the oferta parameter with the reference...
                     $percentage_rata_relativo = ((int)$minimo->precio_referencia-(int)$product->precio_tarjeta)/(float)$minimo->precio_referencia;
                     if ($percentage_rata >= 0.40 && $percentage_rata_relativo >= 0.7) {
+                      try {
+                        Notification::send(Device::all(),new PushRata($product, $minimo->precio_oferta, $product->precio_oferta));
+                      } catch (\Exception $e) {
+                      }
                       try {
                         \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
                         ->notify(new \App\Notifications\AlertaRata($product, $minimo->precio_tarjeta, $product->precio_tarjeta, $percentage_rata, true));
