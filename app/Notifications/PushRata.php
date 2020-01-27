@@ -13,14 +13,25 @@ class PushRata extends Notification
 {
     use Queueable;
 
+    private $product;
+    private $precio_antes;
+    private $precio_despues;
+    private $is_tarjeta;
+    private $porcentaje_rata;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Producto $product, int $precio_antes, int $precio_despues, $porcentaje_rata = null, $is_tarjeta = null)
     {
-        //
+        $this->product = $product;
+        $this->product->load('tienda');
+        $this->precio_antes = moneyFormat($precio_antes, 'CLP');
+        $this->precio_despues = moneyFormat($precio_despues, 'CLP');
+        $this->is_tarjeta = (boolean)$is_tarjeta;
+        $this->porcentaje_rata = (boolean)$porcentaje_rata ? (int)(round($porcentaje_rata*100)) : 0;
     }
 
     /**
@@ -36,11 +47,17 @@ class PushRata extends Notification
 
     public function toWebPush($notifiable, $notification)
     {
+        $product = $this->product;
+        $precio_antes = $this->precio_antes;
+        $precio_despues = $this->precio_despues;
+
         return (new WebPushMessage)
-            ->title('I\'m Notification Title')
+            ->title('Alerta rata 🐀')
             ->icon('/notification-icon.png')
-            ->body('Great, Push Notifications work!')
-            ->action('View App', 'notification_action');
+            ->body($product->nombre. ' a solo '.$precio_despues)
+            ->action('Ver producto', 'view_product')
+            ->data(['url' => $product->url_compra])
+            ->vibrate([125,75,125,275,200,275,125,75,125,275,200,600,200,600]);
     }
 
     /**
