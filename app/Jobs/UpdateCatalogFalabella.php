@@ -30,7 +30,8 @@ class UpdateCatalogFalabella implements ShouldQueue
     private $uri;
     private $page_start;
     private $tienda;
-    private $total_pages_field;
+    private $total_elements_field;
+    private $per_page_field;
     private $results_field;
     private $sku_field;
     private $current_page_field;
@@ -44,28 +45,29 @@ class UpdateCatalogFalabella implements ShouldQueue
     public function __construct()
     {
       $this->categories = [
-        '/category/cat4850013/Computacion-Gamer',
-        '/category/cat720161/Smartphones',
-        '/category/cat2018/Celulares-y-Telefonos',
-        '/category/cat7190053/Wearables',
-        '/category/cat1012/TV',
-        '/category/cat70057/Notebooks',
-        '/category/cat2062/Monitores',
-        '/category/cat40051/All-In-One',
-        '/category/cat7230007/Tablets',
-        '/category/cat4850013/Computacion-Gamer',
-        '/category/cat2023/Videojuegos',
-        '/category/cat2038/Fotografia',
+        'cat4850013', ///Computacion-Gamer',
+        'cat720161', //Smartphones',
+        'cat2018', //Celulares-y-Telefonos',
+        'cat7190053', //Wearables',
+        'cat1012', //TV',
+        'cat70057', //Notebooks',
+        'cat2062', //Monitores',
+        'cat40051', //All-In-One',
+        'cat7230007', //Tablets',
+        //'cat4850013', //Computacion-Gamer',
+        'cat2023', //Videojuegos',
+        'cat2038', //Fotografia',
       ];
       $this->protocol = 'https';
-      $this->method = 'POST';
-      $this->uri = 'www.falabella.com/rest/model/falabella/rest/browse/BrowseActor/get-product-record-list';
+      $this->method = 'GET';
+      $this->uri = 'www.falabella.com/s/browse/v1/listing/cl';
       $this->page_start = 1;
       $this->total_pages = 1;
       $this->tienda = null;
-      $this->total_pages_field = 'state.pagesTotal';
-      $this->results_field = 'state.resultList';
-      $this->current_page_field = 'state.curentPage';
+      $this->total_elements_field = 'data.pagination.count';
+      $this->per_page_field = 'data.pagination.perPage';
+      $this->results_field = 'data.results';
+      $this->current_page_field = 'data.pagination.currentPage';
       $this->sku_field = 'productId';
     }
 
@@ -87,22 +89,15 @@ class UpdateCatalogFalabella implements ShouldQueue
           try {
             $page_start = 1;
             Log::debug("getting first page for category $category");
-            $options = [];
-            $options['headers'] = [
-              'Content-type' => 'application/json',
-            ];
-            $body_data = [
-              'currentPage' => (int)$page_start,
-              'navState' => $category,
-            ];
-            $options['body'] = json_encode($body_data);
+            
             //get response
             $url = $this->protocol.'://'.$this->uri;
+            $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate%2Cdesc";
             $response = null;
             $data = null;
             $total_pages = 0;
             try {
-              $response = $client->post($url, $options)->getBody()->getContents();
+              $response = $client->get($url)->getBody()->getContents();
             } catch (\Exception $e) {
               Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
               throw new \Exception("Error Processing Request", 1);
@@ -115,7 +110,7 @@ class UpdateCatalogFalabella implements ShouldQueue
                 throw new \Exception("Error Processing Request", 1);
               }
               //got response, lets check how many pages has this request
-              $total_pages = ArrHelper::get($data, $this->total_pages_field, 0);
+              $total_pages = (int)ceil(ArrHelper::get($data, $this->total_elements_field, 0)/ArrHelper::get($data, $this->per_page_field, 1));
               //check now where am i
               $page_start = ArrHelper::get($data, $this->current_page_field, 0);
               //extract all sku for tienda and put them into database
@@ -149,21 +144,13 @@ class UpdateCatalogFalabella implements ShouldQueue
                 //FALABELLA BLOCKS THE F*KING REQUESTS!!!!
                 usleep(700000);
                 Log::debug("making request for page $pages of $total_pages for cat $category");
-                $options = [];
-                $options['headers'] = [
-                  'Content-type' => 'application/json',
-                ];
-                $body_data = [
-                  'currentPage' => (int)$pages,
-                  'navState' => $category,
-                ];
-                $options['body'] = json_encode($body_data);
                 //get response
                 $url = $this->protocol.'://'.$this->uri;
+                $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate%2Cdesc";
                 $response = null;
                 $data = null;
                 try {
-                  $response = $client->post($url, $options)->getBody()->getContents();
+                  $response = $client->get($url)->getBody()->getContents();
                 } catch (\Exception $e) {
                   Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
                   throw new \Exception("Error Processing Request", 1);

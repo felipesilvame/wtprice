@@ -48,12 +48,12 @@ class UpdateCatalogRipley implements ShouldQueue
         '945204', // 2 en 1 convertibles
         '945205', //notebooks gamer
         '945206', //tablets
-        '945220',
-        '947841',
-        '945153',
-        '945155',
-        '945157',
-        '945158',
+        '945220', //parlantes
+        '947841', //gadgets
+        '945153', //television
+        '945155', //mundo gamer
+        '945157', //telefonia
+        '945158', //computacion
       ];
       $this->protocol = 'https';
       $this->method = 'GET';
