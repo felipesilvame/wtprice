@@ -92,12 +92,20 @@ class UpdateCatalogFalabella implements ShouldQueue
             
             //get response
             $url = $this->protocol.'://'.$this->uri;
-            $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate%2Cdesc";
+            $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc";
             $response = null;
             $data = null;
             $total_pages = 0;
             try {
-              $response = $client->get($url)->getBody()->getContents();
+              //deprecated, using classic curl
+              //$response = $client->get($url)->getBody()->getContents();
+              $ch = curl_init();
+              curl_setopt($ch, CURLOPT_URL, $url);
+              curl_setopt($ch, CURLOPT_POST, 0);
+              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+              $response = curl_exec($ch);
+              $err = curl_error($ch);  //if you need
+              curl_close($ch);
             } catch (\Exception $e) {
               Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
               throw new \Exception("Error Processing Request", 1);
@@ -150,7 +158,15 @@ class UpdateCatalogFalabella implements ShouldQueue
                 $response = null;
                 $data = null;
                 try {
-                  $response = $client->get($url)->getBody()->getContents();
+                  //deprecated, using classic curl
+                  //$response = $client->get($url)->getBody()->getContents();
+                  $ch = curl_init();
+                  curl_setopt($ch, CURLOPT_URL, $url);
+                  curl_setopt($ch, CURLOPT_POST, 0);
+                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                  $response = curl_exec($ch);
+                  $err = curl_error($ch);  //if you need
+                  curl_close($ch);
                 } catch (\Exception $e) {
                   Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
                   throw new \Exception("Error Processing Request", 1);
