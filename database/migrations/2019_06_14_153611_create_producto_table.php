@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+/**
+ * Updated 14-03-2020: imagen_url es ahora TEXT
+ */
 class CreateProductoTable extends Migration
 {
     /**
@@ -22,7 +25,7 @@ class CreateProductoTable extends Migration
             $table->string('marca')->nullable();
             $table->string('modelo')->nullable();
             $table->text('descripcion')->nullable();
-            $table->string('imagen_url')->nullable();
+            $table->text('imagen_url')->nullable();
             $table->string('categoria')->nullable();
             $table->decimal('precio_referencia', 10, 2)->nullable();
             $table->decimal('precio_oferta', 10, 2)->nullable();

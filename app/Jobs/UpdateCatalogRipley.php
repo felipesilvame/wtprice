@@ -76,6 +76,11 @@ class UpdateCatalogRipley implements ShouldQueue
     {
       $tienda = null;
       $client = new \GuzzleHttp\Client();
+      $options = [];
+      //added proxy for ripley
+      if ((boolean)env('APP_PROXY')) {
+        $options['proxy'] = env('APP_PROXY');
+      }
       if ($tienda = \App\Models\Tienda::whereNombre('Ripley')->first()) {
         Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
@@ -91,8 +96,7 @@ class UpdateCatalogRipley implements ShouldQueue
             $response = null;
             $data = null;
             try {
-              //added proxy for ripley
-              $response = $client->get($url, ['proxy' => 'tcp://183.88.38.172:8080'])->getBody()->getContents();
+              $response = $client->get($url, $options)->getBody()->getContents();
             } catch (\Exception $e) {
               Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
               throw new \Exception("Error Processing Request", 1);
@@ -142,7 +146,7 @@ class UpdateCatalogRipley implements ShouldQueue
                 $data = null;
                 try {
                   //added proxy for ripley
-                  $response = $client->get($url, ['proxy' => 'tcp://183.88.38.172:8080'])->getBody()->getContents();
+                  $response = $client->get($url, $options)->getBody()->getContents();
                 } catch (\Exception $e) {
                   Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
                   throw new \Exception("Error Processing Request", 1);
