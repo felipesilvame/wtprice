@@ -83,6 +83,10 @@ class ProcessProduct implements ShouldQueue
           if ($tienda->request_body_sku && $tienda->method == "POST") {
             $options['body'] = json_encode([$tienda->request_body_sku => $product->sku]);
           }
+          if($tienda->nombre === 'Ripley' && (boolean)env('APP_PROXY')) {
+            //for ripley, add proxy
+            $options['proxy'] = env('APP_PROXY');
+          }
           try {
             if ($tienda->method == "POST") {
               $response = $client->post($url, $options)->getBody()->getContents();
@@ -95,7 +99,7 @@ class ProcessProduct implements ShouldQueue
                 $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url);
               }
 
-              $response = (string) $client->send($request)->getBody();
+              $response = (string) $client->send($request, $options)->getBody();
             }
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener respuesta del servidor para el producto ".$product->id." Tienda ".$tienda->nombre);

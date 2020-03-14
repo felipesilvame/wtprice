@@ -91,7 +91,8 @@ class UpdateCatalogRipley implements ShouldQueue
             $response = null;
             $data = null;
             try {
-              $response = $client->get($url)->getBody()->getContents();
+              //added proxy for ripley
+              $response = $client->get($url, ['proxy' => 'tcp://183.88.38.172:8080'])->getBody()->getContents();
             } catch (\Exception $e) {
               Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
               throw new \Exception("Error Processing Request", 1);
@@ -140,7 +141,8 @@ class UpdateCatalogRipley implements ShouldQueue
                 $response = null;
                 $data = null;
                 try {
-                  $response = $client->get($url)->getBody()->getContents();
+                  //added proxy for ripley
+                  $response = $client->get($url, ['proxy' => 'tcp://183.88.38.172:8080'])->getBody()->getContents();
                 } catch (\Exception $e) {
                   Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
                   throw new \Exception("Error Processing Request", 1);
