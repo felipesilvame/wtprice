@@ -80,6 +80,7 @@ class UpdateCatalogRipley implements ShouldQueue
       //added proxy for ripley
       if ((boolean)env('APP_PROXY')) {
         $options['proxy'] = env('APP_PROXY');
+$options['verify'] = false;
       }
       if ($tienda = \App\Models\Tienda::whereNombre('Ripley')->first()) {
         Log::debug("Tienda found. ID: ".$tienda->id);
