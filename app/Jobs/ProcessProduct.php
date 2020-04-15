@@ -224,14 +224,19 @@ class ProcessProduct implements ShouldQueue
                 $product->intentos_fallidos +=1;
                 throw $e;
               }
-              // create historical data
-              $historical = HistorialPrecio::create([
-              'id_producto' => $product->id,
-              'precio_referencia' => $product->precio_referencia,
-              'precio_oferta' => $product->precio_oferta,
-              'precio_tarjeta' => $product->precio_tarjeta,
-              'fecha' => Carbon::now(),
-              ]);
+
+              if($old->precio_referencia !== $product->precio_referencia ||
+              $old->precio_oferta !== $product->precio_oferta
+              $old->precio_tarjeta !== $product->precio_tarjeta
+              ){
+                $historical = HistorialPrecio::create([
+                'id_producto' => $product->id,
+                'precio_referencia' => $product->precio_referencia,
+                'precio_oferta' => $product->precio_oferta,
+                'precio_tarjeta' => $product->precio_tarjeta,
+                'fecha' => Carbon::now(),
+                ]);
+              }
 
               if (count($product->getDirty()) > 0) {
                 //save ultima actualizacion

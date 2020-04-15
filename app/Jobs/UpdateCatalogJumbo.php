@@ -44,13 +44,13 @@ class UpdateCatalogJumbo implements ShouldQueue
     public function __construct()
     {
       $this->categories = [
-        '/298/302/300/', //celulares
-        '/298/302/309/', //computacion y accesorios
-        '/298/303/431/', //televisores
+        'electro-y-tecnologia/tecnologia/celulares/', //celulares
+        '298/302/309/', //computacion y accesorios
+        '298/303/431/', //televisores
       ];
       $this->protocol = 'https';
       $this->method = 'GET';
-      $this->uri = 'api.smdigital.cl:8443/v0/cl/jumbo/vtex/front/dev/proxy/api/v1/catalog_system/pub/products/search/';
+      $this->uri = 'api.smdigital.cl:8443/v0/cl/jumbo/vtex/front/prod/proxy/api/v2/products/search';
       $this->page_start = 0;
       $this->page_end = 0;
       $this->total_pages = 0;
