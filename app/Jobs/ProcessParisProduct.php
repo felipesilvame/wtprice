@@ -163,7 +163,7 @@ class ProcessParisProduct implements ShouldQueue
           }
           // create historical data
           if($old->precio_referencia !== $product->precio_referencia ||
-              $old->precio_oferta !== $product->precio_oferta
+              $old->precio_oferta !== $product->precio_oferta ||
               $old->precio_tarjeta !== $product->precio_tarjeta
               ){
                 $historical = HistorialPrecio::create([
