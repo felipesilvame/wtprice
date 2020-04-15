@@ -86,6 +86,7 @@ class ProcessProduct implements ShouldQueue
           if($tienda->nombre === 'Ripley' && (boolean)env('APP_PROXY')) {
             //for ripley, add proxy
             $options['proxy'] = env('APP_PROXY');
+$options['verify'] = false;
           }
           try {
             if ($tienda->method == "POST") {
