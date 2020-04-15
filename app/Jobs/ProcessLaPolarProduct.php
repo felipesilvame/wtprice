@@ -163,13 +163,18 @@ class ProcessLaPolarProduct implements ShouldQueue
             $product->precio_oferta = null;
           }
           // create historical data
-          $historical = HistorialPrecio::create([
-          'id_producto' => $product->id,
-          'precio_referencia' => $product->precio_referencia,
-          'precio_oferta' => $product->precio_oferta,
-          'precio_tarjeta' => $product->precio_tarjeta,
-          'fecha' => Carbon::now(),
-          ]);
+          if($old->precio_referencia !== $product->precio_referencia ||
+              $old->precio_oferta !== $product->precio_oferta
+              $old->precio_tarjeta !== $product->precio_tarjeta
+              ){
+                $historical = HistorialPrecio::create([
+                'id_producto' => $product->id,
+                'precio_referencia' => $product->precio_referencia,
+                'precio_oferta' => $product->precio_oferta,
+                'precio_tarjeta' => $product->precio_tarjeta,
+                'fecha' => Carbon::now(),
+                ]);
+              }
 
           $product->ultima_actualizacion = \Carbon\Carbon::now();
           $product->intervalo_actualizacion = random_int(15, 100);
