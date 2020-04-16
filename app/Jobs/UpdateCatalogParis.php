@@ -93,7 +93,8 @@ class UpdateCatalogParis implements ShouldQueue
                           'sku' => $sku,
                           'id_tienda' => $tienda->id,
                           'nombre' => $sku,
-                          'intervalo_actualizacion' => random_int(15,45)
+                          'intervalo_actualizacion' => random_int(15,45),
+                          'categoria' => $category
                         ]);
                       }
                     } catch (\Exception $e) {

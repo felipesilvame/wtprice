@@ -128,7 +128,8 @@ class UpdateCatalogCorona implements ShouldQueue
                     'id_tienda' => $tienda->id,
                     'sku' => $sku,
                     'nombre' => $sku,
-                    'intervalo_actualizacion' => random_int(15,45)
+                    'intervalo_actualizacion' => random_int(15,45),
+                    'categoria' => $category
                   ]);
                 }
               }
@@ -183,7 +184,8 @@ class UpdateCatalogCorona implements ShouldQueue
                       'id_tienda' => $tienda->id,
                       'sku' => $sku,
                       'nombre' => $sku,
-                      'intervalo_actualizacion' => random_int(15,45)
+                      'intervalo_actualizacion' => random_int(15,45),
+                      'categoria' => $category
                     ]);
                   }
                 }
