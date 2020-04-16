@@ -283,14 +283,14 @@ class ProcessProduct implements ShouldQueue
                 }
                 // Es hora de discriminar
                 if ($p_rata >= 0.60 && $p_rata_relativo >= 0.63) {
-                  if ($minimo->precio_referencia >= 490000) {
+                  if ($old->precio_referencia >= 490000) {
                     // ALERTA RATA LVL 3: ESTA WEA ES UN COIPO
                     try {
                       Rata::alertaCoipo($product, $minimo, $p_rata);
                     } catch (\Exception $e) {
                       //throw $th;
                     }
-                  } else if ($minimo->precio_referencia >= 195000){
+                  } else if ($old->precio_referencia >= 195000){
                     // ALERTA RATA LVL 2: ESTO ES UNA RATA
                     try {
                       Rata::alertaRata($product, $minimo, $p_rata);
@@ -308,9 +308,9 @@ class ProcessProduct implements ShouldQueue
                   \App\Models\AlertaRata::create([
                     'id_tienda' => $tienda->id,
                     'id_producto' => $product->id,
-                    'precio_antes' => $minimo->precio_referencia,
-                    'precio_oferta_antes' => $minimo->precio_oferta,
-                    'precio_tarjeta_antes' => $minimo->precio_tarjeta,
+                    'precio_antes' => $old->precio_referencia,
+                    'precio_oferta_antes' => $old->precio_oferta,
+                    'precio_tarjeta_antes' => $old->precio_tarjeta,
                     'precio_ahora' => $product->precio_referencia,
                     'precio_oferta_ahora' => $product->precio_oferta,
                     'precio_tarjeta_ahora' => $product->precio_tarjeta,
@@ -342,9 +342,9 @@ class ProcessProduct implements ShouldQueue
                   \App\Models\AlertaRata::create([
                     'id_tienda' => $tienda->id,
                     'id_producto' => $product->id,
-                    'precio_antes' => $minimo->precio_referencia,
-                    'precio_oferta_antes' => $minimo->precio_oferta,
-                    'precio_tarjeta_antes' => $minimo->precio_tarjeta,
+                    'precio_antes' => $old->precio_referencia,
+                    'precio_oferta_antes' => $old->precio_oferta,
+                    'precio_tarjeta_antes' => $old->precio_tarjeta,
                     'precio_ahora' => $product->precio_referencia,
                     'precio_oferta_ahora' => $product->precio_oferta,
                     'precio_tarjeta_ahora' => $product->precio_tarjeta,

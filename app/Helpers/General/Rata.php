@@ -204,13 +204,13 @@ class Rata
             throw $e;
         }
         try {
-            Notification::send(Device::all(),new PushRata($producto, self::menorValor($minimo), self::menorValor($producto)));
+            //Notification::send(Device::all(),new PushRata($producto, self::menorValor($minimo), self::menorValor($producto)));
         } catch (\Exception $e) {
             //throw $th;
         }
         try {
-            \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-                      ->notify(new \App\Notifications\AlertaRata($producto, self::menorValor($minimo), self::menorValor($producto), $p_rata));
+           // \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+            //          ->notify(new \App\Notifications\AlertaRata($producto, self::menorValor($minimo), self::menorValor($producto), $p_rata));
         } catch (\Exception $e) {
             //throw $th;
         }

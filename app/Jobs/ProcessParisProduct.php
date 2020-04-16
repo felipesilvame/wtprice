@@ -110,7 +110,7 @@ class ProcessParisProduct implements ShouldQueue
           }
           // check precio referencia, cancel if fails
           try {
-            $precio_referencia = trim($crawler->filter($tienda->campo_precio_referencia)->first()->text());
+            $precio_referencia = trim($crawler->filter($tienda->campo_precio_referencia)->last()->text());
             $p_referencia = (integer)preg_replace('/[^0-9]/','',$precio_referencia);
             if ($p_referencia && $p_referencia < 10000000) {
               $product->precio_referencia = $p_referencia;
@@ -216,14 +216,14 @@ class ProcessParisProduct implements ShouldQueue
             }
             // Es hora de discriminar
             if ($p_rata >= 0.60 && $p_rata_relativo >= 0.63) {
-              if ($minimo->precio_referencia >= 490000) {
+              if ($old->precio_referencia >= 490000) {
                 // ALERTA RATA LVL 3: ESTA WEA ES UN COIPO
                 try {
                   Rata::alertaCoipo($product, $minimo, $p_rata);
                 } catch (\Exception $e) {
                   //throw $th;
                 }
-              } else if ($minimo->precio_referencia >= 195000){
+              } else if ($old->precio_referencia >= 195000){
                 // ALERTA RATA LVL 2: ESTO ES UNA RATA
                 try {
                   Rata::alertaRata($product, $minimo, $p_rata);
@@ -241,9 +241,9 @@ class ProcessParisProduct implements ShouldQueue
               \App\Models\AlertaRata::create([
                 'id_tienda' => $tienda->id,
                 'id_producto' => $product->id,
-                'precio_antes' => $minimo->precio_referencia,
-                'precio_oferta_antes' => $minimo->precio_oferta,
-                'precio_tarjeta_antes' => $minimo->precio_tarjeta,
+                'precio_antes' => $old->precio_referencia,
+                'precio_oferta_antes' => $old->precio_oferta,
+                'precio_tarjeta_antes' => $old->precio_tarjeta,
                 'precio_ahora' => $product->precio_referencia,
                 'precio_oferta_ahora' => $product->precio_oferta,
                 'precio_tarjeta_ahora' => $product->precio_tarjeta,
@@ -255,7 +255,7 @@ class ProcessParisProduct implements ShouldQueue
                 'url_imagen' => $product->imagen_url,
               ]);
             } else if ($p_rata >= 0.85){
-              if ($minimo->precio_referencia >= 10000) {
+              if ($old->precio_referencia >= 10000) {
                 // RATA LVL 3: COIPO
                 try {
                   Rata::alertaCoipo($product, $minimo, $p_rata);
@@ -275,9 +275,9 @@ class ProcessParisProduct implements ShouldQueue
               \App\Models\AlertaRata::create([
                 'id_tienda' => $tienda->id,
                 'id_producto' => $product->id,
-                'precio_antes' => $minimo->precio_referencia,
-                'precio_oferta_antes' => $minimo->precio_oferta,
-                'precio_tarjeta_antes' => $minimo->precio_tarjeta,
+                'precio_antes' => $old->precio_referencia,
+                'precio_oferta_antes' => $old->precio_oferta,
+                'precio_tarjeta_antes' => $old->precio_tarjeta,
                 'precio_ahora' => $product->precio_referencia,
                 'precio_oferta_ahora' => $product->precio_oferta,
                 'precio_tarjeta_ahora' => $product->precio_tarjeta,
