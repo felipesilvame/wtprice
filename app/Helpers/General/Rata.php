@@ -143,6 +143,34 @@ class Rata
     }
 
     /**
+     * Compara el porcentaje consigo mismo, 
+     * en caso de que un producto tenga el valor erroneo 
+     * al primer escaneo
+     * @param \App\Models\Producto $producto
+     * @return array
+     */
+    public static function calculaSelf(Producto $producto){
+        $p_rata = 0.0;
+        $p_rata_relativo = 0.0;
+        try {
+            if ($producto->precio_tarjeta && $producto->precio_oferta) {
+                $p_rata = self::comparar($producto->precio_tarjeta, $producto->precio_oferta);
+                $p_rata_relativo = self::comparar($producto->precio_tarjeta, $producto->precio_referencia);
+            } else if ($producto->precio_tarjeta && !$producto->precio_oferta) {
+                $p_rata = self::comparar($producto->precio_tarjeta, $producto->precio_referencia);
+                $p_rata_relativo = $p_rata;
+            } else if (!$producto->precio_tarjeta && $producto->precio_oferta) {
+                $p_rata = self::comparar($producto->precio_oferta, $producto->precio_referencia);
+                $p_rata_relativo = $p_rata;
+            } 
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+
+        return [$p_rata, $p_rata_relativo];
+    }
+
+    /**
      * Compara entre 2 precios, si es negativo, se trunca a 0.
      * Se asume que el primer elemento siempre será menor al segundo
      * @param int|float $a
