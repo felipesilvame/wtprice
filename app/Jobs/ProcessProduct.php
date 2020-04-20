@@ -325,7 +325,7 @@ class ProcessProduct implements ShouldQueue
                   $minimo->precio_tarjeta = $product->precio_tarjeta;
                 }
                 // Es hora de discriminar
-                if ($p_rata >= 0.60 && $p_rata_relativo >= 0.63) {
+                if ($p_rata >= 0.65 && $p_rata_relativo >= 0.63) {
                   if ($old->precio_referencia >= 490000) {
                     // ALERTA RATA LVL 3: ESTA WEA ES UN COIPO
                     try {
@@ -364,7 +364,7 @@ class ProcessProduct implements ShouldQueue
                     'url_compra' => $product->url_compra,
                     'url_imagen' => $product->imagen_url,
                   ]);
-                } else if ($p_rata >= 0.85){
+                } else if ($p_rata >= 0.85 && $p_rata_relativo >= 0.5){
                   if ($minimo->precio_referencia >= 10000) {
                     // RATA LVL 3: COIPO
                     try {
