@@ -191,6 +191,7 @@ class Rata
      * Notifica por discord una alerta hamster
      */
     public static function alertaHamster(Producto $producto, MinimoPrecio $minimo, float $p_rata){
+        $imgUrl = self::imagenUrl($producto->imagen_url);
         try {
             $client = new Client();
             $response = $client->post('https://discordapp.com/api/webhooks/700179498922016829/SYjLTV8a8bL1BZ4QgmRZSaPBABuYtnJ_fYhEu1rhZ4rAnTlNsaqE6T-NyIzpUtH-QwUp', [
@@ -222,7 +223,7 @@ class Rata
                                 ]
                             ],
                             "image" => [
-                                "url" => $producto->imagen_url
+                                "url" => $imgUrl
                             ]
                         ]
                     ]
@@ -248,6 +249,7 @@ class Rata
      * Notifica por todos los medios una alerta rata
     */
     public static function alertaRata(Producto $producto, MinimoPrecio $minimo, float $p_rata){
+        $imgUrl = self::imagenUrl($producto->imagen_url);
         try {
             $client = new Client();
             $response = $client->post('https://discordapp.com/api/webhooks/700204968312832021/mdNtO_LLhxYH0rv5wIk1PWQJu5xuam9dHBT4GdPzsDkDwYCjaPTy39NpwJD23EpDElID', [
@@ -279,7 +281,7 @@ class Rata
                                 ]
                             ],
                             "image" => [
-                                "url" => $producto->imagen_url
+                                "url" => $imgUrl
                             ] 
                         ]
                     ]
@@ -305,6 +307,7 @@ class Rata
      * Notifica por todos los medios una alerta coipo
     */
     public static function alertaCoipo(Producto $producto, MinimoPrecio $minimo, float $p_rata){
+        $imgUrl = self::imagenUrl($producto->imagen_url);
         try {
             $client = new Client();
             $response = $client->post('https://discordapp.com/api/webhooks/700205655453204560/yrAx67HZ8f-ZTijUbIFvgsjMxQVoqSEHH25aZSxTkqPlQQIxQsupQi-HIQntvMB76VRP', [
@@ -336,7 +339,7 @@ class Rata
                                 ]
                             ],
                             "image" => [
-                                "url" => $producto->imagen_url
+                                "url" => $imgUrl
                             ] 
                         ]
                     ]
@@ -363,5 +366,13 @@ class Rata
             $valores[] = $producto->precio_tarjeta;
         }
         return min($valores);
+    }
+
+    /**
+    * Set a placeholder for img notification
+    */
+    public static function imagenUrl($url){
+        if (!$url || $url == '') return 'https://via.placeholder.com/150';
+        return parse_url($url, PHP_URL_SCHEME) === null ? 'https:'. $url : $url;
     }
 }
