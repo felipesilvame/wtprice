@@ -215,7 +215,7 @@ class Rata
                                 ],
                                 [
                                     "name" => "Precio antes",
-                                    "value" => moneyFormat(self::menorValor($minimo), 'CLP'),
+                                    "value" => moneyFormat($minimo->precio_referencia, 'CLP'),
                                 ],
                                 [
                                     "name" => "Precio ahora",
@@ -273,7 +273,7 @@ class Rata
                                 ],
                                 [
                                     "name" => "Precio antes",
-                                    "value" => moneyFormat(self::menorValor($minimo), 'CLP'),
+                                    "value" => moneyFormat($minimo->precio_referencia, 'CLP'),
                                 ],
                                 [
                                     "name" => "Precio ahora",
@@ -331,7 +331,7 @@ class Rata
                                 ],
                                 [
                                     "name" => "Precio antes",
-                                    "value" => moneyFormat(self::menorValor($minimo), 'CLP'),
+                                    "value" => moneyFormat($minimo->precio_referencia, 'CLP'),
                                 ],
                                 [
                                     "name" => "Precio ahora",
