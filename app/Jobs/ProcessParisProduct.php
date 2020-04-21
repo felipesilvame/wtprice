@@ -160,7 +160,7 @@ class ProcessParisProduct implements ShouldQueue
             }
           } catch (\Exception $e) {
             // si no se pudo obtener el precio tarjeta de un producto, y antes tenia... se elimina
-            $product->precio_oferta = null;
+            $product->precio_tarjeta = null;
           }
           // create historical data
           if($old->precio_referencia !== $product->precio_referencia ||
