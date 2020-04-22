@@ -74,7 +74,7 @@ class ProcessProduct implements ShouldQueue
           } else if ($tienda->method == "POST" && !$tienda->request_body_sku) {
             $url .= $product->sku;
           }
-          if ($tienda->prefix_api) {
+          if ($tienda->suffix_api) {
             $url .= $tienda->suffix_api;
           }
           $options = [];
@@ -251,9 +251,9 @@ class ProcessProduct implements ShouldQueue
               if ($tienda->nombre === "Falabella" || $tienda->nombre === "Linio") {
                 $product->intervalo_actualizacion = random_int(10, 45);
               } elseif ($tienda->nombre === 'Lider'){
-		            $product->intervalo_actualizacion = 1;
+		            $product->intervalo_actualizacion = random_int(5, 10);
 	            } else {
-                $product->intervalo_actualizacion = random_int(3, 25);
+                $product->intervalo_actualizacion = random_int(3, 35);
               }
               //el producto ha actualizado correctamente su precio, por lo tanto, tiene hora de ultima actualizacion
               //se puede volver a encolar
