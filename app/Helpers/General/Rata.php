@@ -64,8 +64,9 @@ class Rata
                  * Caso 2.3, tengo ambos 
                  */
                 else {
-                    $p_rata = self::comparar($ahora->precio_tarjeta, $minimo->precio_tarjeta);
-                    $p_rata_relativo = self::comparar($ahora->precio_tarjeta, $minimo->precio_referencia);
+                    $a = self::menorValor($ahora);
+                    $p_rata = self::comparar($a, $ahora->precio_referencia);
+                    $p_rata_relativo = self::comparar($a, $minimo->precio_referencia);
                 }
             }
             /**
@@ -90,8 +91,19 @@ class Rata
                      * menor al precio de oferta siempre.
                      */
                     else {
-                        $p_rata = self::comparar($ahora->precio_tarjeta, $minimo->precio_tarjeta);
-                        $p_rata_relativo = self::comparar($ahora->precio_tarjeta, $minimo->precio_referencia);
+
+                        /**
+                         * Hey! alto, se ha dado un caso donde por error antes no habia precio oferta
+                         * ahora si lo hay, y es misteriosamente menor al precio tarjeta que habia
+                         */
+                        if ($ahora->precio_oferta && $ahora->precio_tarjeta && ($ahora->precio_oferta < $ahora->precio_tarjeta)) {
+                            $p_rata = self::comparar($ahora->precio_oferta, $minimo->precio_referencia);
+                            $p_rata_relativo = self::comparar($ahora->precio_oferta, $ahora->precio_referencia);
+                        } else {
+                            $p_rata = self::comparar($ahora->precio_tarjeta, $minimo->precio_tarjeta);
+                            $p_rata_relativo = self::comparar($ahora->precio_tarjeta, $minimo->precio_referencia);
+                        }
+                        
                     } 
                 }
                 /**
@@ -108,33 +120,34 @@ class Rata
                     } 
                     /**
                      * Caso 3.2.2, tengo precio tarjeta u oferta
-                     * Da lo mismo, está el supuesto que el precio de tarjeta es
-                     * menor al precio de oferta siempre.
+                     * Da lo mismo, elijo el más bajo
                      */
                     else {
-                        $p_rata = self::comparar($ahora->precio_tarjeta, $minimo->precio_tarjeta);
-                        $p_rata_relativo = self::comparar($ahora->precio_tarjeta, $minimo->precio_referencia);
+                        $a = self::menorValor($ahora);
+                        $p_rata = self::comparar($a, $minimo->precio_tarjeta);
+                        $p_rata_relativo = self::comparar($a, $minimo->precio_referencia);
                     } 
                 }
                 /**
                  * Caso 3.3, tengo ambos
-                 * De todas formas, el precio tarjeta es 
+                 * elijo el más bajo 
                  * menor al precio de oferta siempre
                  */
                 else {
-                    $p_rata = self::comparar($ahora->precio_tarjeta, $minimo->precio_tarjeta);
-                    $p_rata_relativo = self::comparar($ahora->precio_tarjeta, $minimo->precio_referencia);
+                    $a = self::menorValor($ahora);
+                    $p_rata = self::comparar($a, $minimo->precio_tarjeta);
+                    $p_rata_relativo = self::comparar($a, $minimo->precio_referencia);
                 }
 
             }
             /**
              *  Caso 4. cualquier otro caso no considerado aqui
-             *  Se deja en supuesto que es más preciso y fácil de comprar un producto cuyo precio
-             *  esté en oferta, independiente si tiene posibilidad de tarjeta.
+             *  se compara el precio referencia con el precio más bajo registrado.
              */
             else {
-                $p_rata = self::comparar($ahora->precio_oferta, $minimo->precio_oferta);
-                $p_rata_relativo = self::comparar($ahora->precio_oferta, $minimo->precio_referencia);
+                $a = self::menorValor($ahora);
+                $p_rata = self::comparar($a, $ahora->precio_referencia);
+                $p_rata_relativo = self::comparar($a, $ahora->precio_referencia);
             }
         } catch (\Exception $e) {
             //throw $th;
