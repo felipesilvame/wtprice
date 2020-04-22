@@ -117,6 +117,7 @@ class UpdateCatalogAbcdin implements ShouldQueue
                   if ($producto->estado == "Detenido") {
                     $producto->estado = "Activo";
                     $producto->intentos_fallidos = 0;
+                    $producto->actualizacion_pendiente = 1;
                     $producto->save();
                   }
                   continue;
@@ -173,6 +174,7 @@ class UpdateCatalogAbcdin implements ShouldQueue
                       if ($producto->estado == "Detenido") {
                         $producto->estado = "Activo";
                         $producto->intentos_fallidos = 0;
+                        $producto->actualizacion_pendiente = 1;
                         $producto->save();
                       }
                       continue;

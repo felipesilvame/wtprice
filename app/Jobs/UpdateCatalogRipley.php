@@ -169,6 +169,7 @@ $options['verify'] = false;
                       if ($producto->estado == "Detenido") {
                         $producto->estado = "Activo";
                         $producto->intentos_fallidos = 0;
+                        $producto->actualizacion_pendiente = 1;
                         $producto->save();
                       }
                       continue;

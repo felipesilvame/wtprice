@@ -264,6 +264,17 @@ class Rata
     public static function alertaRata(Producto $producto, MinimoPrecio $minimo, float $p_rata){
         $imgUrl = self::imagenUrl($producto->imagen_url);
         try {
+            Notification::send(Device::all(),new PushRata($producto, self::menorValor($minimo), self::menorValor($producto)));
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+        try {
+            \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                      ->notify(new \App\Notifications\AlertaRata($producto, self::menorValor($minimo), self::menorValor($producto), $p_rata));
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+        try {
             $client = new Client();
             $response = $client->post('https://discordapp.com/api/webhooks/700204968312832021/mdNtO_LLhxYH0rv5wIk1PWQJu5xuam9dHBT4GdPzsDkDwYCjaPTy39NpwJD23EpDElID', [
                 'json' => [
@@ -303,17 +314,6 @@ class Rata
         } catch (\Exception $e) {
             throw $e;
         }
-        try {
-            Notification::send(Device::all(),new PushRata($producto, self::menorValor($minimo), self::menorValor($producto)));
-        } catch (\Exception $e) {
-            //throw $th;
-        }
-        try {
-            \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-                      ->notify(new \App\Notifications\AlertaRata($producto, self::menorValor($minimo), self::menorValor($producto), $p_rata));
-        } catch (\Exception $e) {
-            //throw $th;
-        }
     }
 
     /** 
@@ -321,6 +321,12 @@ class Rata
     */
     public static function alertaCoipo(Producto $producto, MinimoPrecio $minimo, float $p_rata){
         $imgUrl = self::imagenUrl($producto->imagen_url);
+        try {
+            \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
+                      ->notify(new \App\Notifications\AlertaRata($producto, self::menorValor($minimo), self::menorValor($producto), $p_rata));
+        } catch (\Exception $e) {
+            //throw $th;
+        }
         try {
             $client = new Client();
             $response = $client->post('https://discordapp.com/api/webhooks/700205655453204560/yrAx67HZ8f-ZTijUbIFvgsjMxQVoqSEHH25aZSxTkqPlQQIxQsupQi-HIQntvMB76VRP', [
@@ -361,6 +367,7 @@ class Rata
         } catch (\Exception $e) {
             throw $e;
         }
+        
     }
 
     /**

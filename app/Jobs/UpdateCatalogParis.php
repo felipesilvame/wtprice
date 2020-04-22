@@ -86,6 +86,7 @@ class UpdateCatalogParis implements ShouldQueue
                         if ($product->estado == "Detenido") {
                           $product->estado = "Activo";
                           $product->intentos_fallidos = 0;
+                          $producto->actualizacion_pendiente = 1;
                           $product->save();
                         }
                       } else {
