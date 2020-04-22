@@ -76,6 +76,9 @@ class ProcessParisProduct implements ShouldQueue
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener respuesta del servidor para el producto ".$product->id." Tienda ".$tienda->nombre);
             $product->intentos_fallidos += 1;
+            //maybe try later? 
+            $product->ultima_actualizacion = now();
+            $product->intervalo_actualizacion = random_int(5, 25);
             $product->actualizacion_pendiente = true;
             $product->save();
             throw $e;
@@ -195,8 +198,8 @@ class ProcessParisProduct implements ShouldQueue
             ]);
             // no hay minimo,
             try {
-              \Notification::route('slack', env('SLACK_NUEVA_URL'))
-                ->notify(new \App\Notifications\ProductAdded($product));
+              //\Notification::route('slack', env('SLACK_NUEVA_URL'))
+              // ->notify(new \App\Notifications\ProductAdded($product));
             } catch (\Exception $e) {
 
             }
@@ -215,7 +218,7 @@ class ProcessParisProduct implements ShouldQueue
               $minimo->precio_tarjeta = $product->precio_tarjeta;
             }
             // Es hora de discriminar
-            if ($p_rata >= 0.60 && $p_rata_relativo >= 0.63) {
+            if ($p_rata >= 0.60 && $p_rata_relativo >= 0.63 && !$product->alertado) {
               if ($old->precio_referencia >= 490000) {
                 // ALERTA RATA LVL 3: ESTA WEA ES UN COIPO
                 try {
@@ -254,7 +257,9 @@ class ProcessParisProduct implements ShouldQueue
                 'url_compra' => $product->url_compra,
                 'url_imagen' => $product->imagen_url,
               ]);
-            } else if ($p_rata >= 0.85){
+              $product->alertado = true;
+              $product->save();
+            } else if ($p_rata >= 0.85 && !$product->alertado){
               if ($old->precio_referencia >= 10000) {
                 // RATA LVL 3: COIPO
                 try {
@@ -288,6 +293,8 @@ class ProcessParisProduct implements ShouldQueue
                 'url_compra' => $product->url_compra,
                 'url_imagen' => $product->imagen_url,
               ]);
+              $product->alertado = true;
+              $product->save();
             }
           }
           // TODO: create historical, check minimum, etc etc

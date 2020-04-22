@@ -106,6 +106,10 @@ class ProcessProduct implements ShouldQueue
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener respuesta del servidor para el producto ".$product->id." Tienda ".$tienda->nombre);
             $product->intentos_fallidos += 1;
+            //maybe try later? 
+            $product->ultima_actualizacion = now();
+            $product->actualizacion_pendiente = true;
+            $product->intervalo_actualizacion = random_int(5, 25);
             $product->save();
             throw $e;
           }
@@ -268,8 +272,8 @@ class ProcessProduct implements ShouldQueue
                 ]);
                 //no habia nunca antes un minimo, producto agregado
                 try {
-                  \Notification::route('slack', env('SLACK_NUEVA_URL'))
-                  ->notify(new \App\Notifications\ProductAdded($product));
+                  //\Notification::route('slack', env('SLACK_NUEVA_URL'))
+                  //->notify(new \App\Notifications\ProductAdded($product));
                 } catch (\Exception $e) {
                   //throw $th;
                 }
@@ -277,9 +281,13 @@ class ProcessProduct implements ShouldQueue
                 //Hold up! maaaaaaaaaybe you want to check fast if the very first price was wrong,
                 // so, just check if has precio_oferta or precio_tarjeta
                 [$p_rata, $p_rata_relativo] = Rata::calculaSelf($product);
-                if ($p_rata >= 0.87) {
+                if ($p_rata >= 0.87 && !$product->alertado) {
                   if ($product->precio_referencia >= 490000) {
-                    Rata::alertaCoipo($product, $minimo, $p_rata);
+                    try {
+                      Rata::alertaCoipo($product, $minimo, $p_rata);
+                    } catch (\Throwable $th) {
+                      //throw $th;
+                    }
                   } else if ($old->precio_referencia >= 195000){
                     // ALERTA RATA LVL 2: ESTO ES UNA RATA
                     try {
@@ -311,6 +319,8 @@ class ProcessProduct implements ShouldQueue
                     'url_compra' => $product->url_compra,
                     'url_imagen' => $product->imagen_url,
                   ]);
+                  $product->alertado = true;
+                  $product->save();
                 }
               } else {
                 // 15-04-2020. added static method for comparison
@@ -325,7 +335,7 @@ class ProcessProduct implements ShouldQueue
                   $minimo->precio_tarjeta = $product->precio_tarjeta;
                 }
                 // Es hora de discriminar
-                if ($p_rata >= 0.65 && $p_rata_relativo >= 0.63) {
+                if ($p_rata >= 0.65 && $p_rata_relativo >= 0.63 && !$product->alertado) {
                   if ($old->precio_referencia >= 490000) {
                     // ALERTA RATA LVL 3: ESTA WEA ES UN COIPO
                     try {
@@ -364,7 +374,9 @@ class ProcessProduct implements ShouldQueue
                     'url_compra' => $product->url_compra,
                     'url_imagen' => $product->imagen_url,
                   ]);
-                } else if ($p_rata >= 0.85 && $p_rata_relativo >= 0.5){
+                  $product->alertado = true;
+                  $product->save();
+                } else if ($p_rata >= 0.85 && $p_rata_relativo >= 0.5 && !$product->alertado){
                   if ($minimo->precio_referencia >= 10000) {
                     // RATA LVL 3: COIPO
                     try {
@@ -398,6 +410,8 @@ class ProcessProduct implements ShouldQueue
                     'url_compra' => $product->url_compra,
                     'url_imagen' => $product->imagen_url,
                   ]);
+                  $product->alertado = true;
+                  $product->save();
                 }
               }
               // TODO: create historical, check minimum, etc etc

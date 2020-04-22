@@ -45,6 +45,7 @@ class Producto extends Model implements AuditableInterface
         'intentos_fallidos',
         'actualizacion_pendiente',
         'imagen_url',
+        'alertado',
     ];
 
     /**
@@ -79,6 +80,7 @@ class Producto extends Model implements AuditableInterface
         'intervalo_actualizacion' => 'integer',
         'umbral_descuento' => 'float',
         'actualizacion_pendiente' => 'boolean',
+        'alertado' => 'boolean'
     ];
 
     /**
