@@ -88,6 +88,7 @@ class ProcessProduct implements ShouldQueue
             //for ripley, add proxy
             $options['proxy'] = env('APP_PROXY');
             $options['verify'] = false;
+            $options['timeout'] = 15;
           }
           try {
             if ($tienda->method == "POST") {
