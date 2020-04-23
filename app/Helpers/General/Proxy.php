@@ -3,6 +3,7 @@
 namespace App\Helpers\General;
 
 use Exception;
+use App\Models\Proxy as ProxyModel;
 
 class Proxy
 {
@@ -22,7 +23,9 @@ class Proxy
      * @return string
      */
     static public function random(){
-        return self::PROXYS[array_rand(self::PROXYS)];
+        $proxys = ProxyModel::where('activo', true)->get();
+        if(count($proxys) == 0) return self::PROXYS[array_rand(self::PROXYS)];
+        else return $proxys->random();
     }
 
     /**
@@ -31,8 +34,16 @@ class Proxy
      * @return string
      */
     static public function index(int $index){
-        if ($index < 0 || $index >= count(self::PROXYS)) {
-            throw new Exception("Número no válido", 1);
-        } else return self::PROXYS[$index];
+        $proxys = ProxyModel::where('activo', true)->get();
+        if(count($proxys) == 0){
+            if ($index < 0 || $index >= count(self::PROXYS)) {
+                throw new Exception("Número no válido", 1);
+            } else return self::PROXYS[$index];
+        } else {
+            if ($index < 0 || $index >= count($proxys)) {
+                throw new Exception("Número no válido", 1);
+            } else return $proxys[$index];
+        }
+        
     }
 }

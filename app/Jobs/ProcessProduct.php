@@ -64,6 +64,7 @@ class ProcessProduct implements ShouldQueue
           $request = null;
           $response = null;
           $url = "";
+          $proxy = null;
           if ($tienda->protocolo) {
             $url .= $tienda->protocolo."://";
           }
@@ -87,7 +88,8 @@ class ProcessProduct implements ShouldQueue
           }
           if($tienda->nombre === 'Ripley' && (boolean)env('APP_PROXY')) {
             //for ripley, add proxy
-            $options['proxy'] = Proxy::random();
+            $proxy = Proxy::random();
+            $options['proxy'] = $proxy->url;
             $options['verify'] = false;
             $options['timeout'] = 15;
           }
@@ -113,6 +115,13 @@ class ProcessProduct implements ShouldQueue
             $product->actualizacion_pendiente = true;
             $product->intervalo_actualizacion = random_int(5, 25);
             $product->save();
+            if ($proxy) {
+              $proxy->intentos_fallidos +=1;
+              if ($proxy->intentos_fallidos > 3) {
+                $proxy->activo = false;
+              }
+              $proxy->save();
+            }
             throw $e;
           }
           if ((boolean) $response){
