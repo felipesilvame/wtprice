@@ -20,6 +20,7 @@ use App\Helpers\General\Arr as ArrHelper;
 use Notification;
 use App\Notifications\PushRata;
 use App\Helpers\General\Rata;
+use App\Helpers\General\Proxy;
 
 class ProcessProduct implements ShouldQueue
 {
@@ -86,7 +87,7 @@ class ProcessProduct implements ShouldQueue
           }
           if($tienda->nombre === 'Ripley' && (boolean)env('APP_PROXY')) {
             //for ripley, add proxy
-            $options['proxy'] = env('APP_PROXY');
+            $options['proxy'] = Proxy::random();
             $options['verify'] = false;
             $options['timeout'] = 15;
           }
