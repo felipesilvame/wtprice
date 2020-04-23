@@ -105,7 +105,39 @@ class ProcessProduct implements ShouldQueue
                 $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url);
               }
 
-              $response = (string) $client->send($request, $options)->getBody();
+              $res = $client->send($request, $options);
+              $response = (string) $res->getBody();
+            }
+          } catch(\GuzzleHttp\Exception\ConnectException $e) {
+            Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
+            if ($proxy) {
+              $proxy->intentos_fallidos +=1;
+              if ($proxy->intentos_fallidos > 3) {
+                $proxy->activo = false;
+              }
+              $proxy->save();
+            }
+            throw $e;
+          } catch(\GuzzleHttp\Exception\ClientException $e){
+            $status = $e->getResponse()->getStatusCode();
+            Log::error("Error ".$status." para el producto ".$product->id." Tienda ".$tienda->nombre);
+            if ($status != 404) {
+              if ($proxy) {
+                $proxy->intentos_fallidos +=1;
+                if ($proxy->intentos_fallidos > 3) {
+                  $proxy->activo = false;
+                }
+                $proxy->save();
+              }
+              throw $e;
+            } else {
+              $product->intentos_fallidos += 1;
+              //maybe try later? 
+              $product->ultima_actualizacion = now();
+              $product->actualizacion_pendiente = true;
+              $product->intervalo_actualizacion = random_int(5, 25);
+              $product->save();            
+              throw $e;
             }
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener respuesta del servidor para el producto ".$product->id." Tienda ".$tienda->nombre);
@@ -114,14 +146,7 @@ class ProcessProduct implements ShouldQueue
             $product->ultima_actualizacion = now();
             $product->actualizacion_pendiente = true;
             $product->intervalo_actualizacion = random_int(5, 25);
-            $product->save();
-            if ($proxy) {
-              $proxy->intentos_fallidos +=1;
-              if ($proxy->intentos_fallidos > 3) {
-                $proxy->activo = false;
-              }
-              $proxy->save();
-            }
+            $product->save();            
             throw $e;
           }
           if ((boolean) $response){
