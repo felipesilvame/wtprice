@@ -112,7 +112,7 @@ class ProcessProduct implements ShouldQueue
             Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
             if ($proxy) {
               $proxy->intentos_fallidos +=1;
-              if ($proxy->intentos_fallidos > 3) {
+              if ($proxy->intentos_fallidos > 100) {
                 $proxy->activo = false;
               }
               $proxy->save();
@@ -121,29 +121,28 @@ class ProcessProduct implements ShouldQueue
           } catch(\GuzzleHttp\Exception\ClientException $e){
             $status = $e->getResponse()->getStatusCode();
             Log::error("Error ".$status." para el producto ".$product->id." Tienda ".$tienda->nombre);
+            $product->intentos_fallidos += 1;
             if ($status != 404) {
               if ($proxy) {
                 $proxy->intentos_fallidos +=1;
-                if ($proxy->intentos_fallidos > 3) {
+                if ($proxy->intentos_fallidos > 100) {
                   $proxy->activo = false;
                 }
                 $proxy->save();
               }
-              throw $e;
-            } else {
-              $product->intentos_fallidos += 1;
-              //maybe try later? 
               $product->ultima_actualizacion = now();
               $product->actualizacion_pendiente = true;
               $product->intervalo_actualizacion = random_int(5, 25);
-              $product->save();            
-              throw $e;
+            } else {
+              $product->estado = 'Detenido';
             }
+            $product->save();            
+            throw $e;
           } catch(\GuzzleHttp\Exception\RequestException $e){
             Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
             if ($proxy) {
               $proxy->intentos_fallidos +=1;
-              if ($proxy->intentos_fallidos > 3) {
+              if ($proxy->intentos_fallidos > 100) {
                 $proxy->activo = false;
               }
               $proxy->save();
