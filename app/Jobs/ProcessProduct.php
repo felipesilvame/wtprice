@@ -139,6 +139,16 @@ class ProcessProduct implements ShouldQueue
               $product->save();            
               throw $e;
             }
+          } catch(\GuzzleHttp\Exception\RequestException $e){
+            Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
+            if ($proxy) {
+              $proxy->intentos_fallidos +=1;
+              if ($proxy->intentos_fallidos > 3) {
+                $proxy->activo = false;
+              }
+              $proxy->save();
+            }
+            throw $e;
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener respuesta del servidor para el producto ".$product->id." Tienda ".$tienda->nombre);
             $product->intentos_fallidos += 1;
