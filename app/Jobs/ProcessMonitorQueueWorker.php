@@ -11,6 +11,7 @@ use App\Models\Producto;
 use App\Jobs\ProcessProduct;
 use App\Jobs\ProcessParisProduct;
 use App\Jobs\ProcessLaPolarProduct;
+use App\Jobs\ProcessHitesProduct;
 use \Carbon\Carbon;
 
 /**
@@ -93,6 +94,9 @@ class ProcessMonitorQueueWorker implements ShouldQueue
                 break;
               case 'LaPolar':
                 ProcessLaPolarProduct::dispatch($producto);
+                break;
+              case 'Hites':
+                ProcessHitesProduct::dispatch($producto);
                 break;
               default:
                 ProcessProduct::dispatch($producto);
