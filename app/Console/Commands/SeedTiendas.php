@@ -197,5 +197,21 @@ class SeedTiendas extends Command
           'campo_imagen_url' => 'html > body .product-detail .primary-image img'
         ]
       );
+      \App\Models\Tienda::updateOrcreate(['nombre' => 'Hites'],
+        [
+          'protocolo' => 'https',
+          'prefix_api' => 'www.hites.com/',
+          'suffix_api' => null,
+          'request_body_sku' => 'html > body .product-detail',
+          'campo_nombre_producto' => 'html > body div.product__wrapper div.product__card div.product__header h1',
+          'campo_precio_oferta' => 'hardcodeado',
+          'campo_precio_referencia' => 'html > body div.product__wrapper div.product__card div.product__detail__main div.product__price-block',
+          'campo_precio_tarjeta' => 'hardcodeado',
+          'url_prefix_compra' => 'https://www.hites.com/',
+          'url_suffix_compra' => null,
+          'campo_slug_compra' => null,
+          'campo_imagen_url' => 'html > body div.product__wrapper div.product__card .gallery__images-content img'
+        ]
+      );
     }
 }
