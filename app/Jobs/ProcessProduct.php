@@ -146,6 +146,10 @@ class ProcessProduct implements ShouldQueue
                 $proxy->activo = false;
               }
               $proxy->save();
+              $product->ultima_actualizacion = now();
+              $product->actualizacion_pendiente = true;
+              $product->intervalo_actualizacion = random_int(5, 25);
+              $product->save();
             }
             throw $e;
           } catch (\Exception $e) {
