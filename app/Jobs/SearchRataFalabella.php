@@ -243,7 +243,7 @@ class SearchRataFalabella implements ShouldQueue
                 ]);
                 // TODO: Notify sospecha
                   try {
-                    Rata::sospechaRataUrl($url);
+                    Rata::sospechaRata($sospecha);
                   } catch (\Throwable $th) {
                     //throw $th;
                     //nothing
@@ -350,7 +350,7 @@ class SearchRataFalabella implements ShouldQueue
                     // TODO: Notify sospecha
 
                     try {
-                      Rata::sospechaRataUrl($url);
+                      Rata::sospechaRata($sospecha);
                     } catch (\Throwable $th) {
                       //nothing
                     }
