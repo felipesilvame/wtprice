@@ -242,7 +242,12 @@ class SearchRataFalabella implements ShouldQueue
                   'url_imagen' => $imagen_url,
                 ]);
                 // TODO: Notify sospecha
-
+                  try {
+                    Rata::sospechaRataUrl($url);
+                  } catch (\Throwable $th) {
+                    //throw $th;
+                    //nothing
+                  }
 
                 $producto_original = \App\Models\Producto::where('id_tienda', $tienda->id)->where('sku', $sku)->first();
                 if (!$producto_original) {
@@ -344,6 +349,11 @@ class SearchRataFalabella implements ShouldQueue
                     ]);
                     // TODO: Notify sospecha
 
+                    try {
+                      Rata::sospechaRataUrl($url);
+                    } catch (\Throwable $th) {
+                      //nothing
+                    }
                     $producto_original = \App\Models\Producto::where('id_tienda', $tienda->id)->where('sku', $sku)->first();
                     if (!$producto_original) {
                       //create new producto
