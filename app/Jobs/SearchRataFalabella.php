@@ -117,7 +117,7 @@ class SearchRataFalabella implements ShouldQueue
           $page_start = 1;
           //get response
           $url = $this->protocol.'://'.$this->uri;
-          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=70%25+dcto+y+más";
+          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=70% dcto y más";
           Log::debug('Getting url: '.$url);
           $response = null;
           $data = null;
@@ -125,11 +125,16 @@ class SearchRataFalabella implements ShouldQueue
           try {
             //FALABELLA BLOCKS THE F*KING REQUESTS!!!!
             usleep(1400000);
-            if (\App::environment('local')) {
+            if (1) {
               //deprecated, using classic curl
-              $response = $client->get($url)->getBody()->getContents();
+              $response = $client->get($url, [
+                'headers' => [
+                    'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9',
+                    'Accept'     => 'application/json',
+                  ]
+              ])->getBody()->getContents();
             }
-            else {
+            /* else {
               $ch = curl_init();
               curl_setopt($ch, CURLOPT_URL, $url);
               curl_setopt($ch, CURLOPT_POST, 0);
@@ -137,7 +142,7 @@ class SearchRataFalabella implements ShouldQueue
               $response = curl_exec($ch);
               $err = curl_error($ch);  //if you need
               curl_close($ch);
-            }
+            } */
           } catch (\Exception $e) {
             Log::warning("SearchRataFalabella: No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
             throw new \Exception("Error Processing Request", 1);
