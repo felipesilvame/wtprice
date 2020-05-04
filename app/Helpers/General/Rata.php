@@ -5,6 +5,7 @@ namespace App\Helpers\General;
 use App\Models\Producto;
 use App\Models\MinimoPrecio;
 use App\Models\Device;
+use App\Models\SospechaRata;
 use App\Notifications\PushRata;
 use GuzzleHttp\Client;
 use Notification;
@@ -369,6 +370,78 @@ class Rata
         }
         
     }
+
+    /**
+     * Manda una sospecha rata por discord
+     */
+    public static function sospechaRataUrl($url){
+        try {
+            $client = new Client();
+            $response = $client->post('https://discordapp.com/api/webhooks/699757818311475221/mV3nu84k_sd0jCecqdtV2MackIrWuk4uYypQgJCysO9paf25cMC2a4mVaUenjP_w2Sn3', [
+                'json' => [
+                    'content' => 'Una rata sorprendida ha encontrado un producto con descuento mayor a 70%. Visita la web para corroborar la oferta',
+                    'embeds' => [
+                        [
+                            "title" => $url,
+                            "url" => $url,
+                            "color" => 2612178,
+                            
+                        ]
+                    ]
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    /**
+     * Manda una sospecha rata por discord
+     */
+    public static function sospechaRata(SospechaRata $producto){
+        $imgUrl = self::imagenUrl($producto->url_imagen);
+        try {
+            $client = new Client();
+            $response = $client->post('https://discordapp.com/api/webhooks/699757818311475221/mV3nu84k_sd0jCecqdtV2MackIrWuk4uYypQgJCysO9paf25cMC2a4mVaUenjP_w2Sn3', [
+                'json' => [
+                    'content' => 'Una rata sorprendida ha encontrado un producto con descuento mayor a 70%. Visita la web para corroborar la oferta',
+                    'embeds' => [
+                        [
+                            "title" => $producto->nombre_producto.' a tan sólo '.moneyFormat(self::menorValor($producto), 'CLP'),
+                            "url" => $producto->url_compra,
+                            "color" => 2612178,
+                            "fields" => [
+                                [
+                                    "name" => "Nombre producto",
+                                    "value" => $producto->nombre_producto,
+                                    "inline" => true,
+                                ],
+                                [
+                                    "name" => "Tienda",
+                                    "value" => $producto->nombre_tienda,
+                                    "inline" => true,
+                                ],
+                                [
+                                    "name" => "Precio antes",
+                                    "value" => moneyFormat($producto->precio_referencia, 'CLP'),
+                                ],
+                                [
+                                    "name" => "Precio ahora",
+                                    "value" => moneyFormat(self::menorValor($producto), 'CLP'),
+                                ]
+                            ],
+                            "image" => [
+                                "url" => $imgUrl
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
 
     /**
      * Checkea cual es el precio o monto mas bajo de los que tiene un producto

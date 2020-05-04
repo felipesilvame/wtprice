@@ -8,6 +8,7 @@ use App\Models\HistorialPrecio;
 use App\Models\MinimoPrecio;
 use App\Models\Producto;
 use App\Models\Tienda;
+use App\Models\SospechaRata;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -251,9 +252,9 @@ class ProcessProduct implements ShouldQueue
               try {
                 if ($tienda->campo_precio_oferta) {
                   $p_oferta = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_oferta, 0));
-                  if (!$p_referencia) {
+                  if (!$p_oferta) {
                     //hardcoded for falabella
-                    $p_referencia = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, 'state.product.prices:label,(Oferta),formattedLowestPrice'));
+                    $p_oferta = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, 'state.product.prices:label,(Oferta),formattedLowestPrice'));
                   }
                   if ($p_oferta) {
                     if ($p_oferta < 10000000) {
@@ -278,6 +279,19 @@ class ProcessProduct implements ShouldQueue
                 $product->nombre = '-';
                 $product->intentos_fallidos +=1;
                 throw $e;
+              }
+              if ($tienda->nombre === 'Falabella') {
+                // complete sospecha if its registered
+                $sospecha = SospechaRata::where('id_tienda', $tienda->id)->where('sku', $product->sku)->whereNull('nombre_producto')->whereNull('precio_referencia')->first();
+                if ($sospecha){
+                  //fullfill the subsecuent fields
+                  $sospecha->nombre_producto = $product->nombre;
+                  $sospecha->precio_referencia = $product->precio_referencia;
+                  $sospecha->precio_oferta = $product->precio_oferta;
+                  $sospecha->precio_tarjeta = $product->precio_tarjeta;
+                  $sospecha->url_imagen = $product->imagen_url;
+                  $sospecha->save();
+                }
               }
 
               if($old->precio_referencia !== $product->precio_referencia ||
@@ -476,6 +490,7 @@ class ProcessProduct implements ShouldQueue
         } catch (\Exception $e) {
           $product->actualizacion_pendiente = true;
           $product->save();
+          throw $e;
         }
       }
       $product->actualizacion_pendiente = true;

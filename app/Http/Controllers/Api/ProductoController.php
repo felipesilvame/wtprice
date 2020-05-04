@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Producto;
+use App\Models\MinimoPrecio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminRequest;
 use App\Jobs\ProcessProduct;
@@ -59,5 +61,52 @@ class ProductoController extends Controller
     public function show(Request $request, $id){
       $producto = Producto::with(['tienda', 'minimo'])->findOrFail($id);
       return response()->json($producto);
+    }
+
+    public function main_products(Request $request){
+      $orderBy = $request->input('order', 'updated_at');
+      $sort = $request->input('sort', 'DESC');
+      $paged = $request->input('items', 12);
+      $estado = $request->input('estado', 'Activo');
+      $query = MinimoPrecio::with(['producto' => function ($query) use ($estado, $request) {
+        if ($estado != 'Todos') {
+          $query->where('estado', $estado);
+        }
+      }, 'producto.tienda' => function($query){
+        $query->select('nombre', 'id');
+      }])->orderBy($orderBy, $sort);
+      $query->whereHas('producto', function($q) use ($request){
+        $q->where('estado', 'Activo');
+        if ($request->has('tienda')) {
+          $q->where('id_tienda', $request->input('tienda'));
+        }
+      });
+      
+      $results = $query->paginate($paged);
+      return response()->json($results);
+    }
+
+    public function new_products(Request $request){
+      $orderBy = $request->input('order', 'updated_at');
+      $sort = $request->input('sort', 'DESC');
+      $paged = $request->input('items', 12);
+      $estado = $request->input('estado', 'Activo');
+      $query = MinimoPrecio::with(['producto' => function ($query) use ($estado, $request) {
+        if ($estado != 'Todos') {
+          $query->where('estado', $estado);
+        }
+      }, 'producto.tienda' => function($query){
+        $query->select('nombre', 'id');
+      }])->orderBy($orderBy, $sort);
+      $query->whereHas('producto', function($q) use ($request){
+        $q->where('estado', 'Activo');
+        if ($request->has('tienda')) {
+          $q->where('id_tienda', $request->input('tienda'));
+        }
+        $q->whereIn('id', collect(DB::select('SELECT id_producto FROM (SELECT id_producto, COUNT(*) as cnt FROM historial_precios  GROUP BY id_producto HAVING cnt = 1) AS ids'))->pluck('id_producto'));
+      });
+      
+      $results = $query->paginate($paged);
+      return response()->json($results);
     }
 }

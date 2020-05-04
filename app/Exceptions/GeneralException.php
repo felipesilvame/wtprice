@@ -8,7 +8,7 @@ use Throwable;
 /**
  * Class GeneralException.
  */
-class GeneralException extends Exception
+class GeneralException extends Throwable
 {
     /**
      * @var
