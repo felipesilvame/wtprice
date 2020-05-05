@@ -8,14 +8,7 @@ use App\Models\Proxy as ProxyModel;
 class Proxy
 {
     const PROXYS = [
-        'http://200.73.128.86:80',
-        'http://195.4.168.40:8080',
-        'http://51.158.107.202:8811',
-        'http://45.76.43.163:8080',
-        'https://202.142.155.136:8080',
-        'socks4://162.220.109.42:58196',
-        'https://168.149.142.170:8080',
-        'https://168.149.146.172:8080',
+        'http://lum-customer-hl_9bd375c3-zone-static:k2o7fh2omlyg@zproxy.lum-superproxy.io:22225'
     ];
 
     /**

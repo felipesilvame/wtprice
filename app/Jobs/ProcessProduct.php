@@ -316,7 +316,7 @@ class ProcessProduct implements ShouldQueue
               } elseif ($tienda->nombre === 'Lider'){
 		            $product->intervalo_actualizacion = random_int(5, 10);
 	            } else {
-                $product->intervalo_actualizacion = random_int(3, 35);
+                $product->intervalo_actualizacion = random_int(10, 40);
               }
               //el producto ha actualizado correctamente su precio, por lo tanto, tiene hora de ultima actualizacion
               //se puede volver a encolar
@@ -490,7 +490,6 @@ class ProcessProduct implements ShouldQueue
         } catch (\Exception $e) {
           $product->actualizacion_pendiente = true;
           $product->save();
-          throw $e;
         }
       }
       $product->actualizacion_pendiente = true;
