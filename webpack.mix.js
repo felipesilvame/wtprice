@@ -39,6 +39,7 @@ mix //.js('resources/js/dashboard/main.js', 'public/js/ratboard.js')
         'lodash'
     ])
   .sass('resources/sass/frontend/app.scss', 'public/css/app.css')
+  .sass('resources/sass/argon-design-system.scss', 'public/css/theme.css')
     ;
 
 if (mix.inProduction()) {

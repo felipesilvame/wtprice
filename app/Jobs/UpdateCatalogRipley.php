@@ -80,16 +80,17 @@ class UpdateCatalogRipley implements ShouldQueue
       //added proxy for ripley
       if ((boolean)env('APP_PROXY')) {
         $options['proxy'] = env('APP_PROXY');
-$options['verify'] = false;
+        $options['verify'] = false;
       }
       if ($tienda = \App\Models\Tienda::whereNombre('Ripley')->first()) {
-        Log::debug("Tienda found. ID: ".$tienda->id);
+        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
         //try foreach category
         foreach ($this->categories as $key => $category) {
           try {
             $page_start = 1;
-            Log::debug("getting first page for category $category");
+            //Log::debug("getting first page for category $category");
             //get response
             $url = $this->protocol.'://'.$this->uri;
             //add page and category in url;
@@ -136,10 +137,10 @@ $options['verify'] = false;
               }
             }
             //total pages is fullfilled
-            Log::debug("total pages for category: $total_pages");
+            //Log::debug("total pages for category: $total_pages");
             if ($page_start < $total_pages) {
               for ($pages = $page_start+1; $pages <= $total_pages ; $pages++) {
-                Log::debug("making request for page $pages of $total_pages for cat $category");
+                //Log::debug("making request for page $pages of $total_pages for cat $category");
                 //get response
                 $url = $this->protocol.'://'.$this->uri;
                 //add page and category in url;
@@ -190,6 +191,7 @@ $options['verify'] = false;
             Log::error("Error obteniendo info de ".$tienda->nombre);
           }
         }
+        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

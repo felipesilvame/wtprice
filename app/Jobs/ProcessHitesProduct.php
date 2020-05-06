@@ -79,7 +79,7 @@ class ProcessHitesProduct implements ShouldQueue
             $product->intervalo_actualizacion = random_int(5, 25);
             $product->actualizacion_pendiente = true;
             $product->save();
-            throw $e;
+            return;
           }
           $precio_referencia = null;
           $precio_oferta = null;
@@ -92,10 +92,11 @@ class ProcessHitesProduct implements ShouldQueue
              $product->nombre = mb_strimwidth($nombre_producto, 0, 250, '...');
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener el nombre para el producto ".$product->id." Tienda ".$tienda->nombre);
+            $product->ultima_actualizacion = now();
             $product->intentos_fallidos += 1;
             $product->actualizacion_pendiente = true;
             $product->save();
-            throw $e;
+            return;
           }
           // 22-12-2019: updated url img
           if (!$product->imagen_url) {
@@ -135,8 +136,9 @@ class ProcessHitesProduct implements ShouldQueue
               Log::error("No se pudo obtener la lista de precios para el producto ".$product->id." Tienda ".$tienda->nombre);
               $product->intentos_fallidos += 1;
               $product->actualizacion_pendiente = true;
+              $product->ultima_actualizacion = now();
               $product->save();
-              throw $e;
+              return;
           }
           // check precio referencia, cancel if fails
           try {
@@ -152,8 +154,9 @@ class ProcessHitesProduct implements ShouldQueue
             Log::error("No se ha podido obtener el precio para el producto ".$product->id." Tienda ".$tienda->nombre);
             $product->intentos_fallidos += 1;
             $product->actualizacion_pendiente = true;
+            $product->ultima_actualizacion = now();
             $product->save();
-            throw $e;
+            return;
           }
           //get url compra
           try {

@@ -1,0 +1,9 @@
+.date-range .vdp-datepicker {
+  max-width: 150px;
+}
+
+.date-range .vdp-datepicker input {
+  font-size: .6875rem !important;
+  text-align: center;
+}
+/*# sourceMappingURL=date-range.css.map */

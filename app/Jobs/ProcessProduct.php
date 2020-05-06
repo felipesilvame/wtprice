@@ -110,15 +110,19 @@ class ProcessProduct implements ShouldQueue
               $response = (string) $res->getBody();
             }
           } catch(\GuzzleHttp\Exception\ConnectException $e) {
-            Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
             if ($proxy) {
+              Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
               $proxy->intentos_fallidos +=1;
               if ($proxy->intentos_fallidos > 100) {
                 $proxy->activo = false;
               }
               $proxy->save();
-            }
-            throw $e;
+            } else Log::error("Error de Connection para el producto ".$product->id." Tienda ".$tienda->nombre);
+            $product->ultima_actualizacion = now();
+            $product->actualizacion_pendiente = true;
+            $product->intervalo_actualizacion = random_int(5, 25);
+            $product->save();
+            return;
           } catch(\GuzzleHttp\Exception\ClientException $e){
             $status = $e->getResponse()->getStatusCode();
             Log::error("Error ".$status." para el producto ".$product->id." Tienda ".$tienda->nombre);
@@ -138,21 +142,21 @@ class ProcessProduct implements ShouldQueue
               $product->estado = 'Detenido';
             }
             $product->save();            
-            throw $e;
-          } catch(\GuzzleHttp\Exception\RequestException $e){
-            Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
+            return;
+          } catch(\GuzzleHttp\Exception\RequestException $e){            
             if ($proxy) {
+              Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
               $proxy->intentos_fallidos +=1;
               if ($proxy->intentos_fallidos > 100) {
                 $proxy->activo = false;
               }
               $proxy->save();
-              $product->ultima_actualizacion = now();
-              $product->actualizacion_pendiente = true;
-              $product->intervalo_actualizacion = random_int(5, 25);
-              $product->save();
-            }
-            throw $e;
+            } else Log::error("Error de Request para el producto ".$product->id." Tienda ".$tienda->nombre);
+            $product->ultima_actualizacion = now();
+            $product->actualizacion_pendiente = true;
+            $product->intervalo_actualizacion = random_int(5, 25);
+            $product->save();
+            return;
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener respuesta del servidor para el producto ".$product->id." Tienda ".$tienda->nombre);
             $product->intentos_fallidos += 1;
@@ -161,16 +165,18 @@ class ProcessProduct implements ShouldQueue
             $product->actualizacion_pendiente = true;
             $product->intervalo_actualizacion = random_int(5, 25);
             $product->save();            
-            throw $e;
+            return; 
           }
           if ((boolean) $response){
             $data = null;
             try {
               $data = json_decode($response, true);
             } catch (\Exception $e) {
-              Log::warning("Producto id ".$product->id.": No se ha podido convertir la respuesta a JSON");
+              Log::error("Producto id ".$product->id.": No se ha podido convertir la respuesta a JSON");
+              $product->actualizacion_pendiente = true;
               $product->intentos_fallidos +=1;
               $product->save();
+              return;
             }
             $precio_referencia = null;
             $precio_oferta = null;
@@ -307,15 +313,14 @@ class ProcessProduct implements ShouldQueue
                 ]);
               }
 
-              if (count($product->getDirty()) > 0) {
-                //save ultima actualizacion
-              }
               $product->ultima_actualizacion = Carbon::now();
               if ($tienda->nombre === "Falabella" || $tienda->nombre === "Linio") {
                 $product->intervalo_actualizacion = random_int(10, 45);
               } elseif ($tienda->nombre === 'Lider'){
 		            $product->intervalo_actualizacion = random_int(5, 10);
-	            } else {
+	            } elseif ($tienda->nombre === 'Ripley'){
+                $product->intervalo_actualizacion = random_int(25, 65);
+              } else {
                 $product->intervalo_actualizacion = random_int(10, 40);
               }
               //el producto ha actualizado correctamente su precio, por lo tanto, tiene hora de ultima actualizacion
@@ -481,6 +486,8 @@ class ProcessProduct implements ShouldQueue
               $minimo->save();
             } else {
               Log::warning("Advertencia producto ".$product->id.": puede que ya no haya stock o sea descontinuado. Tienda".$tienda->nombre);
+              $product->ultima_actualizacion = now();
+              $product->intervalo_actualizacion = random_int(5, 25);
               $product->intentos_fallidos += 1;
               throw new \Exception("puede que ya no haya stock o sea descontinuado", 1);
 
@@ -490,6 +497,7 @@ class ProcessProduct implements ShouldQueue
         } catch (\Exception $e) {
           $product->actualizacion_pendiente = true;
           $product->save();
+          return;
         }
       }
       $product->actualizacion_pendiente = true;

@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAC,eAAe,CAAC;EAC1B,SAAS,EAAE,KAAK;CAMjB;;AAPD,AAGE,WAHS,CAAC,eAAe,CAGzB,KAAK,CAAC;EACJ,SAAS,EAAE,mBAAmB;EAC9B,UAAU,EAAE,MAAM;CACnB",
+    "sources": [
+        "date-range.scss"
+    ],
+    "names": [],
+    "file": "date-range.css"
+}

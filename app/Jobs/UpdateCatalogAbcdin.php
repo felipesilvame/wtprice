@@ -71,14 +71,15 @@ class UpdateCatalogAbcdin implements ShouldQueue
       $client = new \GuzzleHttp\Client();
       $tienda = null;
       if ($tienda  = \App\Models\Tienda::whereNombre('ABCDin')->first()) {
-        Log::debug("Tienda found. ID: ".$tienda->id);
+        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
 
         //try foreach category
         foreach ($this->categories as $key => $category) {
           try {
             $page_start = 1;
-            Log::debug("getting first page for category $category");
+            //Log::debug("getting first page for category $category");
             //make request
             $total_pages = 0;
             //$total_pages = $this->makeRequest($page_start, $category, $tienda);
@@ -134,10 +135,10 @@ class UpdateCatalogAbcdin implements ShouldQueue
               }
             }
             //total pages is fullfilled
-            Log::debug("total pages for category: $total_pages");
+            //Log::debug("total pages for category: $total_pages");
             if ($page_start < $total_pages) {
               for ($pages = $page_start+1; $pages <= $total_pages ; $pages++) {
-                Log::debug("making request for page $pages of $total_pages for cat $category");
+                //Log::debug("making request for page $pages of $total_pages for cat $category");
                 //make subsequent queries
                 $url = $this->protocol.'://'.$this->uri;
                 //add page and category in url;
@@ -197,7 +198,7 @@ class UpdateCatalogAbcdin implements ShouldQueue
           }
 
         }
-
+        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

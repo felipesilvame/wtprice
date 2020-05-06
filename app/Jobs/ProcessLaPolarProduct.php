@@ -78,7 +78,7 @@ class ProcessLaPolarProduct implements ShouldQueue
             $product->intervalo_actualizacion = random_int(5, 25);
             $product->actualizacion_pendiente = true;
             $product->save();
-            throw $e;
+            return;
           }
           $precio_referencia = null;
           $precio_oferta = null;
@@ -92,9 +92,10 @@ class ProcessLaPolarProduct implements ShouldQueue
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener el nombre para el producto ".$product->id." Tienda ".$tienda->nombre);
             $product->intentos_fallidos += 1;
+            $product->ultima_actualizacion = now();
             $product->actualizacion_pendiente = true;
             $product->save();
-            throw $e;
+            return;
           }
           // 22-12-2019: updated url img
           if (!$product->imagen_url) {
@@ -121,10 +122,11 @@ class ProcessLaPolarProduct implements ShouldQueue
             }
           } catch (\Exception $e) {
             Log::error("No se ha podido obtener el precio para el producto ".$product->id." Tienda ".$tienda->nombre);
+            $product->ultima_actualizacion = now();
             $product->intentos_fallidos += 1;
             $product->actualizacion_pendiente = true;
             $product->save();
-            throw $e;
+            return;
           }
           //get url compra
           try {
@@ -199,8 +201,8 @@ class ProcessLaPolarProduct implements ShouldQueue
             ]);
             // no hay minimo,
             try {
-              \Notification::route('slack', env('SLACK_NUEVA_URL'))
-                ->notify(new \App\Notifications\ProductAdded($product));
+              //\Notification::route('slack', env('SLACK_NUEVA_URL'))
+              //  ->notify(new \App\Notifications\ProductAdded($product));
             } catch (\Exception $e) {
 
             }

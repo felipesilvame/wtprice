@@ -82,13 +82,14 @@ class UpdateCatalogFalabella implements ShouldQueue
       $tienda = null;
       $total_pages = 0;
       if ($tienda = \App\Models\Tienda::whereNombre('Falabella')->first()) {
-        Log::debug("Tienda found. ID: ".$tienda->id);
+        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
         //try foreach category
         foreach ($this->categories as $key => $category) {
           try {
             $page_start = 1;
-            Log::debug("getting first page for category $category");
+            //Log::debug("getting first page for category $category");
             
             //get response
             $url = $this->protocol.'://'.$this->uri;
@@ -148,12 +149,12 @@ class UpdateCatalogFalabella implements ShouldQueue
               }
             }
             //total pages is fullfilled
-            Log::debug("total pages for category: $total_pages");
+            //Log::debug("total pages for category: $total_pages");
             if ($page_start <= $total_pages) {
               for ($pages = $page_start; $pages <= $total_pages ; $pages++) {
                 //FALABELLA BLOCKS THE F*KING REQUESTS!!!!
                 usleep(700000);
-                Log::debug("making request for page $pages of $total_pages for cat $category");
+                //Log::debug("making request for page $pages of $total_pages for cat $category");
                 //get response
                 $url = $this->protocol.'://'.$this->uri;
                 $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate%2Cdesc";
@@ -211,6 +212,7 @@ class UpdateCatalogFalabella implements ShouldQueue
             Log::error("Error obteniendo info de ".$tienda->nombre);
           }
         }
+        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

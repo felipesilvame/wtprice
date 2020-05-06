@@ -1,0 +1,29 @@
+.file-manager-list th:first-child {
+  width: 10px !important;
+}
+
+.file-manager-list th:first-child .VueTables__heading {
+  display: none !important;
+}
+
+.file-manager-list td:nth-child(2),
+.file-manager-list th:nth-child(2) {
+  text-align: left !important;
+}
+
+.file-manager-list th:last-child {
+  text-align: right !important;
+}
+
+.file-manager-list td {
+  vertical-align: middle;
+}
+
+.file-manager-list .dropzone-wrapper {
+  padding: .75rem 1.0625rem !important;
+}
+
+.file-manager-list div.row:first-of-type {
+  border-bottom: 1px solid #e1e5eb;
+}
+/*# sourceMappingURL=file-manager-list.css.map */

@@ -73,7 +73,8 @@ class UpdateCatalogCorona implements ShouldQueue
       $client = new \GuzzleHttp\Client();
       $tienda = null;
       if ($tienda = \App\Models\Tienda::whereNombre('Corona')->first()) {
-        Log::debug("Tienda found. ID: ".$tienda->id);
+        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
 
         //try foreach category
@@ -82,7 +83,7 @@ class UpdateCatalogCorona implements ShouldQueue
             $page_start = 0;
             $from = 0;
             $to = 49;
-            Log::debug("getting first page for category $category");
+            //Log::debug("getting first page for category $category");
             //get response
             $url = $this->protocol.'://'.$this->uri;
             //add page and category in url;
@@ -136,10 +137,10 @@ class UpdateCatalogCorona implements ShouldQueue
               }
             }
             //total pages is fullfilled
-            Log::debug("total pages for category: $total_pages");
+            //Log::debug("total pages for category: $total_pages");
             if ($page_start < $total_pages) {
               for ($pages = $page_start+1; $pages <= $total_pages ; $pages++) {
-                Log::debug("making request for page $pages of $total_pages for cat $category");
+                //Log::debug("making request for page $pages of $total_pages for cat $category");
                 $from = $to+1;
                 $to += 50;
                 //get response
@@ -197,6 +198,7 @@ class UpdateCatalogCorona implements ShouldQueue
             Log::error("Error obteniendo info de ".$tienda->nombre);
           }
         }
+        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

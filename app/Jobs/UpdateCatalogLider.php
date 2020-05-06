@@ -74,13 +74,14 @@ class UpdateCatalogLider implements ShouldQueue
       $tienda = null;
       $client = new \GuzzleHttp\Client();
       if ($tienda = \App\Models\Tienda::whereNombre('Lider')->first()) {
-        Log::debug("Tienda found. ID: $tienda->id");
+        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Tienda found. ID: $tienda->id");
         // perform the query
         //try foreach category
         foreach ($this->categories as $key => $category) {
           try {
             $page_start = 0;
-            Log::debug("getting first page for category $category");
+            //Log::debug("getting first page for category $category");
             $options = [];
             $options['headers'] = [
               'Content-type' => 'application/json',
@@ -139,10 +140,10 @@ class UpdateCatalogLider implements ShouldQueue
               }
             }
             //total pages is fullfilled
-            Log::debug("total pages for category: $total_pages");
+            //Log::debug("total pages for category: $total_pages");
             if ($page_start < $total_pages) {
               for ($pages = $page_start+1; $pages < $total_pages ; $pages++) {
-                Log::debug("making request for page ".($pages+1)." of $total_pages for cat $category");
+                //Log::debug("making request for page ".($pages+1)." of $total_pages for cat $category");
                 $options = [];
                 $options['headers'] = [
                   'Content-type' => 'application/json',
@@ -205,6 +206,7 @@ class UpdateCatalogLider implements ShouldQueue
             Log::error("Error obteniendo info de Lider");
           }
         }
+        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

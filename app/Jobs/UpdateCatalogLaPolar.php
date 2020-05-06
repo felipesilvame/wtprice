@@ -66,7 +66,7 @@ class UpdateCatalogLaPolar implements ShouldQueue
         $tienda  = \App\Models\Tienda::whereNombre('LaPolar')->first();
         if (!$tienda) throw new \Exception("Tienda not found", 1);
         $client = new \Goutte\Client();
-
+        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
         foreach ($this->categories as $category) {
           // code...
           $url = $this->protocol.'://'.$this->uri.$category;
@@ -112,6 +112,7 @@ class UpdateCatalogLaPolar implements ShouldQueue
             //continue
           }
         }
+        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       } catch (\Exception $e) {
         //calm down
       }
