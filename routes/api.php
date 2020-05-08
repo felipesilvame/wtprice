@@ -20,13 +20,14 @@ Route::get('main-products', 'Api\ProductoController@main_products');
 Route::get('new-products', 'Api\ProductoController@new_products');
 Route::get('discounts', 'Api\ProductoController@discounts');
 Route::get('legacy', 'Api\ProductoController@legacy');
+Route::get('producto/{uuid}', 'Api\ProductoController@getByUuid');
 Route::group(['prefix' => 'auth',], function () {
     Route::post('login', 'Api\AuthController@login');
     Route::post('logout', 'Api\AuthController@logout');
     Route::post('refresh', 'Api\AuthController@refresh');
     Route::post('me', 'Api\AuthController@me');
 });
-Route::group(['middleware' => ['jwt']], function(){
+Route::group(['middleware' => ['jwt'], 'prefix' => 'admin'], function(){
   Route::apiResource('tienda', 'Api\TiendaController');
   Route::get('producto/{id}/toggle-status', 'Api\ProductoController@toggleProducto');
   Route::apiResource('producto', 'Api\ProductoController');

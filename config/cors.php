@@ -26,7 +26,12 @@ return [
     /*
      * Matches the request origin. `[*]` allows all origins.
      */
-    'allowed_origins' => [],
+    'allowed_origins' => env('APP_ENV') === 'local' ? ['*'] : [
+        'http://soyrata.cl',
+        'https://soyrata.cl',
+        'http://www.soyrata.cl',
+        'https://www.soyrata.cl'
+    ],
 
     /*
      * Matches the request origin with, similar to `Request::is()`

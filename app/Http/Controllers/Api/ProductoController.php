@@ -58,6 +58,14 @@ class ProductoController extends Controller
 
     }
 
+    public function getByUuid(Request $request, $uuid){
+      $producto = Producto::with(['tienda' => function($query){
+        $query->select(['id', 'nombre']);
+      }, 'historico', 'minimo'])->where('uuid', $uuid)->firstOrFail();
+
+      return response()->json($producto);
+    }
+
     public function show(Request $request, $id){
       $producto = Producto::with(['tienda', 'minimo'])->findOrFail($id);
       return response()->json($producto);
