@@ -63,7 +63,7 @@ class SeedTiendas extends Command
           ],
           'campo_nombre_producto' => 'data.products.0.name',
           'campo_precio_referencia' => 'data.products.0.price.normal',
-          'campo_precio_oferta' => 'data.products.0.price.commerce'
+          'campo_precio_oferta' => 'data.products.0.price.commerce',
           'campo_precio_tarjeta' => 'data.products.0.price.card',
           'url_prefix_compra' => 'https://www.abcdin.cl/tienda/search/',
           'campo_imagen_url' => 'data.products.0.thumbnail',
