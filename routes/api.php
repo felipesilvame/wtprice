@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 });*/
 Route::get('main-products', 'Api\ProductoController@main_products');
 Route::get('new-products', 'Api\ProductoController@new_products');
+Route::get('discounts', 'Api\ProductoController@discounts');
+Route::get('legacy', 'Api\ProductoController@legacy');
 Route::group(['prefix' => 'auth',], function () {
     Route::post('login', 'Api\AuthController@login');
     Route::post('logout', 'Api\AuthController@logout');

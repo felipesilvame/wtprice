@@ -54,7 +54,7 @@ class Producto extends Model implements AuditableInterface
      * @var array
      */
     protected $hidden = [
-
+      'id', 'id_tienda'
     ];
 
     /**

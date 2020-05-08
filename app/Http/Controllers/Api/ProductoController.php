@@ -64,17 +64,20 @@ class ProductoController extends Controller
     }
 
     public function main_products(Request $request){
+      $now = now()->subMinutes(15);
       $orderBy = $request->input('order', 'updated_at');
       $sort = $request->input('sort', 'DESC');
       $paged = $request->input('items', 12);
       $estado = $request->input('estado', 'Activo');
-      $query = MinimoPrecio::with(['producto' => function ($query) use ($estado, $request) {
+      $query = MinimoPrecio::select(['precio_oferta', 'precio_referencia', 'precio_tarjeta', 'updated_at', 'id_producto', 'uuid'])
+        ->with(['producto' => function ($query) use ($estado, $request) {
+        $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra']);
         if ($estado != 'Todos') {
           $query->where('estado', $estado);
         }
       }, 'producto.tienda' => function($query){
         $query->select('nombre', 'id');
-      }])->orderBy($orderBy, $sort);
+      }])->where('updated_at', '<=', $now)->orderBy($orderBy, $sort);
       $query->whereHas('producto', function($q) use ($request){
         $q->where('estado', 'Activo');
         if ($request->has('tienda')) {
@@ -87,14 +90,70 @@ class ProductoController extends Controller
     }
 
     public function new_products(Request $request){
+      $now = now()->subMinutes(15);
       $orderBy = $request->input('order', 'updated_at');
       $sort = $request->input('sort', 'DESC');
       $paged = $request->input('items', 12);
       $estado = $request->input('estado', 'Activo');
-      $query = MinimoPrecio::with(['producto' => function ($query) use ($estado, $request) {
+      $query = MinimoPrecio::select(['precio_oferta', 'precio_referencia', 'precio_tarjeta', 'updated_at', 'id_producto', 'uuid'])
+        ->with(['producto' => function ($query) use ($estado, $request) {
+        $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra']);
         if ($estado != 'Todos') {
           $query->where('estado', $estado);
         }
+      }, 'producto.tienda' => function($query){
+        $query->select('nombre', 'id');
+      }])->where('updated_at', '<=', $now)->orderBy($orderBy, $sort);
+      $query->whereHas('producto', function($q) use ($request){
+        $q->where('estado', 'Activo');
+        if ($request->has('tienda')) {
+          $q->where('id_tienda', $request->input('tienda'));
+        }
+        $q->whereNotIn('id', collect(DB::select('SELECT id_producto FROM (SELECT id_producto, COUNT(*) as cnt FROM historial_precios  GROUP BY id_producto HAVING cnt > 1) AS ids'))->pluck('id_producto'));
+      });
+      
+      $results = $query->paginate($paged);
+      return response()->json($results);
+    }
+
+    public function discounts(Request $request){
+      $now = now()->subMinutes(15);
+      $orderBy = $request->input('order', 'updated_at');
+      $sort = $request->input('sort', 'DESC');
+      $paged = $request->input('items', 12);
+      $estado = $request->input('estado', 'Activo');
+      $query = MinimoPrecio::select(['precio_oferta', 'precio_referencia', 'precio_tarjeta', 'updated_at', 'id_producto', 'uuid'])
+        ->with(['producto' => function ($query) use ($estado, $request) {
+        $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra']);
+        if ($estado != 'Todos') {
+          $query->where('estado', $estado);
+        }
+      }, 'producto.tienda' => function($query){
+        $query->select('nombre', 'id');
+      }])->where('updated_at', '<=', $now)->orderBy($orderBy, $sort);
+      $query->whereHas('producto', function($q) use ($request){
+        $q->where('estado', 'Activo');
+        if ($request->has('tienda')) {
+          $q->where('id_tienda', $request->input('tienda'));
+        }
+        $q->whereIn('id', collect(DB::select('SELECT id_producto FROM (SELECT id_producto, COUNT(*) as cnt FROM historial_precios  GROUP BY id_producto HAVING cnt > 1) AS ids'))->pluck('id_producto'));
+      });
+      
+      $results = $query->paginate($paged);
+      return response()->json($results);
+    }
+
+    public function legacy(Request $request){
+      $orderBy = $request->input('order', 'updated_at');
+      $sort = $request->input('sort', 'DESC');
+      $paged = $request->input('items', 12);
+      $estado = $request->input('estado', 'Activo');
+      $query = MinimoPrecio::select(['precio_oferta', 'precio_referencia', 'precio_tarjeta', 'updated_at', 'id_producto', 'uuid'])
+        ->with(['producto' => function ($query) use ($estado, $request) {
+          $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra']);
+          if ($estado != 'Todos') {
+            $query->where('estado', $estado);
+          }
       }, 'producto.tienda' => function($query){
         $query->select('nombre', 'id');
       }])->orderBy($orderBy, $sort);
@@ -103,7 +162,6 @@ class ProductoController extends Controller
         if ($request->has('tienda')) {
           $q->where('id_tienda', $request->input('tienda'));
         }
-        $q->whereIn('id', collect(DB::select('SELECT id_producto FROM (SELECT id_producto, COUNT(*) as cnt FROM historial_precios  GROUP BY id_producto HAVING cnt = 1) AS ids'))->pluck('id_producto'));
       });
       
       $results = $query->paginate($paged);
