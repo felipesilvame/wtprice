@@ -92,7 +92,7 @@ class TestProxy extends Command
               
             }
             $this->info('Agregando Proxy');
-            $proxy = Proxy::updateOrCreate(['url' => $url], ['intentos_fallidos' => 0, 'activo' => true]);
+            $model = ProxyModel::updateOrCreate(['url' => $proxy], ['intentos_fallidos' => 0, 'activo' => true]);
             $this->info('Proxy agregado');
         }
         
