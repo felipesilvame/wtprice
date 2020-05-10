@@ -43,12 +43,13 @@ class UpdateCatalogCorona implements ShouldQueue
     public function __construct()
     {
       $this->categories = [
-        '/9/56/57/', //consolas
+        '/9/35', // televisores
+        '/9/54', // cámaras
         '/9/39/40/', //notebook
         '/9/39/41/', //All in one
         '/9/39/42/', //tablets
         '/9/56/', //consolas
-        '/44/45/', //telefonos
+        '/8/122/124', //telefonos
       ];
       $this->protocol = 'https';
       $this->method = 'GET';
