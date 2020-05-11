@@ -271,7 +271,7 @@ class Rata
         }
         try {
             \Notification::route('slack', env('SLACK_WEBHOOK_URL'))
-                      ->notify(new \App\Notifications\AlertaRata($producto, self::menorValor($minimo), self::menorValor($producto), $p_rata));
+                      ->notify(new \App\Notifications\AlertaRata($producto, $minimo->precio_referencia, self::menorValor($producto), $p_rata));
         } catch (\Exception $e) {
             //throw $th;
         }

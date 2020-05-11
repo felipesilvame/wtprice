@@ -66,6 +66,10 @@ class ProcessProduct implements ShouldQueue
           $response = null;
           $url = "";
           $proxy = null;
+          $regex = "/[^0-9]/";
+          if ($tienda->nombre === 'Lider') {
+            $regex = "/[^0-9.]/";
+          }
           if ($tienda->protocolo) {
             $url .= $tienda->protocolo."://";
           }
@@ -222,7 +226,7 @@ class ProcessProduct implements ShouldQueue
 
               try {
                 if ($tienda->campo_precio_tarjeta) {
-                  $p_tarjeta = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_tarjeta));
+                  $p_tarjeta = (integer)preg_replace($regex,'',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_tarjeta));
                   if ($p_tarjeta) {
                     if ($p_tarjeta < 10000000) {
                       $product->precio_tarjeta = $p_tarjeta;
@@ -238,10 +242,10 @@ class ProcessProduct implements ShouldQueue
               }
               try {
                 if ($tienda->campo_precio_referencia) {
-                  $p_referencia = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_referencia, 0));
+                  $p_referencia = (integer)preg_replace($regex,'',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_referencia, 0));
                   if (!$p_referencia) {
                     //hardcoded for falabella
-                    $p_referencia = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, 'state.product.prices:label,,formattedLowestPrice'));
+                    $p_referencia = (integer)preg_replace($regex,'',(string)ArrHelper::get_pipo($data, 'state.product.prices:label,,formattedLowestPrice'));
                   }
                   if ($p_referencia && $p_referencia < 10000000) {
                     $product->precio_referencia = $p_referencia;
@@ -257,10 +261,10 @@ class ProcessProduct implements ShouldQueue
               }
               try {
                 if ($tienda->campo_precio_oferta) {
-                  $p_oferta = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_oferta, 0));
+                  $p_oferta = (integer)preg_replace($regex,'',(string)ArrHelper::get_pipo($data, $tienda->campo_precio_oferta, 0));
                   if (!$p_oferta) {
                     //hardcoded for falabella
-                    $p_oferta = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($data, 'state.product.prices:label,(Oferta),formattedLowestPrice'));
+                    $p_oferta = (integer)preg_replace($regex,'',(string)ArrHelper::get_pipo($data, 'state.product.prices:label,(Oferta),formattedLowestPrice'));
                   }
                   if ($p_oferta) {
                     if ($p_oferta < 10000000) {
