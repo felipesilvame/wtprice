@@ -17,7 +17,11 @@ class Proxy
      */
     static public function random(){
         $proxys = ProxyModel::where('activo', true)->get();
-        if(count($proxys) == 0) return self::PROXYS[array_rand(self::PROXYS)];
+        if(count($proxys) == 0){
+            $std = new \stdClass();
+            $std->url = self::PROXYS[array_rand(self::PROXYS)];
+            return $std;
+        }
         else return $proxys->random();
     }
 
