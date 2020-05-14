@@ -317,7 +317,6 @@ class ProcessProduct implements ShouldQueue
                 ]);
               }
 
-              $product->ultima_actualizacion = Carbon::now();
               if ($tienda->nombre === "Falabella" || $tienda->nombre === "Linio") {
                 $product->intervalo_actualizacion = random_int(10, 45);
               } elseif ($tienda->nombre === 'Lider'){
@@ -331,6 +330,9 @@ class ProcessProduct implements ShouldQueue
               //13-05-2020: se agrega flag de stock para aquellos que tengan disponible la funcion
               if ($tienda->campo_disponible) {
                 $product->disponible = Rata::getAvailableFlag($data, $tienda->campo_disponible, $tienda->nombre);
+                if ($product->disponible === 'Sin Stock') {
+                  $product->intervalo_actualizacion = $product->intervalo_actualizacion*3;
+                }
               }
 
               if ($tienda->campo_stock) {
@@ -339,6 +341,7 @@ class ProcessProduct implements ShouldQueue
 
               //el producto ha actualizado correctamente su precio, por lo tanto, tiene hora de ultima actualizacion
               //se puede volver a encolar
+              $product->ultima_actualizacion = Carbon::now();
               $product->actualizacion_pendiente = true;
               $product->save();
 
