@@ -50,6 +50,7 @@ class SeedTiendas extends Command
           'url_prefix_compra' => 'https://www.lider.cl/product/sku/',
           'url_suffix_compra' => null,
           'campo_imagen_url' => '0.imagesAvailables.0',
+          'campo_disponible' => '0.available',
         ]
       );
 
@@ -67,6 +68,8 @@ class SeedTiendas extends Command
           'campo_precio_tarjeta' => 'data.products.0.price.card',
           'url_prefix_compra' => 'https://www.abcdin.cl/tienda/search/',
           'campo_imagen_url' => 'data.products.0.thumbnail',
+          'campo_disponible' => 'data.products.0.stockStatus',
+          'campo_stock' => 'data.products.0.stockQuantity',
         ]
       );
 
@@ -82,6 +85,7 @@ class SeedTiendas extends Command
           'campo_slug_compra' => 'productString',
           'url_prefix_compra' => 'https://simple.ripley.cl/',
           'url_suffix_compra' => null,
+          'campo_disponible' => 'simple.isOutOfStock',
           'campo_imagen_url' => 'fullImage',
         ]
       );
@@ -118,6 +122,8 @@ class SeedTiendas extends Command
           'url_prefix_compra' => 'https://www.corona.cl/',
           'url_suffix_compra' => '/p',
           'campo_imagen_url' => '0.items.0.images.0.imageUrl',
+          'campo_disponible' => '0.items.0.sellers.0.commertialOffer.AvailableQuantity',
+          'campo_stock' => '0.items.0.sellers.0.commertialOffer.AvailableQuantity',
         ]
       );
 

@@ -218,6 +218,23 @@ class Rata
                     } else if ($available = ArrHelper::get_pipo($data, $predicate, null)){
                         return "Disponible";
                     } else return "Sin Stock";
+                } else if ($nombre_tienda && $nombre_tienda === 'Ripley'){
+                    $no_stock = ArrHelper::get_pipo($data, $predicate, null);
+                    $unavailable  = ArrHelper::get_pipo($data, 'simple.isUnavailable', false);
+                    return ($no_stock || $unavailable) ? "Sin Stock" : "Disponible";
+                } else if ($nombre_tienda && $nombre_tienda === 'ABCDin'){
+                    $availability = ArrHelper::get_pipo($data, $predicate, null);
+                    if ($availability && $availability === 'Available') {
+                        return "Disponible";
+                    } else if ($availability && $availability === 'Unavailable'){
+                        return "Sin Stock";
+                    }
+                } else if ($nombre_tienda && $nombre_tienda === 'Lider'){
+                    $available = ArrHelper::get_pipo($data, $predicate, null);
+                    return $available ? 'Disponible' : 'Sin Stock';
+                } else if ($nombre_tienda && $nombre_tienda === 'Corona'){
+                    $quantity = self::getStock($data, $predicate, $nombre_tienda);
+                    return ($quantity > 0) ? 'Disponible' : 'Sin Stock';
                 }
                 else if ($available = ArrHelper::get_pipo($data, $predicate, null)) {
                     return "Disponible";
