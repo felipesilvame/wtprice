@@ -8,6 +8,7 @@ use App\Models\Device;
 use App\Models\SospechaRata;
 use App\Notifications\PushRata;
 use GuzzleHttp\Client;
+use App\Helpers\General\Arr as ArrHelper;
 use Notification;
 
 
@@ -199,6 +200,53 @@ class Rata
         } catch (\Exception $e) {
             return 0;
         }
+    }
+
+    /**
+     * Obtiene el valor si hay stock de un producto en una tienda.
+     * La entrada es la data JSON, y el segundo parámetro es el criterio para obtener la info,
+     * de todas formas, un tercer parámetro va a ser el nombre de la tienda en caso de que
+     * se tenga que hardcodear algo, como por ejemplo falabella, que tiene una flag "OUT_OF_STOCK"
+     */
+    public static function getAvailableFlag($data = null, $predicate = null, $nombre_tienda = null){
+        try {
+            if ($data && $predicate) {
+                if ($nombre_tienda && $nombre_tienda === 'Falabella') {
+                    $no_stock = ArrHelper::get_pipo($data, 'responseType', null);
+                    if ($no_stock && $no_stock == 'OUT_OF_STOCK') {
+                        return "Sin Stock";
+                    } else if ($available = ArrHelper::get_pipo($data, $predicate, null)){
+                        return "Disponible";
+                    } else return "Sin Stock";
+                }
+                else if ($available = ArrHelper::get_pipo($data, $predicate, null)) {
+                    return "Disponible";
+                } else return "Sin Stock";
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        return "Sin Información";
+    }
+
+    /**
+     * Obtiene el stock de un producto en una tienda.
+     * La entrada es la data JSON, y el segundo parámetro es el criterio para obtener la info,
+     * de todas formas, un tercer parámetro va a ser el nombre de la tienda en caso de que
+     * se tenga que hardcodear algo, como por ejemplo falabella, que tiene una flag "OUT_OF_STOCK"
+     */
+    public static function getStock($data = null, $predicate = null, $nombre_tienda = null){
+        try {
+            if ($data && $predicate) {
+                $quantity = ArrHelper::get_pipo($data, $predicate, null);
+                if ($quantity !== null) {
+                    return (integer) $quantity;
+                }
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        return null;
     }
 
     /**

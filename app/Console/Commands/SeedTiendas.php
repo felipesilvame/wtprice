@@ -161,7 +161,9 @@ class SeedTiendas extends Command
             'User-Agent' => 'okhttp/3.14.6',
             'X-cmRef' => 'FalabellaMobileApp',
           ],
-          'campo_imagen_url' => 'https://falabella.scene7.com/is/image/Falabella/'
+          'campo_imagen_url' => 'https://falabella.scene7.com/is/image/Falabella/',
+          'campo_disponible' => 'data.variants.0.isPurchaseable',
+          'campo_stock' => 'data.variants.0.networkStock'
         ]
       );
 

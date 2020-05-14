@@ -36,6 +36,8 @@ class Tienda extends Model implements AuditableInterface
         'campo_precio_oferta',
         'campo_precio_tarjeta',
         'campo_request_error',
+        'campo_disponible',
+        'campo_stock',
         'url_compra',
         'url_prefix_compra',
         'url_suffix_compra',

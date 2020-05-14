@@ -327,6 +327,16 @@ class ProcessProduct implements ShouldQueue
               } else {
                 $product->intervalo_actualizacion = random_int(10, 40);
               }
+
+              //13-05-2020: se agrega flag de stock para aquellos que tengan disponible la funcion
+              if ($tienda->campo_disponible) {
+                $product->disponible = Rata::getAvailableFlag($data, $tienda->campo_disponible, $tienda->nombre);
+              }
+
+              if ($tienda->campo_stock) {
+                $product->stock = Rata::getStock($data, $tienda->campo_stock, $tienda->nombre);
+              }
+
               //el producto ha actualizado correctamente su precio, por lo tanto, tiene hora de ultima actualizacion
               //se puede volver a encolar
               $product->actualizacion_pendiente = true;

@@ -25,6 +25,9 @@ class SospechaRata extends Model
         'categoria',
         'url_compra',
         'url_imagen',
+        'disponible',
+        'stock',
+        'segunda_notificacion',
     ];
 
     // RELATIONS

@@ -46,6 +46,8 @@ class Producto extends Model implements AuditableInterface
         'actualizacion_pendiente',
         'imagen_url',
         'alertado',
+        'disponible',
+        'stock',
     ];
 
     /**
@@ -80,7 +82,8 @@ class Producto extends Model implements AuditableInterface
         'intervalo_actualizacion' => 'integer',
         'umbral_descuento' => 'float',
         'actualizacion_pendiente' => 'boolean',
-        'alertado' => 'boolean'
+        'alertado' => 'boolean',
+        'stock' => 'integer',
     ];
 
     /**
