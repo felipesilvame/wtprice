@@ -79,7 +79,7 @@ class ProductoController extends Controller
       $estado = $request->input('estado', 'Activo');
       $query = MinimoPrecio::select(['precio_oferta', 'precio_referencia', 'precio_tarjeta', 'updated_at', 'id_producto', 'uuid'])
         ->with(['producto' => function ($query) use ($estado, $request) {
-        $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra']);
+        $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra', 'disponible', 'stock']);
         if ($estado != 'Todos') {
           $query->where('estado', $estado);
         }
@@ -105,7 +105,7 @@ class ProductoController extends Controller
       $estado = $request->input('estado', 'Activo');
       $query = MinimoPrecio::select(['precio_oferta', 'precio_referencia', 'precio_tarjeta', 'updated_at', 'id_producto', 'uuid'])
         ->with(['producto' => function ($query) use ($estado, $request) {
-        $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra']);
+        $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra', 'disponible', 'stock']);
         if ($estado != 'Todos') {
           $query->where('estado', $estado);
         }
@@ -132,7 +132,7 @@ class ProductoController extends Controller
       $estado = $request->input('estado', 'Activo');
       $query = MinimoPrecio::select(['precio_oferta', 'precio_referencia', 'precio_tarjeta', 'updated_at', 'id_producto', 'uuid'])
         ->with(['producto' => function ($query) use ($estado, $request) {
-        $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra']);
+        $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra', 'disponible', 'stock']);
         if ($estado != 'Todos') {
           $query->where('estado', $estado);
         }
@@ -158,7 +158,7 @@ class ProductoController extends Controller
       $estado = $request->input('estado', 'Activo');
       $query = MinimoPrecio::select(['precio_oferta', 'precio_referencia', 'precio_tarjeta', 'updated_at', 'id_producto', 'uuid'])
         ->with(['producto' => function ($query) use ($estado, $request) {
-          $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra']);
+          $query->select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra', 'disponible', 'stock']);
           if ($estado != 'Todos') {
             $query->where('estado', $estado);
           }

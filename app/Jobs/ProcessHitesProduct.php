@@ -131,6 +131,10 @@ class ProcessHitesProduct implements ShouldQueue
                     $precio_referencia = (integer)preg_replace('/[^0-9]/','',$value);
                 }
             }
+            // 15-05-2020: if normal price not listed, use oferta intead
+            if (!$precio_referencia || $precio_referencia === '') {
+              $precio_referencia = $precio_oferta;
+            }
 
           } catch (\Exception $e) {
               Log::error("No se pudo obtener la lista de precios para el producto ".$product->id." Tienda ".$tienda->nombre);
