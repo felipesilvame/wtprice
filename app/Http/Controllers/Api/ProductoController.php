@@ -30,6 +30,32 @@ class ProductoController extends Controller
       return response()->json($query->paginate($paged));
     }
 
+    public function search(Request $request){
+      $input = $request->input('q', null);
+      $paged = $request->input('items', 24);
+      $estado = $request->input('estado', 'Todos');
+      $tiendas = $request->input('id_tienda', []);
+      $orderBy = $request->input('order', 'nombre');
+      $sort = $request->input('sort', 'ASC');
+
+      if ($input === null) return response(null, 400);
+      $query = Producto::select(['uuid','id', 'id_tienda', 'nombre', 'imagen_url', 'precio_referencia', 'precio_oferta', 'precio_tarjeta', 'url_compra', 'disponible', 'stock', 'updated_at'])
+      ->with(['tienda' => function($builder){
+        $builder->select(['id', 'nombre']);
+      }, 'minimo' => function($builder){
+        $builder->select(['precio_referencia', 'precio_oferta','precio_tarjeta', 'id', 'id_producto']);
+      }])->where('nombre', 'like', '%'.$input.'%');
+      if ($tiendas && count($tiendas) !== 0) {
+        $query = $query->whereIn('id_tienda', $tiendas);
+      }
+      if ($estado != 'Todos') {
+        $query = $query->where('estado', $estado);
+      }
+      $query = $query->orderBy($orderBy, $sort);
+      $results = $query->paginate($paged);
+      return response()->json($results);
+    }
+
     public function toggleProducto(AdminRequest $request, $id){
       $producto = \App\Models\Producto::findOrFail($id);
       if ($producto->estado === 'Activo') {

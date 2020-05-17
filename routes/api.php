@@ -21,6 +21,7 @@ Route::get('new-products', 'Api\ProductoController@new_products');
 Route::get('discounts', 'Api\ProductoController@discounts');
 Route::get('legacy', 'Api\ProductoController@legacy');
 Route::get('producto/{uuid}', 'Api\ProductoController@getByUuid');
+Route::post('producto/search', 'Api\ProductoController@search');
 Route::group(['prefix' => 'auth',], function () {
     Route::post('login', 'Api\AuthController@login');
     Route::post('logout', 'Api\AuthController@logout');
