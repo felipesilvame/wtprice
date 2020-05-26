@@ -34,13 +34,14 @@ class UpdateCatalogParis implements ShouldQueue
     public function __construct()
     {
       $this->categories = [
-        'electro/television/?srule=nuevosproductos',
-        'tecnologia/celulares/smartphones/?srule=nuevosproductos',
-        'tecnologia/computadores/?srule=nuevosproductos',
-        'tecnologia/gamer/consolas/?srule=nuevosproductos',
-        'tecnologia/computadores/pc-gamer/?srule=nuevosproductos',
-        'tecnologia/accesorios-videojuegos/juegos-ps4-vr/?srule=nuevosproductos',
-        'tecnologia/accesorios-videojuegos/juegos-nintendo/?srule=nuevosproductos'
+        'electro/television/?srule=Nuevos Productos AB',
+        'tecnologia/celulares/smartphones/?srule=Nuevos Productos AB',
+        'tecnologia/computadores/?srule=Nuevos Productos AB',
+        'tecnologia/gamer/consolas/?srule=Nuevos Productos AB',
+        'tecnologia/consolas-videojuegos/?srule=Nuevos Productos AB',
+        'tecnologia/computadores/pc-gamer/?srule=Nuevos Productos AB',
+        'tecnologia/accesorios-videojuegos/juegos-ps4-vr/?srule=Nuevos Productos AB',
+        'tecnologia/accesorios-videojuegos/juegos-nintendo/?srule=Nuevos Productos AB'
       ];
       $this->protocol = 'https';
       $this->method = 'GET';

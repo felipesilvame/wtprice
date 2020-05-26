@@ -233,7 +233,7 @@ class ProcessProduct implements ShouldQueue
                     } else {
                       $product->intentos_fallidos += 1;
                     }
-                  }
+                  } else $product->precio_tarjeta = null;
 
                 }
               } catch (\Exception $e) {
@@ -273,7 +273,7 @@ class ProcessProduct implements ShouldQueue
                     } else {
                       $product->intentos_fallidos +=1;
                     }
-                  }
+                  } else $product->precio_oferta = null;
 
                 }
               } catch (\Exception $e) {
@@ -356,17 +356,11 @@ class ProcessProduct implements ShouldQueue
                 'fecha' => Carbon::now(),
                 ]);
                 //no habia nunca antes un minimo, producto agregado
-                try {
-                  //\Notification::route('slack', env('SLACK_NUEVA_URL'))
-                  //->notify(new \App\Notifications\ProductAdded($product));
-                } catch (\Exception $e) {
-                  //throw $th;
-                }
 
                 //Hold up! maaaaaaaaaybe you want to check fast if the very first price was wrong,
                 // so, just check if has precio_oferta or precio_tarjeta
                 [$p_rata, $p_rata_relativo] = Rata::calculaSelf($product);
-                if ($p_rata >= 0.87 && !$product->alertado) {
+                if ($p_rata >= 0.75 && !$product->alertado) {
                   if ($product->precio_referencia >= 490000) {
                     try {
                       Rata::alertaCoipo($product, $minimo, $p_rata);
@@ -410,15 +404,16 @@ class ProcessProduct implements ShouldQueue
               } else {
                 // 15-04-2020. added static method for comparison
                 [$p_rata, $p_rata_relativo] = Rata::calculaRata($product, $minimo);
-                if ((!$minimo->precio_referencia) || $minimo->precio_referencia > $product->precio_referencia) {
+                if ((boolean)$product->precio_referencia && (!$minimo->precio_referencia) || $minimo->precio_referencia > $product->precio_referencia) {
                   $minimo->precio_referencia = $product->precio_referencia;
                 }
-                if ((!$minimo->precio_oferta) || $minimo->precio_oferta > $product->precio_oferta) {
+                if ((boolean)$product->precio_oferta && (!$minimo->precio_oferta) || $minimo->precio_oferta > $product->precio_oferta) {
                   $minimo->precio_oferta = $product->precio_oferta;
                 }
-                if ((!$minimo->precio_tarjeta) || $minimo->precio_tarjeta > $product->precio_tarjeta) {
+                if ((boolean)$product->precio_tarjeta && (!$minimo->precio_tarjeta) || $minimo->precio_tarjeta > $product->precio_tarjeta) {
                   $minimo->precio_tarjeta = $product->precio_tarjeta;
                 }
+                $minimo->save();
                 // Es hora de discriminar
                 if ($p_rata >= 0.65 && $p_rata_relativo >= 0.63 && !$product->alertado) {
                   if ($old->precio_referencia >= 490000) {
@@ -499,13 +494,13 @@ class ProcessProduct implements ShouldQueue
                   $product->save();
                 }
               }
-              // TODO: create historical, check minimum, etc etc
-              $minimo->save();
             } else {
               Log::warning("Advertencia producto ".$product->id.": puede que ya no haya stock o sea descontinuado. Tienda".$tienda->nombre);
               $product->ultima_actualizacion = now();
               $product->intervalo_actualizacion = random_int(5, 25);
               $product->intentos_fallidos += 1;
+              $product->actualizacion_pendiente = true;
+              $product->save();
               throw new \Exception("puede que ya no haya stock o sea descontinuado", 1);
 
             }

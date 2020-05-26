@@ -247,15 +247,16 @@ class ProcessHitesProduct implements ShouldQueue
           } else {
             // 15-04-2020. added static method for comparison
             [$p_rata, $p_rata_relativo] = Rata::calculaRata($product, $minimo);
-            if ((!$minimo->precio_referencia) || $minimo->precio_referencia > $product->precio_referencia) {
+            if ((boolean)$product->precio_referencia && (!$minimo->precio_referencia) || $minimo->precio_referencia > $product->precio_referencia) {
               $minimo->precio_referencia = $product->precio_referencia;
             }
-            if ((!$minimo->precio_oferta) || $minimo->precio_oferta > $product->precio_oferta) {
+            if ((boolean)$product->precio_oferta && (!$minimo->precio_oferta) || $minimo->precio_oferta > $product->precio_oferta) {
               $minimo->precio_oferta = $product->precio_oferta;
             }
-            if ((!$minimo->precio_tarjeta) || $minimo->precio_tarjeta > $product->precio_tarjeta) {
+            if ((boolean)$product->precio_tarjeta && (!$minimo->precio_tarjeta) || $minimo->precio_tarjeta > $product->precio_tarjeta) {
               $minimo->precio_tarjeta = $product->precio_tarjeta;
             }
+            $minimo->save();
             // Es hora de discriminar
             if ($p_rata >= 0.60 && $p_rata_relativo >= 0.63 && !$product->alertado) {
               if ($old->precio_referencia >= 490000) {
@@ -335,9 +336,7 @@ class ProcessHitesProduct implements ShouldQueue
               $product->alertado = true;
               $product->save();
             }
-          }
-          // TODO: create historical, check minimum, etc etc
-          $minimo->save();
+          }   
           //save again por si acaso xd xd xd
           $product->actualizacion_pendiente = true;
           $product->save();
