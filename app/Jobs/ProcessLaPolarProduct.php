@@ -247,13 +247,13 @@ class ProcessLaPolarProduct implements ShouldQueue
           } else {
             // 15-04-2020. added static method for comparison
             [$p_rata, $p_rata_relativo] = Rata::calculaRata($product, $minimo);
-            if ((boolean)$product->precio_referencia && (!$minimo->precio_referencia) || $minimo->precio_referencia > $product->precio_referencia) {
+            if ((boolean)$product->precio_referencia && (!$minimo->precio_referencia || $minimo->precio_referencia > $product->precio_referencia)) {
               $minimo->precio_referencia = $product->precio_referencia;
             }
-            if ((boolean)$product->precio_oferta && (!$minimo->precio_oferta) || $minimo->precio_oferta > $product->precio_oferta) {
+            if ((boolean)$product->precio_oferta && (!$minimo->precio_oferta || $minimo->precio_oferta > $product->precio_oferta)) {
               $minimo->precio_oferta = $product->precio_oferta;
             }
-            if ((boolean)$product->precio_tarjeta && (!$minimo->precio_tarjeta) || $minimo->precio_tarjeta > $product->precio_tarjeta) {
+            if ((boolean)$product->precio_tarjeta && (!$minimo->precio_tarjeta || $minimo->precio_tarjeta > $product->precio_tarjeta)) {
               $minimo->precio_tarjeta = $product->precio_tarjeta;
             }
             $minimo->save();
