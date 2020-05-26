@@ -199,13 +199,50 @@ class ProcessParisProduct implements ShouldQueue
             'fecha' => Carbon::now(),
             ]);
             // no hay minimo,
-            try {
-              //\Notification::route('slack', env('SLACK_NUEVA_URL'))
-              // ->notify(new \App\Notifications\ProductAdded($product));
-            } catch (\Exception $e) {
-
+            //Hold up! maaaaaaaaaybe you want to check fast if the very first price was wrong,
+            // so, just check if has precio_oferta or precio_tarjeta
+            [$p_rata, $p_rata_relativo] = Rata::calculaSelf($product);
+            if ($p_rata >= 0.75 && !$product->alertado) {
+              if ($product->precio_referencia >= 490000) {
+                try {
+                  Rata::alertaCoipo($product, $minimo, $p_rata);
+                } catch (\Throwable $th) {
+                  //throw $th;
+                }
+              } else if ($old->precio_referencia >= 195000){
+                // ALERTA RATA LVL 2: ESTO ES UNA RATA
+                try {
+                  Rata::alertaRata($product, $minimo, $p_rata);
+                } catch (\Exception $e) {
+                  //throw $th;
+                }
+              } else {
+                // ALERTA RATA LVL 1: UN HAMSTER
+                try {
+                  Rata::alertaHamster($product, $minimo, $p_rata);
+                } catch (\Exception $e) {
+                  //throw $th;
+                }
+              }
+              \App\Models\AlertaRata::create([
+                'id_tienda' => $tienda->id,
+                'id_producto' => $product->id,
+                'precio_antes' => $old->precio_referencia,
+                'precio_oferta_antes' => $old->precio_oferta,
+                'precio_tarjeta_antes' => $old->precio_tarjeta,
+                'precio_ahora' => $product->precio_referencia,
+                'precio_oferta_ahora' => $product->precio_oferta,
+                'precio_tarjeta_ahora' => $product->precio_tarjeta,
+                'porcentaje_rata' => $p_rata,
+                'porcentaje_rata_relativo' => $p_rata_relativo,
+                'nombre_tienda' => $tienda->nombre,
+                'nombre_producto' => $product->nombre,
+                'url_compra' => $product->url_compra,
+                'url_imagen' => $product->imagen_url,
+              ]);
+              $product->alertado = true;
+              $product->save();
             }
-
 
           } else {
             // 15-04-2020. added static method for comparison
