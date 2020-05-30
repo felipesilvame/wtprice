@@ -56,7 +56,9 @@ class Producto extends Model implements AuditableInterface
      * @var array
      */
     protected $hidden = [
-      'id', 'id_tienda'
+      'id', 'id_tienda',
+      //aggregate values for inner join with minimo
+      'id_producto', 'tienda_id'
     ];
 
     /**
@@ -84,6 +86,10 @@ class Producto extends Model implements AuditableInterface
         'actualizacion_pendiente' => 'boolean',
         'alertado' => 'boolean',
         'stock' => 'integer',
+        //aggregate values for inner join with minimo
+        'minimo_referencia' => 'double',
+        'minimo_tarjeta' => 'double',
+        'minimo_oferta' => 'double',
     ];
 
     /**

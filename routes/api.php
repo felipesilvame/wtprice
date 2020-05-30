@@ -20,6 +20,7 @@ Route::get('main-products', 'Api\ProductoController@main_products');
 Route::get('new-products', 'Api\ProductoController@new_products');
 Route::get('discounts', 'Api\ProductoController@discounts');
 Route::get('legacy', 'Api\ProductoController@legacy');
+Route::post('ofertas', 'Api\OfertasController@ofertas_rata');
 Route::get('producto/{uuid}', 'Api\ProductoController@getByUuid');
 Route::post('producto/search', 'Api\ProductoController@search');
 Route::group(['prefix' => 'auth',], function () {
