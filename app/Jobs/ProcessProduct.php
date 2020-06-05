@@ -318,11 +318,11 @@ class ProcessProduct implements ShouldQueue
               }
 
               if ($tienda->nombre === "Falabella" || $tienda->nombre === "Linio") {
-                $product->intervalo_actualizacion = random_int(10, 45);
+                $product->intervalo_actualizacion = random_int(3, 45);
               } elseif ($tienda->nombre === 'Lider'){
 		            $product->intervalo_actualizacion = random_int(5, 10);
 	            } elseif ($tienda->nombre === 'Ripley'){
-                $product->intervalo_actualizacion = random_int(25, 65);
+                $product->intervalo_actualizacion = random_int(35, 75);
               } else {
                 $product->intervalo_actualizacion = random_int(10, 40);
               }
@@ -331,7 +331,7 @@ class ProcessProduct implements ShouldQueue
               if ($tienda->campo_disponible) {
                 $product->disponible = Rata::getAvailableFlag($data, $tienda->campo_disponible, $tienda->nombre);
                 if ($product->disponible === 'Sin Stock') {
-                  $product->intervalo_actualizacion = $product->intervalo_actualizacion*3;
+                  $product->intervalo_actualizacion = $product->intervalo_actualizacion*7;
                 }
               }
 
