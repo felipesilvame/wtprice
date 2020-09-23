@@ -81,7 +81,8 @@ class ProcessMonitorQueueWorker implements ShouldQueue
                 ProcessProduct::dispatch($producto);
                 break;
               case 'Ripley':
-                ProcessProduct::dispatch($producto)->onQueue('ripley');
+                //disabled Ripley products
+                //ProcessProduct::dispatch($producto)->onQueue('ripley');
                 break;
               case 'Corona':
                 ProcessProduct::dispatch($producto);

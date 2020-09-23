@@ -7,23 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
-use App\Helpers\General\Arr as ArrHelper;
-use App\Models\SospechaRata;
-use App\Helpers\General\Rata;
 
-
-/**
- * Aprovechando la manera en que falabella usa su catalogo,
- * se puede aprovechar de buscar en las categorias deseadas, ofertas con
- * el porcetange de descuento hardcodeado.
- * Si encuentra productos, los manda directamente al modelo SospechaRata,
- * y manda automaticamente a procesar ese producto en el módulo principal,
- * si ya se encuentra en la SospechaRata, entonces no hace nada... para no 
- * entorpecer con el normal funcionamiento de la plataforma.
- * Este modelo se basa en el Job UpdateCatalogFalabella.
- */
-class SearchRataFalabella implements ShouldQueue
+class FunctionRataFalabella implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -45,42 +30,17 @@ class SearchRataFalabella implements ShouldQueue
     private $image_url_field;
     private $current_page_field;
     private $client;
+    private $discount;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(string $category, string $discount)
     {
-      $this->categories = [
-        'cat3770004', //Consolas
-        'cat720179', //Juegos,
-        'cat70003', //Nintendo
-        'cat4440005', //Playstation
-        'cat4850013', ///Computacion-Gamer',
-        'cat720161', //Smartphones',
-        'cat2018', //Celulares-y-Telefonos',
-        'cat7190053', //Wearables',
-        'cat1012', //TV',
-        'cat70057', //Notebooks',
-        'cat2062', //Monitores',
-        'cat40051', //All-In-One',
-        'cat7230007', //Tablets',
-        'cat2023', //Videojuegos',
-        'cat2038', //Fotografia',
-        'cat7190093', //Smart Home,
-        'cat7350043', //Desktops,
-        'cat2003', //Almacenamiento,
-        'cat2062', //Monitores,
-        'cat7190148', //LEDS
-        'cat2005', //Audio
-        'cat3205', //Refrigeradores,
-        'cat3065', //Cocina
-        'cat2034', //Electrodomesticos Cocina
-
-
-      ];
+      $this->categories = [$category];
+      $this->discount = $discount;
       $this->protocol = 'https';
       $this->method = 'GET';
       $this->uri = 'www.falabella.com/s/browse/v1/listing/cl';
@@ -107,17 +67,18 @@ class SearchRataFalabella implements ShouldQueue
      */
     public function handle()
     {
-      $client = new \GuzzleHttp\Client();
+    $client = new \GuzzleHttp\Client();
       $tienda = null;
       $total_pages = 0;
       $tienda = \App\Models\Tienda::whereNombre('Falabella')->first();
+      $_d = (string)$this->discount;
       if (!$tienda) return null;
       foreach ($this->categories as $key => $category) {
         try {
           $page_start = 1;
           //get response
           $url = $this->protocol.'://'.$this->uri;
-          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount.event=70%25+dcto+y+más&isPLP=1&isPLP=1,1";
+          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount.event=$_s%25+dcto+y+más&isPLP=1&isPLP=1,1&f.derived.variant.sellerId=FALABELLA";
           Log::debug('Getting url: '.$url);
           $response = null;
           $data = null;
