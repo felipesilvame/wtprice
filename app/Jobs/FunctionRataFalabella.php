@@ -7,6 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use App\Helpers\General\Arr as ArrHelper;
+use App\Models\SospechaRata;
+use App\Helpers\General\Rata;
 
 class FunctionRataFalabella implements ShouldQueue
 {
@@ -78,7 +82,7 @@ class FunctionRataFalabella implements ShouldQueue
           $page_start = 1;
           //get response
           $url = $this->protocol.'://'.$this->uri;
-          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount.event=$_s%25+dcto+y+más&isPLP=1&isPLP=1,1&f.derived.variant.sellerId=FALABELLA";
+          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount.event=$_d%25+dcto+y+más&isPLP=1&isPLP=1,1&f.derived.variant.sellerId=FALABELLA";
           Log::debug('Getting url: '.$url);
           $response = null;
           $data = null;
