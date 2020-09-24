@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\ProcessMonitorQueueWorker;
 use App\Jobs\UpdateAllCatalogs;
 use App\Jobs\SearchRataFalabella;
+use App\Jobs\FunctionRataFalabella;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -14,6 +15,19 @@ use Illuminate\Support\Facades\Log;
  */
 class Kernel extends ConsoleKernel
 {
+    private $array_parent_categories = [
+        'cat7090034', // Tecnología
+        'cat16400010', // Telefonía
+        'cat16510006', // Electrohogar
+        'cat8950017', // Decohogar
+        'cat1008', // Muebles
+        'cat1005', // Dormitorio
+        'cat6930002', // Deportes
+        'cat7330051', // Moda Mujer
+        'cat7450065', // Moda Hombre
+
+    ];
+
     /**
      * The Artisan commands provided by your application.
      *
@@ -32,7 +46,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
-        $schedule->job(new SearchRataFalabella)->everyFiveMinutes()->runInBackground();
+        $schedule->job(new FunctionRataFalabella($this->array_parent_categories, '70'))->everyFiveMinutes()->runInBackground();
         $schedule->job(new UpdateAllCatalogs)->everyFifteenMinutes()->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('08:08')->runInBackground();

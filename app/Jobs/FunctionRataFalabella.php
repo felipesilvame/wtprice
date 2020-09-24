@@ -41,9 +41,9 @@ class FunctionRataFalabella implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(string $category, string $discount)
+    public function __construct(array $category, string $discount)
     {
-      $this->categories = [$category];
+      $this->categories = $category;
       $this->discount = $discount;
       $this->protocol = 'https';
       $this->method = 'GET';
