@@ -156,7 +156,14 @@ class ProcessParisProduct implements ShouldQueue
           //get precio tarjeta if any
           try {
             if ($tienda->campo_precio_tarjeta) {
-              $precio_tarjeta = trim($crawler->filter($tienda->campo_precio_tarjeta)->first()->text());
+              //modification 26/09/2020: removed the card image
+              $item = $crawler->filter($tienda->campo_precio_tarjeta)->first();
+              $item->filter('span.discount-2')->each(function ($crawler) { 
+                foreach ($crawler as $node) { 
+                    $node->parentNode->removeChild($node); 
+                } 
+              });
+              $precio_tarjeta = trim($item->text());
               $p_tarjeta = (integer)preg_replace('/[^0-9]/','',$precio_tarjeta);
               if ($p_tarjeta && $p_tarjeta < 10000000) {
                 $product->precio_tarjeta = $p_tarjeta;
