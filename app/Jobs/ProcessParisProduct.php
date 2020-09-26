@@ -142,7 +142,13 @@ class ProcessParisProduct implements ShouldQueue
           //get precio oferta if any
           try {
             if ($tienda->campo_precio_oferta) {
-              $precio_oferta = trim($crawler->filter($tienda->campo_precio_oferta)->first()->text());
+              $item = $crawler->filter($tienda->campo_precio_oferta)->first();
+              $item->filter('span.discount-2')->each(function ($crawler) { 
+                foreach ($crawler as $node) { 
+                    $node->parentNode->removeChild($node); 
+                } 
+              });
+              $precio_oferta = trim($item->text());
               $p_oferta = (integer)preg_replace('/[^0-9]/','',$precio_oferta);
               if ($p_oferta && $p_oferta < 10000000) {
                 $product->precio_oferta = $p_oferta;
