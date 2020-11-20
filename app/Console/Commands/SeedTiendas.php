@@ -155,7 +155,7 @@ class SeedTiendas extends Command
           'request_body_sku' => 'data.id',
           'campo_nombre_producto' => 'data.name',
           'campo_precio_referencia' => 'data.variants.0.prices:label,,price.0',
-          'campo_precio_oferta' => 'data.variants.0.prices:label,(Oferta),price.0',
+          'campo_precio_oferta' => 'data.variants.0.prices:type,internetPrice,price.0',
           'campo_precio_tarjeta' => 'data.variants.0.prices:type,cmrPrice,price.0',
           'campo_slug_compra' => null,
           'url_prefix_compra' => 'https://www.falabella.com/falabella-cl/product/',

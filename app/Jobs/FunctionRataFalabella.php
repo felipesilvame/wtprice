@@ -58,7 +58,7 @@ class FunctionRataFalabella implements ShouldQueue
       $this->sku_field = 'productId';
       $this->nombre_field = 'displayName';
       $this->precio_referencia_field = 'prices:label,,price.0';
-      $this->precio_oferta_field = 'prices:label,(Oferta),price.0';
+      $this->precio_oferta_field = 'prices:crossed,0,price.0';
       $this->precio_tarjeta_field = 'prices:icons,cmr-icon,price.0';
       $this->buy_url_field = 'url';
       $this->image_url_field = 'https://falabella.scene7.com/is/image/Falabella/';
