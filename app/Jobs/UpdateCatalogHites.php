@@ -35,24 +35,24 @@ class UpdateCatalogHites implements ShouldQueue
     public function __construct()
     {
       $this->categories = [
-        'tecnologia/tv-video/todos-los-led?pageSize=48&orderBy=2',
-        'tecnologia/computacion?pageSize=48&orderBy=2',
-        'tecnologia/video-juego/consolas?pageSize=48&orderBy=2',
-        'tecnologia/video-juego/juegos?pageSize=48&orderBy=2',
-        'tecnologia/video-juego/suscripciones-y-creditos?pageSize=48&orderBy=2',
-        'tecnologia/video-juego/play-station?pageSize=48&orderBy=2',
-        'tecnologia/video-juego/xbox?pageSize=48&orderBy=2',
-        'tecnologia/video-juego/nintendo?pageSize=48&orderBy=2',
-        'tecnologia/fotografia/camaras-reflex?pageSize=48&orderBy=2',
-        'tecnologia/fotografia/camaras-semi-profesional?pageSize=48&orderBy=2',
-        'tecnologia/fotografia/camaras-deportivas?pageSize=48&orderBy=2',
-        'celulares/smartphone?pageSize=48&orderBy=2',
+        'tvvideo',
+        'computacion',
+        'consolas',
+        'juegos',
+        'suscripciones',
+        'playstation',
+        'xbox',
+        'nintendo',
+        'camarasreflex',
+        'camarassemiprofesional',
+        'camarasdeportivas',
+        'smartphones',
 
       ];
       $this->protocol = 'https';
       $this->method = 'GET';
-      $this->uri = 'www.hites.com/';
-      $this->page_start = 1;
+      $this->uri = 'www.hites.com/on/demandware.store/Sites-HITES-Site/default/Search-UpdateGrid';
+      $this->page_start = 0;
       $this->total_pages = 0;
       $this->tienda = null;
       $this->total_pages_field = null;
@@ -75,8 +75,10 @@ class UpdateCatalogHites implements ShouldQueue
         Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
         foreach ($this->categories as $category) {
             // code...
-            $url = $this->protocol.'://'.$this->uri.$category;
+            $url = $this->protocol.'://'.$this->uri;
             $current_page = $this->page_start;
+            //add page and category in url;
+            $url .= "?cgid=$category&srule=price-low-to-high&sz=144&start=$current_page";
             $finished = false;
             try {
               $crawler = $client->request($this->method, $url);
@@ -84,9 +86,10 @@ class UpdateCatalogHites implements ShouldQueue
               try {
                 while (!$finished) {
                   //get list of sku
-                  $data = json_decode($crawler->filter('script#hy-data')->first()->text(), true);$list = collect(Arr::get($data, 'result.products', []))->pluck('partNumber');
+                  // updated hites catalog
+                  $list = $crawler->filter('html > body div.product-tile')->each(function($node) { return $node->attr('data-pid'); });
                   //we got the list id, now append into the DB if we havent got yet
-                  if ($list->count() === 0) {
+                  if (count($list) === 0) {
                       $finished = true;
                       continue;
                   }
@@ -114,9 +117,9 @@ class UpdateCatalogHites implements ShouldQueue
                     }
                   }
                   // get next page
-                  $current_page++;
+                  $current_page = $current_page+144;
                   try {
-                    $crawler = $client->request('GET', $url.'&page='.$current_page);
+                    $crawler = $client->request('GET', $this->protocol.'://'.$this->uri."?cgid=$category&srule=price-low-to-high&sz=144&start=$current_page");
                   } catch (\Throwable $th) {
                     $finished = true;
                   }

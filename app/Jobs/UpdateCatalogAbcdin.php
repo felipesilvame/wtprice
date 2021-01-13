@@ -94,8 +94,18 @@ class UpdateCatalogAbcdin implements ShouldQueue
             try {
               $response = $client->get($url, $options)->getBody()->getContents();
             } catch (\Exception $e) {
-              Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
-              throw new \Exception("Error Processing Request", 1);
+              Log::warning("No se ha obtenido respuesta satisfactoria de parte del request ".$tienda->nombre);
+              Log::info("Reintentando usando proxy ".$tienda->nombre);
+              try {
+                if ((boolean)env('APP_PROXY')) {
+                  $options['proxy'] = env('APP_PROXY');
+                  $options['verify'] = false;
+                  $response = $client->get($url, $options)->getBody()->getContents();
+                }
+              } catch (\Throwable $th) {
+                Log::warning("No se ha obtenido respuesta satisfactoria de parte del request ".$tienda->nombre);
+                throw new \Exception("Error Processing Request", 1);
+              }
             }
             if ((boolean) $response) {
               try {

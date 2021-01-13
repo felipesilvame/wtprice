@@ -93,8 +93,12 @@ class ProcessProduct implements ShouldQueue
           }
           if($tienda->nombre === 'Ripley' && (boolean)env('APP_PROXY')) {
             //for ripley, add proxy
-            $proxy = Proxy::random();
-            $options['proxy'] = $proxy->url;
+            //$proxy = Proxy::random();
+            $options['proxy'] = env('APP_PROXY');
+            $options['verify'] = false;
+            $options['timeout'] = 15;
+          } elseif($tienda->nombre === 'ABCDin' && (boolean)env('APP_PROXY')){
+            $options['proxy'] = env('APP_PROXY');
             $options['verify'] = false;
             $options['timeout'] = 15;
           }
@@ -113,63 +117,86 @@ class ProcessProduct implements ShouldQueue
               $res = $client->send($request, $options);
               $response = (string) $res->getBody();
             }
-          } catch(\GuzzleHttp\Exception\ConnectException $e) {
-            if ($proxy) {
-              Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
-              $proxy->intentos_fallidos +=1;
-              if ($proxy->intentos_fallidos > 100) {
-                $proxy->activo = false;
+          } catch (\Exception $e) {
+            //option: retry with proxy
+            try {
+              if ((boolean)env('APP_PROXY')) {
+                $options['proxy'] = env('APP_PROXY');
+                $options['verify'] = false;
+                $options['timeout'] = 15;
               }
-              $proxy->save();
-            } else Log::error("Error de Connection para el producto ".$product->id." Tienda ".$tienda->nombre);
-            $product->ultima_actualizacion = now();
-            $product->actualizacion_pendiente = true;
-            $product->intervalo_actualizacion = random_int(5, 25);
-            $product->save();
-            return;
-          } catch(\GuzzleHttp\Exception\ClientException $e){
-            $status = $e->getResponse()->getStatusCode();
-            Log::error("Error ".$status." para el producto ".$product->id." Tienda ".$tienda->nombre);
-            $product->intentos_fallidos += 1;
-            if ($status != 404) {
+              if ($tienda->method == "POST") {
+                $response = $client->post($url, $options)->getBody()->getContents();
+              }
+              else {
+                if ($tienda->headers) {
+                  $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url, $tienda->headers);
+                }
+                else{
+                  $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url);
+                }
+  
+                $res = $client->send($request, $options);
+                $response = (string) $res->getBody();
+              }
+            } catch(\GuzzleHttp\Exception\ConnectException $e) {
               if ($proxy) {
+                Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
                 $proxy->intentos_fallidos +=1;
                 if ($proxy->intentos_fallidos > 100) {
                   $proxy->activo = false;
                 }
                 $proxy->save();
-              }
+              } else Log::error("Error de Connection para el producto ".$product->id." Tienda ".$tienda->nombre);
               $product->ultima_actualizacion = now();
               $product->actualizacion_pendiente = true;
               $product->intervalo_actualizacion = random_int(5, 25);
-            } else {
-              $product->estado = 'Detenido';
-            }
-            $product->save();            
-            return;
-          } catch(\GuzzleHttp\Exception\RequestException $e){            
-            if ($proxy) {
-              Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
-              $proxy->intentos_fallidos +=1;
-              if ($proxy->intentos_fallidos > 100) {
-                $proxy->activo = false;
+              $product->save();
+              return;
+            } catch(\GuzzleHttp\Exception\ClientException $e){
+              $status = $e->getResponse()->getStatusCode();
+              Log::error("Error ".$status." para el producto ".$product->id." Tienda ".$tienda->nombre);
+              $product->intentos_fallidos += 1;
+              if ($status != 404) {
+                if ($proxy) {
+                  $proxy->intentos_fallidos +=1;
+                  if ($proxy->intentos_fallidos > 100) {
+                    $proxy->activo = false;
+                  }
+                  $proxy->save();
+                }
+                $product->ultima_actualizacion = now();
+                $product->actualizacion_pendiente = true;
+                $product->intervalo_actualizacion = random_int(5, 25);
+              } else {
+                $product->estado = 'Detenido';
               }
-              $proxy->save();
-            } else Log::error("Error de Request para el producto ".$product->id." Tienda ".$tienda->nombre);
-            $product->ultima_actualizacion = now();
-            $product->actualizacion_pendiente = true;
-            $product->intervalo_actualizacion = random_int(5, 25);
-            $product->save();
-            return;
-          } catch (\Exception $e) {
-            Log::error("No se ha podido obtener respuesta del servidor para el producto ".$product->id." Tienda ".$tienda->nombre);
-            $product->intentos_fallidos += 1;
-            //maybe try later? 
-            $product->ultima_actualizacion = now();
-            $product->actualizacion_pendiente = true;
-            $product->intervalo_actualizacion = random_int(5, 25);
-            $product->save();            
-            return; 
+              $product->save();            
+              return;
+            } catch(\GuzzleHttp\Exception\RequestException $e){            
+              if ($proxy) {
+                Log::error("Error de proxy para el producto ".$product->id." Tienda ".$tienda->nombre);
+                $proxy->intentos_fallidos +=1;
+                if ($proxy->intentos_fallidos > 100) {
+                  $proxy->activo = false;
+                }
+                $proxy->save();
+              } else Log::error("Error de Request para el producto ".$product->id." Tienda ".$tienda->nombre);
+              $product->ultima_actualizacion = now();
+              $product->actualizacion_pendiente = true;
+              $product->intervalo_actualizacion = random_int(5, 25);
+              $product->save();
+              return;
+            } catch (\Exception $e) {
+              Log::error("No se ha podido obtener respuesta del servidor para el producto ".$product->id." Tienda ".$tienda->nombre);
+              $product->intentos_fallidos += 1;
+              //maybe try later? 
+              $product->ultima_actualizacion = now();
+              $product->actualizacion_pendiente = true;
+              $product->intervalo_actualizacion = random_int(5, 25);
+              $product->save();            
+              return; 
+            }
           }
           if ((boolean) $response){
             $data = null;
@@ -324,7 +351,8 @@ class ProcessProduct implements ShouldQueue
 	            } elseif ($tienda->nombre === 'Ripley'){
                 $product->intervalo_actualizacion = random_int(35, 75);
               } else {
-                $product->intervalo_actualizacion = random_int(10, 40);
+                // 13-01-2020: Se amplia el intervalo de actualizacion. ABCDin, Corona e Hites bloquearon las request.
+                $product->intervalo_actualizacion = random_int(25, 75);
               }
 
               //13-05-2020: se agrega flag de stock para aquellos que tengan disponible la funcion

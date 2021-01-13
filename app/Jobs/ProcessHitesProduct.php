@@ -112,24 +112,30 @@ class ProcessHitesProduct implements ShouldQueue
           }
 
           try {
-            // get list of prices
-            $precios = $crawler->filter($tienda->campo_precio_referencia);
-            $lista = collect($precios->each(function($node, $i){
-                $item['tipo'] = $node->filter('.product__price__card-label, .product__price__label')->last()->text();
-                $item['precio'] = $node->filter('span')->first()->text(); 
-                return $item;})
-                );
-            $keyed = $lista->mapWithKeys(function ($item) {
-                return [$item['tipo'] => $item['precio']];
-            });
-            foreach ($keyed as $key => $value) {
-                if (strpos(Str::lower($key), 'tarjeta') !== false) {
-                    $precio_tarjeta = (integer)preg_replace('/[^0-9]/','',$value);
-                } else if (strpos(Str::lower($key), 'oferta') !== false){
-                    $precio_oferta = (integer)preg_replace('/[^0-9]/','',$value);
-                } else if (strpos(Str::lower($key), 'normal') !== false){
-                    $precio_referencia = (integer)preg_replace('/[^0-9]/','',$value);
-                }
+            // 13-01-2020: updated hites method
+            try {
+              if ($tienda->campo_precio_referencia) {
+                $_precio = $crawler->filter($tienda->campo_precio_referencia)->first()->attr('content');
+                $precio_referencia = (integer)preg_replace('/[^0-9]/','',$_precio);
+              }
+            } catch (\Throwable $th) {
+              //throw $th;
+            }
+            try {
+              if ($tienda->campo_precio_oferta) {
+                $_precio = $crawler->filter($tienda->campo_precio_oferta)->first()->attr('content');
+                $precio_referencia = (integer)preg_replace('/[^0-9]/','',$_precio);
+              }
+            } catch (\Throwable $th) {
+              //throw $th;
+            }
+            try {
+              if ($tienda->campo_precio_tarjeta) {
+                $_precio = $crawler->filter($tienda->campo_precio_tarjeta)->first()->attr('content');
+                $precio_referencia = (integer)preg_replace('/[^0-9]/','',$_precio);
+              }
+            } catch (\Throwable $th) {
+              //throw $th;
             }
             // 15-05-2020: if normal price not listed, use oferta intead
             if (!$precio_referencia || $precio_referencia === '') {
