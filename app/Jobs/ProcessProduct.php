@@ -97,10 +97,6 @@ class ProcessProduct implements ShouldQueue
             $options['proxy'] = env('APP_PROXY');
             $options['verify'] = false;
             $options['timeout'] = 15;
-          } elseif($tienda->nombre === 'ABCDin' && (boolean)env('APP_PROXY')){
-            $options['proxy'] = env('APP_PROXY');
-            $options['verify'] = false;
-            $options['timeout'] = 15;
           }
           try {
             if ($tienda->method == "POST") {
@@ -181,7 +177,10 @@ class ProcessProduct implements ShouldQueue
                   $proxy->activo = false;
                 }
                 $proxy->save();
-              } else Log::error("Error de Request para el producto ".$product->id." Tienda ".$tienda->nombre);
+              } else {
+                Log::error("Error de Request para el producto ".$product->id." Tienda ".$tienda->nombre);
+                $product->intentos_fallidos += 1;
+              }
               $product->ultima_actualizacion = now();
               $product->actualizacion_pendiente = true;
               $product->intervalo_actualizacion = random_int(5, 25);

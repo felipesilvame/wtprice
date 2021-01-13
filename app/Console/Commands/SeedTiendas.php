@@ -61,6 +61,8 @@ class SeedTiendas extends Command
           'suffix_api' => '&storeId=99999',
           'headers' => [
             'Authorization' => 'Bearer 40fddf613cb8a1d88ac334931afda5ec7ccf5fe3',
+            'Accept' => 'application/json',
+            'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36',
           ],
           'campo_nombre_producto' => 'data.products.0.name',
           'campo_precio_referencia' => 'data.products.0.price.normal',

@@ -89,7 +89,11 @@ class UpdateCatalogAbcdin implements ShouldQueue
             $response = null;
             $data = null;
             $options = [
-              'Authorization' => 'Bearer 40fddf613cb8a1d88ac334931afda5ec7ccf5fe3'
+              'headers' => [
+                'Authorization' => 'Bearer 40fddf613cb8a1d88ac334931afda5ec7ccf5fe3',
+                'Accept' => 'application/json',
+                'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36',
+              ],
             ];
             try {
               $response = $client->get($url, $options)->getBody()->getContents();
@@ -153,13 +157,25 @@ class UpdateCatalogAbcdin implements ShouldQueue
                 $response = null;
                 $data = null;
                 $options = [
-                  'Authorization' => 'Bearer 40fddf613cb8a1d88ac334931afda5ec7ccf5fe3'
+                  'headers' => [
+                    'Authorization' => 'Bearer 40fddf613cb8a1d88ac334931afda5ec7ccf5fe3',
+                    'Accept' => 'application/json',
+                    'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36',
+                  ],
                 ];
                 try {
                   $response = $client->get($url, $options)->getBody()->getContents();
                 } catch (\Exception $e) {
-                  Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
-                  throw new \Exception("Error Processing Request", 1);
+                  try {
+                    if ((boolean)env('APP_PROXY')) {
+                      $options['proxy'] = env('APP_PROXY');
+                      $options['verify'] = false;
+                      $response = $client->get($url, $options)->getBody()->getContents();
+                    }
+                  } catch (\Throwable $th) {
+                    Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
+                    throw new \Exception("Error Processing Request", 1);
+                  }
                 }
                 if ((boolean) $response) {
                   try {
@@ -201,7 +217,7 @@ class UpdateCatalogAbcdin implements ShouldQueue
             }
           } catch (\Exception $e) {
             Log::error("Error obteniendo info de ".$tienda->nombre);
-            Log::error(debug_backtrace());
+            //Log::error(debug_backtrace());
           }
 
         }
