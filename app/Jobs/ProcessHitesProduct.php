@@ -124,7 +124,7 @@ class ProcessHitesProduct implements ShouldQueue
             try {
               if ($tienda->campo_precio_oferta) {
                 $_precio = $crawler->filter($tienda->campo_precio_oferta)->first()->attr('content');
-                $precio_referencia = (integer)preg_replace('/[^0-9]/','',$_precio);
+                $precio_oferta = (integer)preg_replace('/[^0-9]/','',$_precio);
               }
             } catch (\Throwable $th) {
               //throw $th;
@@ -132,7 +132,7 @@ class ProcessHitesProduct implements ShouldQueue
             try {
               if ($tienda->campo_precio_tarjeta) {
                 $_precio = $crawler->filter($tienda->campo_precio_tarjeta)->first()->attr('content');
-                $precio_referencia = (integer)preg_replace('/[^0-9]/','',$_precio);
+                $precio_tarjeta = (integer)preg_replace('/[^0-9]/','',$_precio);
               }
             } catch (\Throwable $th) {
               //throw $th;
