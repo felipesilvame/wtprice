@@ -36,7 +36,7 @@ class Kernel extends ConsoleKernel
     private $sesenta_por_ciento = [
         'cat7190148', //Televisores LED
         'cat3770004', //Consolas
-    ]
+    ];
 
     /**
      * The Artisan commands provided by your application.
@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
         $schedule->job(new FunctionRataFalabella($this->array_parent_categories, '70'))->everyFiveMinutes()->runInBackground();
         $schedule->job(new UpdateAllCatalogs)->everyFifteenMinutes()->runInBackground();
-        $schedule->job(new FunctionRataFalabella($this->cincuenta_por_ciento, '50'))->everyTwoMinutes()->runInBackground();
+        $schedule->job(new FunctionRataFalabella($this->cincuenta_por_ciento, '50'))->cron('*/2 * * * *')->runInBackground();
         $schedule->job(new FunctionRataFalabella($this->sesenta_por_ciento, '60'))->everyMinute()->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('08:08')->runInBackground();
