@@ -35,13 +35,14 @@ class FunctionRataFalabella implements ShouldQueue
     private $current_page_field;
     private $client;
     private $discount;
+    private $webhook;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(array $category, string $discount)
+    public function __construct(array $category, string $discount, string $webhook)
     {
       $this->categories = $category;
       $this->discount = $discount;
@@ -62,6 +63,7 @@ class FunctionRataFalabella implements ShouldQueue
       $this->precio_tarjeta_field = 'prices:icons,cmr-icon,price.0';
       $this->buy_url_field = 'url';
       $this->image_url_field = 'https://falabella.scene7.com/is/image/Falabella/';
+      $this->webhook = $webhook;
     }
 
     /**
@@ -155,7 +157,7 @@ class FunctionRataFalabella implements ShouldQueue
                   ]);
 
                   // TODO: Notify sospecha (only url coz its the only what we have)
-                  Rata::sospechaRataUrl($url);
+                  Rata::sospechaRataUrl($url, $this->webhook);
                 }
               } catch (\Throwable $th) {
                 //throw $th;
@@ -208,7 +210,7 @@ class FunctionRataFalabella implements ShouldQueue
                 ]);
                 // TODO: Notify sospecha
                   try {
-                    Rata::sospechaRata($sospecha);
+                    Rata::sospechaRata($sospecha, $webhook);
                   } catch (\Throwable $th) {
                     //throw $th;
                     //nothing
@@ -315,7 +317,7 @@ class FunctionRataFalabella implements ShouldQueue
                     // TODO: Notify sospecha
 
                     try {
-                      Rata::sospechaRata($sospecha);
+                      Rata::sospechaRata($sospecha, $webhook);
                     } catch (\Throwable $th) {
                       //nothing
                     }

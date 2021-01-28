@@ -10,6 +10,7 @@ use App\Notifications\PushRata;
 use GuzzleHttp\Client;
 use App\Helpers\General\Arr as ArrHelper;
 use Notification;
+use Illuminate\Support\Facades\Log;
 
 
 /**
@@ -439,12 +440,16 @@ class Rata
     /**
      * Manda una sospecha rata por discord
      */
-    public static function sospechaRataUrl($url){
+    public static function sospechaRataUrl($url, string $webhook_url){
+        if (!$webhook_url) {
+            Log::warning("Se ha tratado de realizar una SospechaRata sin webhook URL");
+            return;
+        }
         try {
             $client = new Client();
-            $response = $client->post('https://discordapp.com/api/webhooks/699757818311475221/mV3nu84k_sd0jCecqdtV2MackIrWuk4uYypQgJCysO9paf25cMC2a4mVaUenjP_w2Sn3', [
+            $response = $client->post($webhook_url, [
                 'json' => [
-                    'content' => 'Una rata sorprendida ha encontrado un producto con descuento mayor a 70%. Visita la web para corroborar la oferta',
+                    'content' => 'Una rata sorprendida ha encontrado un producto con descuento mayor a 70%. Visita '.$url.' para corroborar la oferta',
                     'embeds' => [
                         [
                             "title" => $url,
@@ -463,13 +468,17 @@ class Rata
     /**
      * Manda una sospecha rata por discord
      */
-    public static function sospechaRata(SospechaRata $producto){
+    public static function sospechaRata(SospechaRata $producto, string $webhook_url){
         $imgUrl = self::imagenUrl($producto->url_imagen);
+        if (!$webhook_url) {
+            Log::warning("Se ha tratado de realizar una SospechaRata sin webhook URL");
+            return;
+        }
         try {
             $client = new Client();
-            $response = $client->post('https://discordapp.com/api/webhooks/699757818311475221/mV3nu84k_sd0jCecqdtV2MackIrWuk4uYypQgJCysO9paf25cMC2a4mVaUenjP_w2Sn3', [
+            $response = $client->post($webhook_url, [
                 'json' => [
-                    'content' => 'Una rata sorprendida ha encontrado un producto con descuento mayor a 70%. Visita la web para corroborar la oferta',
+                    'content' => 'Una rata sorprendida ha encontrado '.$producto->nombre_producto.' con descuento mayor a 70% '.moneyFormat(self::menorValor($producto), 'CLP').' . Visita '.$producto->url_compra.' para corroborar la oferta',
                     'embeds' => [
                         [
                             "title" => $producto->nombre_producto.' a tan sólo '.moneyFormat(self::menorValor($producto), 'CLP'),
