@@ -57,10 +57,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->job(new FunctionRataFalabella($this->cincuenta_por_ciento, '50', config('rata.webhook_rata_tecno')))->everyMinute()->runInBackground();
-        $schedule->job(new FunctionRataFalabella($this->sesenta_por_ciento, '60', config('rata.webhook_rata_tecno')))->everyMinute()->runInBackground();
-        $schedule->job(new FunctionRataFalabella($this->array_parent_categories, '70', config('rata.webhook_rata_tecno')))->cron('*/3 * * * *')->runInBackground();
-        $schedule->job(new FunctionRataFalabella($this->falabella_ropa_categories, '70', config('rata.webhook_rata_ropa')))->everyFiveMinutes()->runInBackground();
+        $schedule->job(new FunctionRataFalabella($this->cincuenta_por_ciento, '50', 'rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataFalabella($this->sesenta_por_ciento, '60','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataFalabella($this->array_parent_categories, '70', 'rata.webhook_rata_tecno'))->cron('*/3 * * * *')->runInBackground();
+        $schedule->job(new FunctionRataFalabella($this->falabella_ropa_categories, '70', 'rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
         $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
         $schedule->job(new UpdateAllCatalogs)->everyFifteenMinutes()->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();

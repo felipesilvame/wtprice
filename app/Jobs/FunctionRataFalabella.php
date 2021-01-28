@@ -63,7 +63,7 @@ class FunctionRataFalabella implements ShouldQueue
       $this->precio_tarjeta_field = 'prices:icons,cmr-icon,price.0';
       $this->buy_url_field = 'url';
       $this->image_url_field = 'https://falabella.scene7.com/is/image/Falabella/';
-      $this->webhook = $webhook;
+      $this->webhook = config($webhook);
     }
 
     /**
