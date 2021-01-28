@@ -8,6 +8,7 @@ use App\Jobs\ProcessMonitorQueueWorker;
 use App\Jobs\UpdateAllCatalogs;
 use App\Jobs\SearchRataFalabella;
 use App\Jobs\FunctionRataFalabella;
+use App\Jobs\FunctionRataLider;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -40,6 +41,24 @@ class Kernel extends ConsoleKernel
         'cat3770004', //Consolas
     ];
 
+    private $lider_sesenta_por_ciento = [
+        'Computación',
+        'Tecno/Mundo Gamer',
+        'Tecno/TV',
+        'Celulares/Celulares y Teléfonos/Smartphones',
+        'Ferretería-'
+    ];
+
+    private $lider_cincuenta_por_ciento = [
+        'Electrohogar',
+    ];
+
+    private $lider_ropa_cat = [
+        'Dormitorio',
+        'Muebles',
+        'Decohogar'
+    ];
+
     /**
      * The Artisan commands provided by your application.
      *
@@ -61,6 +80,9 @@ class Kernel extends ConsoleKernel
         $schedule->job(new FunctionRataFalabella($this->sesenta_por_ciento, '60','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
         $schedule->job(new FunctionRataFalabella($this->array_parent_categories, '70', 'rata.webhook_rata_tecno'))->cron('*/3 * * * *')->runInBackground();
         $schedule->job(new FunctionRataFalabella($this->falabella_ropa_categories, '70', 'rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
+        $schedule->job(new FunctionRataLider($this->lider_sesenta_por_ciento, '59','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataLider($this->lider_cincuenta_por_ciento, '49','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataLider($this->lider_ropa_cat, '60','rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
         $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
         $schedule->job(new UpdateAllCatalogs)->everyFifteenMinutes()->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();

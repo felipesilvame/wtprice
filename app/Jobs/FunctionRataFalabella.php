@@ -210,7 +210,7 @@ class FunctionRataFalabella implements ShouldQueue
                 ]);
                 // TODO: Notify sospecha
                   try {
-                    Rata::sospechaRata($sospecha, $webhook);
+                    Rata::sospechaRata($sospecha, $this->webhook);
                   } catch (\Throwable $th) {
                     //throw $th;
                     //nothing
@@ -317,7 +317,7 @@ class FunctionRataFalabella implements ShouldQueue
                     // TODO: Notify sospecha
 
                     try {
-                      Rata::sospechaRata($sospecha, $webhook);
+                      Rata::sospechaRata($sospecha, $this->webhook);
                     } catch (\Throwable $th) {
                       //nothing
                     }
