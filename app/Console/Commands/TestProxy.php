@@ -8,7 +8,11 @@ use App\Models\Tienda;
 use App\Models\Proxy as ProxyModel;
 use App\Helpers\General\Proxy;
 use App\Helpers\General\Arr as ArrHelper;
+use GuzzleHttp\Exception\ServerException;
 use Exception;
+use Buzz\Browser;
+use Buzz\Client\FileGetContents;
+use Nyholm\Psr7\Factory\Psr17Factory;
 
 class TestProxy extends Command
 {
@@ -47,7 +51,7 @@ class TestProxy extends Command
         $proxy = $this->argument('url');
         if(!$proxy) throw new Exception("Debe haber un proxy para testear", 1);
         $this->info('Iniciando test...');
-        $client = new \GuzzleHttp\Client();
+        //$client = new \GuzzleHttp\Client();
         $tienda = Tienda::where('nombre', 'Ripley')->first();
         if (!$tienda) throw new Exception("No existe la tienda Ripley", 1);
         $product = $tienda->productos()->where('estado', 'Activo')->orderBy('updated_at', 'DESC')->first();
@@ -71,13 +75,41 @@ class TestProxy extends Command
         $options['proxy'] = $proxy;
         $options['verify'] = false;
         $options['timeout'] = 15;
+        $options['headers'] = [
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36',
+            'Accept' => '*/*',
+            'Accept-Encoding' => 'gzip, deflate',
+            'Connection' => 'keep-alive',
+            'Cache-Control' => 'no-cache',
+        ];
         $request = null;
         $response = null;
+        $buzz_options = [
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36',
+            'Accept' => '*/*',
+            'Accept-Encoding' => 'gzip, deflate',
+            'Connection' => 'keep-alive',
+            'Cache-Control' => 'no-cache',
+        ];
         try {
-            $request = new \GuzzleHttp\Psr7\Request($tienda->method, $url);
-            $res = $client->send($request, $options);
-            $response = (string) $res->getBody();
-        } catch (Exception $e) {
+            $client = new FileGetContents(new Psr17Factory(), [
+                'verify' => false,
+                'timeout' => 15,
+                'proxy' => $proxy,
+                'allow_redirects' => true,
+            ]);
+            $browser = new Browser($client, new Psr17Factory());
+            //$request = new \GuzzleHttp\Psr7\Request($tienda->method, $url);
+            //$res = $client->send($request, $options);
+            //$response = (string) $res->getBody();
+            $response = $browser->get($url, $buzz_options);
+        } catch (ServerException $e){
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            echo $responseBodyAsString;
+            return;
+        } 
+        catch (Exception $e) {
             throw $e;
         }
         // success
