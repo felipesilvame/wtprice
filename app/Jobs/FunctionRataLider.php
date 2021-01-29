@@ -144,7 +144,7 @@ class FunctionRataLider implements ShouldQueue
                                     $precio_tarjeta = (integer)preg_replace('/[^0-9]/','',(string)ArrHelper::get_pipo($row, $this->precio_tarjeta_field, 0));
                                     if (!$precio_tarjeta) $precio_tarjeta = null;
                                     $url_compra = $this->buy_url_field.$sku;
-                                    $imagen_url = null;
+                                    $imagen_url = 'https://images.lider.cl/wmtcl?source=url[file:/productos/'.$sku.'a.jpg]&sink';
                                 } catch (\Throwable $th) {
                                     throw $th;
                                 }
