@@ -9,7 +9,9 @@ use App\Jobs\UpdateAllCatalogs;
 use App\Jobs\SearchRataFalabella;
 use App\Jobs\FunctionRataFalabella;
 use App\Jobs\FunctionRataLider;
+use App\Jobs\SearchOfertasParis;
 use Illuminate\Support\Facades\Log;
+use \App\Jobs\FunctionRataParis;
 
 /**
  * Class Kernel.
@@ -59,6 +61,42 @@ class Kernel extends ConsoleKernel
         'Decohogar'
     ];
 
+    private $paris_tecno_cincuenta = [
+        'tecnologia/computadores/pc-gamer/',
+        'tecnologia/computadores/notebooks/',
+        'tecnologia/computadores/all-in-one+desktops+ipads+macbooks/',
+        'tecnologia/computadores/notebooks-gamers/',
+        'tecnologia/computadores/tablets/',
+        'tecnologia/celulares/smartphone/',
+        'electro/television/televisores-led/',
+        'linea-blanca/refrigeracion/',
+    ];
+
+    private $paris_tecno_sesenta = [
+        'electro/television/smart-tv/',
+        'tecnologia/ofertas/',
+        'electro/television/soundbar-home-theater/',
+        'linea-blanca/lavado-secado/',
+        'linea-blanca/cocina/'
+
+    ];
+
+    private $paris_tecno_setenta = [
+        'television/televisores-oled-qled/',
+        'linea-blanca/equipamiento-industrial/'
+
+    ];
+
+    private $paris_ropa_setenta = [
+        'dormitorio/box-spring/',
+        'dormitorio/camas-europeas/',
+        'dormitorio/camas-americanas/',
+        'muebles/living-sala-estar/tv-racks/',
+        'muebles/oficina/sillas/sillas-gamer/',
+        'dormitorio/muebles/closet/',
+        'dormitorio/muebles/veladores/',
+    ];
+
     /**
      * The Artisan commands provided by your application.
      *
@@ -78,13 +116,18 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->job(new FunctionRataFalabella($this->cincuenta_por_ciento, '50', 'rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
         $schedule->job(new FunctionRataFalabella($this->sesenta_por_ciento, '60','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
-        $schedule->job(new FunctionRataFalabella($this->array_parent_categories, '70', 'rata.webhook_rata_tecno'))->cron('*/3 * * * *')->runInBackground();
+        $schedule->job(new FunctionRataFalabella($this->array_parent_categories, '70', 'rata.webhook_rata_tecno'))->cron('*/2 * * * *')->runInBackground();
         $schedule->job(new FunctionRataFalabella($this->falabella_ropa_categories, '70', 'rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
         $schedule->job(new FunctionRataLider($this->lider_sesenta_por_ciento, '59','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
         $schedule->job(new FunctionRataLider($this->lider_cincuenta_por_ciento, '49','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
         $schedule->job(new FunctionRataLider($this->lider_ropa_cat, '60','rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
         $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
         $schedule->job(new UpdateAllCatalogs)->everyFifteenMinutes()->runInBackground();
+        $schedule->job(new FunctionRataParis($this->paris_tecno_cincuenta, '50','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataParis($this->paris_tecno_sesenta, '60','rata.webhook_rata_tecno'))->cron('*/2 * * * *')->runInBackground();
+        $schedule->job(new FunctionRataParis($this->paris_tecno_setenta, '70','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataParis($this->paris_ropa_setenta, '70', 'rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
+        //$schedule->job(new SearchOfertasParis)->everyMinute()->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('08:08')->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('14:11')->runInBackground();
