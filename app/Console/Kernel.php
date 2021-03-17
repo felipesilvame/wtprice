@@ -11,7 +11,8 @@ use App\Jobs\FunctionRataFalabella;
 use App\Jobs\FunctionRataLider;
 use App\Jobs\SearchOfertasParis;
 use Illuminate\Support\Facades\Log;
-use \App\Jobs\FunctionRataParis;
+use App\Jobs\FunctionRataParis;
+use App\Jobs\FunctionRataLaPolar;
 
 /**
  * Class Kernel.
@@ -97,6 +98,36 @@ class Kernel extends ConsoleKernel
         'dormitorio/muebles/veladores/',
     ];
 
+    private $polar_tecno_45 = [
+        'consolas',
+        'notebooks',
+        'all-in-one-y-monitores',
+        'tablet',
+
+    ];
+
+    private $polar_tecno_50 =[
+        'smart-tv',
+    ];
+
+    private $polar_tecno_sesenta = [
+        'smartphones',
+        'videojuegos',
+        'audio',
+        'linea-blanca'
+
+    ];
+
+    private $polar_tecno_setenta = [
+        'mundo-gamer',
+    ];
+
+    private $polar_ropa_70 = [
+        'dormitorio',
+        'muebles',
+        'decohogar'
+    ];
+
     /**
      * The Artisan commands provided by your application.
      *
@@ -127,6 +158,12 @@ class Kernel extends ConsoleKernel
         $schedule->job(new FunctionRataParis($this->paris_tecno_sesenta, '60','rata.webhook_rata_tecno'))->cron('*/2 * * * *')->runInBackground();
         $schedule->job(new FunctionRataParis($this->paris_tecno_setenta, '70','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
         $schedule->job(new FunctionRataParis($this->paris_ropa_setenta, '70', 'rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
+        $schedule->job(new FunctionRataLaPolar($this->polar_tecno_45, '45','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataLaPolar($this->polar_tecno_50, '50','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataLaPolar($this->polar_tecno_sesenta, '60','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataLaPolar($this->polar_tecno_setenta, '70','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        $schedule->job(new FunctionRataLaPolar($this->polar_ropa_70, '70','rata.webhook_rata_ropa'))->everyMinute()->runInBackground();
+
         //$schedule->job(new SearchOfertasParis)->everyMinute()->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('08:08')->runInBackground();

@@ -12,7 +12,7 @@ use App\Helpers\General\Arr as ArrHelper;
 use App\Models\SospechaRata;
 use App\Helpers\General\Rata;
 
-class FunctionRataParis implements ShouldQueue
+class FunctionRataLaPolar implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -50,19 +50,19 @@ class FunctionRataParis implements ShouldQueue
         $this->discount = (int)$discount;
         $this->protocol = 'https';
         $this->method = 'GET';
-        $this->uri = 'www.paris.cl/';
-        $this->suffix = '?srule=price-low-to-high&start=0&sz=60&format=ajax';
+        $this->uri = 'www.lapolar.cl/on/demandware.store/Sites-LaPolar-Site/es_CL/Search-UpdateGrid?cgid=';
+        $this->suffix = '&srule=price-low-to-high&start=0&sz=200';
         $this->page_start = 1;
         $this->total_pages = 1;
         $this->tienda = null;
-        $this->discount_field = 'span.discount-badge,span.discount-2';
-        $this->sku_field = 'div.product-tile';
-        $this->nombre_field = 'span.ellipsis_text';
-        $this->precio_referencia_field = 'div.price-normal span[itemprop=price], div.item-price.offer-price.price-tc.default-price';
-        $this->precio_oferta_field = 'div.price-internet span[itemprop=price], div.item-price.offer-price.price-tc.default-price';
-        $this->precio_tarjeta_field = 'div.price-tc.cencosud-price';
-        $this->buy_url_field = 'meta[itemprop=url]';
-        $this->image_url_field = 'img.img-prod';
+        $this->discount_field = 'p.promotion-badge';
+        $this->sku_field = 'div.product-tile__wrapper';
+        $this->nombre_field = 'div.tile-body [itemprop=url]';
+        $this->precio_referencia_field = 'p.price.js-normal-price';
+        $this->precio_oferta_field = 'p.price.js-internet-price';
+        $this->precio_tarjeta_field = 'p.price.js-tlp-price';
+        $this->buy_url_field = 'div.product-tile__wrapper a.image-link';
+        $this->image_url_field = 'div.product-tile__wrapper img.tile-image';
         $this->webhook = config($webhook);
     }
 
@@ -76,11 +76,11 @@ class FunctionRataParis implements ShouldQueue
         $client = new \Goutte\Client();
         $tienda = null;
         $total_pages = 0;
-        $tienda = \App\Models\Tienda::whereNombre('Paris')->first();
+        $tienda = \App\Models\Tienda::whereNombre('LaPolar')->first();
         $_d = (string)$this->discount;
         if (!$tienda) return null;
         foreach ($this->categories as $key => $category) {
-            usleep(1000000);
+            usleep(500000);
             try {
                 $url = $this->protocol.'://'.$this->uri;
                 $url .= $category.$this->suffix;
@@ -89,12 +89,12 @@ class FunctionRataParis implements ShouldQueue
                 $crawler = $client->request($this->method, $url);
                 if ($client->getResponse()->getStatusCode() !== 200) throw new \Exception("Not Valid Request", 1);
             } catch (\Exception $e) {
-                Log::warning("FunctionRataParis: No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
+                Log::warning("FunctionRataLaPolar: No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
                 throw new \Exception("Error Processing Request", 1);
             }
             $data = collect([]);
             try {
-                $items = $crawler->filter('li.js-product-position,div.onecolumn');
+                $items = $crawler->filter('div.product-tile__item');
             } catch (\Throwable $th) {
                 continue;
             }
@@ -110,10 +110,10 @@ class FunctionRataParis implements ShouldQueue
                     $p_tarjeta = null;
                     $discount = 0;
                     try {
-                        $nombre = $node->filter($this->nombre_field)->first()->text();
-                        $sku = $node->filter($this->sku_field)->attr('data-itemid');
-                        $url = $node->filter($this->buy_url_field)->first()->attr('content');
-                        $img = $node->filter($this->image_url_field)->first()->attr('data-src');
+                        $nombre = $node->filter($this->nombre_field)->first()->attr('data-product-name');
+                        $sku = $node->filter($this->sku_field)->attr('data-pid');
+                        $url = 'https://www.lapolar.cl'.$node->filter($this->buy_url_field)->first()->attr('href');
+                        $img = $node->filter($this->image_url_field)->first()->attr('src');
                     } catch (\Throwable $th) {
                         //nothing
                     }
@@ -217,6 +217,5 @@ class FunctionRataParis implements ShouldQueue
                 throw $th;
             }
         }
-
     }
 }
