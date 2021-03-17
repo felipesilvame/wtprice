@@ -51,7 +51,7 @@ class FunctionRataLaPolar implements ShouldQueue
         $this->protocol = 'https';
         $this->method = 'GET';
         $this->uri = 'www.lapolar.cl/on/demandware.store/Sites-LaPolar-Site/es_CL/Search-UpdateGrid?cgid=';
-        $this->suffix = '&srule=price-low-to-high&start=0&sz=200';
+        $this->suffix = '&srule=price-low-to-high&start=0&sz=9999';
         $this->page_start = 1;
         $this->total_pages = 1;
         $this->tienda = null;
