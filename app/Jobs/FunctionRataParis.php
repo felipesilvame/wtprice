@@ -111,7 +111,7 @@ class FunctionRataParis implements ShouldQueue
             for ($i=1; $i < $pages; $i++) {
                 try {
                     $url = $this->protocol.'://'.$this->uri.$category."?srule=price-low-to-high&start=$start&sz=$epp&format=ajax";
-                    RecursiveUrlParis::dispatch($url, $_d, $this->webhook);
+                    RecursiveUrlParis::dispatch($url, $category,$_d, $this->webhook);
                 } catch (\Throwable $th) {
                     // ignoring page
                 }
@@ -167,6 +167,20 @@ class FunctionRataParis implements ShouldQueue
                         if ($producto){
                             UpdateProduct::dispatch($producto, [
                                 'nombre' => $row['nombre'],
+                                'imagen_url' => $row['img'],
+                                'url_compra' => $row['url'],
+                                'precio_referencia' => $row['precio_normal'],
+                                'precio_oferta' => $row['precio_oferta'],
+                                'precio_tarjeta' => $row['precio_tarjeta'],
+                                'ultima_actualizacion' => now(),
+                                'actualizacion_pendiente' => 1,
+                                'categoria' => $category,
+                                'estado' => 'Activo',
+                                'disponible' => true,
+                            ]);
+                        } else {
+                            \App\Models\Producto::create([
+                                'id_tienda' => $tienda->id,
                                 'imagen_url' => $row['img'],
                                 'url_compra' => $row['url'],
                                 'precio_referencia' => $row['precio_normal'],

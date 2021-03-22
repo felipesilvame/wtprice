@@ -48,10 +48,11 @@ class RecursiveUrlParis implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($url, $discount, $webhook)
+    public function __construct($url, $category, $discount, $webhook)
     {
         $this->url = $url;
         $this->discount = $discount;
+        $this->category = $category;
         $this->protocol = 'https';
         $this->method = 'GET';
         $this->url = $url;
@@ -80,6 +81,7 @@ class RecursiveUrlParis implements ShouldQueue
         $tienda = null;
         $total_pages = 0;
         $tienda = \App\Models\Tienda::whereNombre('Paris')->first();
+        $category = $this->category;
         if (!$tienda) return null;
         usleep(300000);
         try {
@@ -143,6 +145,22 @@ class RecursiveUrlParis implements ShouldQueue
                     $producto = \App\Models\Producto::where('id_tienda', $tienda->id)->where('sku', $row['sku'])->first();
                     if ($producto){
                         UpdateProduct::dispatch($producto, [
+                            'nombre' => $row['nombre'],
+                            'imagen_url' => $row['img'],
+                            'url_compra' => $row['url'],
+                            'precio_referencia' => $row['precio_normal'],
+                            'precio_oferta' => $row['precio_oferta'],
+                            'precio_tarjeta' => $row['precio_tarjeta'],
+                            'ultima_actualizacion' => now(),
+                            'actualizacion_pendiente' => 1,
+                            'categoria' => $category,
+                            'estado' => 'Activo',
+                            'disponible' => true,
+                        ]);
+                    } else {
+                        \App\Models\Producto::create([
+                            'id_tienda' => $tienda->id,
+                            'sku' => $row['sku'],
                             'nombre' => $row['nombre'],
                             'imagen_url' => $row['img'],
                             'url_compra' => $row['url'],
