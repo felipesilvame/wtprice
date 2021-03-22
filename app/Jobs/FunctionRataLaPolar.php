@@ -224,6 +224,22 @@ class FunctionRataLaPolar implements ShouldQueue
                                 'estado' => 'Activo',
                                 'disponible' => true,
                             ]);
+                        } else {
+                            \App\Models\Producto::create([
+                                'id_tienda' => $tienda->id,
+                                'nombre' => $row['nombre'],
+                                'sku' => $row['sku'],
+                                'imagen_url' => $row['img'],
+                                'url_compra' => $row['url'],
+                                'precio_referencia' => $row['precio_normal'],
+                                'precio_oferta' => $row['precio_oferta'],
+                                'precio_tarjeta' => $row['precio_tarjeta'],
+                                'ultima_actualizacion' => now(),
+                                'actualizacion_pendiente' => 1,
+                                'categoria' => $category,
+                                'estado' => 'Activo',
+                                'disponible' => true,
+                            ]);
                         }
                     }
                 }

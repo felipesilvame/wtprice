@@ -181,6 +181,8 @@ class FunctionRataParis implements ShouldQueue
                         } else {
                             \App\Models\Producto::create([
                                 'id_tienda' => $tienda->id,
+                                'nombre' => $row['nombre'],
+                                'sku' => $row['sku'],
                                 'imagen_url' => $row['img'],
                                 'url_compra' => $row['url'],
                                 'precio_referencia' => $row['precio_normal'],
