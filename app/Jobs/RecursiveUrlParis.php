@@ -42,6 +42,7 @@ class RecursiveUrlParis implements ShouldQueue
     private $webhook;
     private $suffix;
     private $elements;
+    private $category;
 
     /**
      * Create a new job instance.
