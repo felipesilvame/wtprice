@@ -227,17 +227,17 @@ class FunctionRataParis implements ShouldQueue
                 //nothing
             }
             try {
-                $p_normal = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_referencia_field)->first()->text()));
+                $p_normal = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_referencia_field)->first()->filter('span')->first()->text()));
             } catch (\Throwable $th) {
                 //throw $th;
             }
             try {
-                $p_oferta = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_oferta_field)->first()->text()));
+                $p_oferta = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_oferta_field)->first()->filter('span')->first()->text()));
             } catch (\Throwable $th) {
                 //throw $th;
             }
             try {
-                $p_tarjeta = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_tarjeta_field)->first()->text()));
+                $p_tarjeta = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_tarjeta_field)->first()->filter('span')->first()->text()));
             } catch (\Throwable $th) {
                 //throw $th;
             }
