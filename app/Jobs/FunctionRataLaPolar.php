@@ -119,17 +119,17 @@ class FunctionRataLaPolar implements ShouldQueue
                         //nothing
                     }
                     try {
-                        $p_normal = $node->filter($this->precio_referencia_field)->first()->text();
+                        $p_normal = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_referencia_field)->first()->text()));
                     } catch (\Throwable $th) {
                         //throw $th;
                     }
                     try {
-                        $p_oferta = $node->filter($this->precio_oferta_field)->first()->text();
+                        $p_oferta = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_oferta_field)->first()->text()));
                     } catch (\Throwable $th) {
                         //throw $th;
                     }
                     try {
-                        $p_tarjeta = $node->filter($this->precio_tarjeta_field)->first()->text();
+                        $p_tarjeta = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_tarjeta_field)->first()->text()));
                     } catch (\Throwable $th) {
                         //throw $th;
                     }
@@ -144,9 +144,9 @@ class FunctionRataLaPolar implements ShouldQueue
                             'img' => $img,
                             'url' => $url,
                             'sku' => $sku,
-                            'precio_normal' => (integer)preg_replace('/[^0-9]/','', trim($p_normal)),
-                            'precio_oferta' => (integer)preg_replace('/[^0-9]/','', trim($p_oferta)),
-                            'precio_tarjeta' => (integer)preg_replace('/[^0-9]/','', trim($p_tarjeta)),
+                            'precio_normal' => $p_normal > 0 ? $p_normal : null,
+                            'precio_oferta' => $p_oferta > 0 ? $p_oferta : null,
+                            'precio_tarjeta' => $p_tarjeta > 0 ? $p_tarjeta : null,
                             'descuento' => (int)$discount,
                         ];
                         return $res;
