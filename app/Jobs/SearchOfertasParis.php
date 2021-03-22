@@ -12,43 +12,31 @@ class SearchOfertasParis implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $paris_tecno_cincuenta = [
-        'tecnologia/computadores/pc-gamer/',
-        'tecnologia/computadores/notebooks/',
-        'tecnologia/computadores/all-in-one+desktops+ipads+macbooks/',
-        'tecnologia/computadores/notebooks-gamers/',
-        'tecnologia/computadores/tablets/',
-        'tecnologia/celulares/smartphone/',
-        'electro/television/televisores-led/',
-        'linea-blanca/refrigeracion/',
-
-
-
-    ];
-
-    private $paris_tecno_sesenta = [
-        'electro/television/smart-tv/',
+    private $paris_tecno_70 = [
+        'tecnologia/computadores/',
+        'tecnologia/gamers/',
+        'tecnologia/consolas-videojuegos/',
         'tecnologia/ofertas/',
+        'tecnologia/celulares/smartphone/',
+        'electro/elige-tu-pulgada',
+        'electro/television/',
         'electro/television/soundbar-home-theater/',
-        'linea-blanca/lavado-secado/',
-        'linea-blanca/cocina/'
-
-    ];
-
-    private $paris_tecno_setenta = [
         'television/televisores-oled-qled/',
-        'linea-blanca/equipamiento-industrial/'
-
+        'linea-blanca/refrigeracion/',
+        'linea-blanca/lavado-secado/',
+        'linea-blanca/cocina/',
+        'linea-blanca/electrodomesticos/',
     ];
+
 
     private $paris_ropa_setenta = [
-        'dormitorio/box-spring/',
-        'dormitorio/camas-europeas/',
-        'dormitorio/camas-americanas/',
-        'muebles/living-sala-estar/tv-racks/',
-        'muebles/oficina/sillas/sillas-gamer/',
-        'dormitorio/muebles/closet/',
-        'dormitorio/muebles/veladores/',
+        'decohogar/decoracion',
+        'decohogar/menaje-cocina',
+        'decohogar/menaje-mesa',
+        'decohogar/iluminacion',
+        'decohogar/ofertas',
+        'dormitorio',
+        'muebles',
     ];
 
     /**
@@ -68,9 +56,7 @@ class SearchOfertasParis implements ShouldQueue
      */
     public function handle()
     {
-        \App\Jobs\FunctionRataParis::dispatch($this->paris_tecno_cincuenta, '50','rata.webhook_rata_tecno');
-        \App\Jobs\FunctionRataParis::dispatch($this->paris_tecno_sesenta, '60','rata.webhook_rata_tecno');
-        \App\Jobs\FunctionRataParis::dispatch($this->paris_tecno_setenta, '69','rata.webhook_rata_tecno');
+        \App\Jobs\FunctionRataParis::dispatch($this->paris_tecno_70, '70','rata.webhook_rata_ropa');
         \App\Jobs\FunctionRataParis::dispatch($this->paris_ropa_setenta, '70','rata.webhook_rata_ropa');
     }
 }

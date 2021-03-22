@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Helpers\General\Arr as ArrHelper;
 use App\Models\SospechaRata;
 use App\Helpers\General\Rata;
+use App\Jobs\UpdateProduct;
 
 class FunctionRataLaPolar implements ShouldQueue
 {
@@ -202,14 +203,28 @@ class FunctionRataLaPolar implements ShouldQueue
                                     'ultima_actualizacion' => now(),
                                     'categoria' => $category,
                                 ]);
-                            } else {
-                                $producto_original->estado = "Activo";
-                                $producto_original->intentos_fallidos = 0;
-                                $producto_original->actualizacion_pendiente = 1;
-                                $producto_original->intervalo_actualizacion = 10;
-                                $producto_original->ultima_actualizacion = now();
-                                $producto_original->save();
                             }
+                    }
+                }
+                foreach ($data as $key => $row) {
+                    if ($row){
+                        // Update product
+                        $producto = \App\Models\Producto::where('id_tienda', $tienda->id)->where('sku', $row['sku'])->first();
+                        if ($producto){
+                            UpdateProduct::dispatch($producto, [
+                                'nombre' => $row['nombre'],
+                                'imagen_url' => $row['img'],
+                                'url_compra' => $row['url'],
+                                'precio_referencia' => $row['precio_normal'],
+                                'precio_oferta' => $row['precio_oferta'],
+                                'precio_tarjeta' => $row['precio_tarjeta'],
+                                'ultima_actualizacion' => now(),
+                                'actualizacion_pendiente' => 1,
+                                'categoria' => $category,
+                                'estado' => 'Activo',
+                                'disponible' => true,
+                            ]);
+                        }
                     }
                 }
             } catch (\Throwable $th) {

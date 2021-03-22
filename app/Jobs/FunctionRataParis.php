@@ -51,7 +51,7 @@ class FunctionRataParis implements ShouldQueue
         $this->protocol = 'https';
         $this->method = 'GET';
         $this->uri = 'www.paris.cl/';
-        $this->suffix = '?srule=price-low-to-high&start=0&sz=60&format=ajax';
+        $this->suffix = '?srule=price-low-to-high&start=0&sz=90&format=ajax';
         $this->page_start = 1;
         $this->total_pages = 1;
         $this->tienda = null;
@@ -80,14 +80,21 @@ class FunctionRataParis implements ShouldQueue
         $_d = (string)$this->discount;
         if (!$tienda) return null;
         foreach ($this->categories as $key => $category) {
+            $start = 0;
+            $total_pages = 0;
+            $pages = 1;
+            $epp = 90; // elements per page
             usleep(1000000);
             try {
                 $url = $this->protocol.'://'.$this->uri;
                 $url .= $category.$this->suffix;
                 Log::debug('Getting url: '.$url);
-                $total_pages = 0;
                 $crawler = $client->request($this->method, $url);
                 if ($client->getResponse()->getStatusCode() !== 200) throw new \Exception("Not Valid Request", 1);
+                $elements = (int)preg_replace('/[^0-9]/','', trim($crawler->filter('div.total-products')->first()->filter('span')->first()->text()));
+                if ($elements > 0) {
+                    $pages = ceil($elements / (float)$epp);
+                }
             } catch (\Exception $e) {
                 Log::warning("FunctionRataParis: No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
                 throw new \Exception("Error Processing Request", 1);
@@ -99,70 +106,18 @@ class FunctionRataParis implements ShouldQueue
                 continue;
             }
             // Getted data, parse each
+            $data = $data->merge($this->filterElements($items));
+            $start += $epp;
+            for ($i=1; $i < $pages; $i++) {
+                try {
+                    $url = $this->protocol.'://'.$this->uri.$category."?srule=price-low-to-high&start=$start&sz=$epp&format=ajax";
+                    RecursiveUrlParis::dispatch($url, $_d, $this->webhook);
+                } catch (\Throwable $th) {
+                    // ignoring page
+                }
+                $start += $epp;
+            }
             try {
-                $data = collect($items->each(function($node){
-                    $nombre = null;
-                    $img = null;
-                    $url = null;
-                    $sku = null;
-                    $p_normal = null;
-                    $p_oferta = null;
-                    $p_tarjeta = null;
-                    $discount = 0;
-                    try {
-                        $nombre = $node->filter($this->nombre_field)->first()->text();
-                        $sku = $node->filter($this->sku_field)->attr('data-itemid');
-                        $url = $node->filter($this->buy_url_field)->first()->attr('content');
-                        $img = $node->filter($this->image_url_field)->first()->attr('data-src');
-                    } catch (\Throwable $th) {
-                        //nothing
-                    }
-                    try {
-                        $p_normal = $node->filter($this->precio_referencia_field)->first()->text();
-                    } catch (\Throwable $th) {
-                        //throw $th;
-                    }
-                    try {
-                        $p_oferta = $node->filter($this->precio_oferta_field)->first()->text();
-                    } catch (\Throwable $th) {
-                        //throw $th;
-                    }
-                    try {
-                        $p_tarjeta = $node->filter($this->precio_tarjeta_field)->first()->text();
-                    } catch (\Throwable $th) {
-                        //throw $th;
-                    }
-                    try {
-                        $discount = preg_replace("/[^0-9]/", "", $node->filter($this->discount_field)->first()->text());
-                    } catch (\Throwable $th) {
-                        //throw $th;
-                    }
-                    if ($nombre && $sku && $p_normal && $img) {
-                        $res = [
-                            'nombre' => $nombre,
-                            'img' => $img,
-                            'url' => $url,
-                            'sku' => $sku,
-                            'precio_normal' => (integer)preg_replace('/[^0-9]/','', trim($p_normal)),
-                            'precio_oferta' => (integer)preg_replace('/[^0-9]/','', trim($p_oferta)),
-                            'precio_tarjeta' => (integer)preg_replace('/[^0-9]/','', trim($p_tarjeta)),
-                            'descuento' => (int)$discount,
-                        ];
-                        return $res;
-                    } else {
-                        $res = [
-                            'nombre' => null,
-                            'img' => null,
-                            'url' => null,
-                            'sku' => null,
-                            'precio_normal' => null,
-                            'precio_oferta' => null,
-                            'precio_tarjeta' => null,
-                            'descuento' => -1,
-                        ];
-                        return $res;
-                    }
-                }));
                 // filtered is the products that has the % 
                 $filtered = $data->filter(function($item, $key){
                     return $item['descuento'] >= $this->discount;
@@ -202,14 +157,28 @@ class FunctionRataParis implements ShouldQueue
                                     'ultima_actualizacion' => now(),
                                     'categoria' => $category,
                                 ]);
-                            } else {
-                                $producto_original->estado = "Activo";
-                                $producto_original->intentos_fallidos = 0;
-                                $producto_original->actualizacion_pendiente = 1;
-                                $producto_original->intervalo_actualizacion = 10;
-                                $producto_original->ultima_actualizacion = now();
-                                $producto_original->save();
                             }
+                    }
+                }
+                foreach ($data as $key => $row) {
+                    if ($row){
+                        // Update product
+                        $producto = \App\Models\Producto::where('id_tienda', $tienda->id)->where('sku', $row['sku'])->first();
+                        if ($producto){
+                            UpdateProduct::dispatch($producto, [
+                                'nombre' => $row['nombre'],
+                                'imagen_url' => $row['img'],
+                                'url_compra' => $row['url'],
+                                'precio_referencia' => $row['precio_normal'],
+                                'precio_oferta' => $row['precio_oferta'],
+                                'precio_tarjeta' => $row['precio_tarjeta'],
+                                'ultima_actualizacion' => now(),
+                                'actualizacion_pendiente' => 1,
+                                'categoria' => $category,
+                                'estado' => 'Activo',
+                                'disponible' => true,
+                            ]);
+                        }
                     }
                 }
             } catch (\Throwable $th) {
@@ -218,5 +187,74 @@ class FunctionRataParis implements ShouldQueue
             }
         }
 
+    }
+
+    /**
+     * 
+     */
+    private function filterElements($items){
+        return $items->each(function($node){
+            $nombre = null;
+            $img = null;
+            $url = null;
+            $sku = null;
+            $p_normal = null;
+            $p_oferta = null;
+            $p_tarjeta = null;
+            $discount = 0;
+            try {
+                $nombre = $node->filter($this->nombre_field)->first()->text();
+                $sku = $node->filter($this->sku_field)->attr('data-itemid');
+                $url = $node->filter($this->buy_url_field)->first()->attr('content');
+                $img = $node->filter($this->image_url_field)->first()->attr('data-src');
+            } catch (\Throwable $th) {
+                //nothing
+            }
+            try {
+                $p_normal = $node->filter($this->precio_referencia_field)->first()->text();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+            try {
+                $p_oferta = $node->filter($this->precio_oferta_field)->first()->text();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+            try {
+                $p_tarjeta = $node->filter($this->precio_tarjeta_field)->first()->text();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+            try {
+                $discount = preg_replace("/[^0-9]/", "", $node->filter($this->discount_field)->first()->text());
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+            if ($nombre && $sku && $p_normal && $img) {
+                $res = [
+                    'nombre' => $nombre,
+                    'img' => $img,
+                    'url' => $url,
+                    'sku' => $sku,
+                    'precio_normal' => (integer)preg_replace('/[^0-9]/','', trim($p_normal)),
+                    'precio_oferta' => (integer)preg_replace('/[^0-9]/','', trim($p_oferta)),
+                    'precio_tarjeta' => (integer)preg_replace('/[^0-9]/','', trim($p_tarjeta)),
+                    'descuento' => (int)$discount,
+                ];
+                return $res;
+            } else {
+                $res = [
+                    'nombre' => null,
+                    'img' => null,
+                    'url' => null,
+                    'sku' => null,
+                    'precio_normal' => null,
+                    'precio_oferta' => null,
+                    'precio_tarjeta' => null,
+                    'descuento' => -1,
+                ];
+                return $res;
+            }
+        });
     }
 }

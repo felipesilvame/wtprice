@@ -53,6 +53,9 @@ class ProcessMonitorQueueWorker implements ShouldQueue
           ->where('estado', 'Activo')
           ->with(['tienda' => function($builder){$builder->select(['id','nombre']);}])
           ->where('actualizacion_pendiente', true)
+          ->whereHas('tienda', function($query){
+            $query->whereNotIn('nombre', ['LaPolar', 'Paris', 'Ripley']);
+          })
           ->where(function ($builder) use ($now){
             $builder->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.$now.'") >= intervalo_actualizacion)')
               ->orWhereNull('ultima_actualizacion');
@@ -62,6 +65,9 @@ class ProcessMonitorQueueWorker implements ShouldQueue
         //all of these productos will update the status to actualizacion_pendiente = false;
         \App\Models\Producto::where('estado', 'Activo')
           ->where('actualizacion_pendiente', true)
+          ->whereHas('tienda', function($query){
+            $query->whereNotIn('nombre', ['LaPolar', 'Paris', 'Ripley']);
+          })
           ->where(function ($builder) use ($now){
             $builder->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.$now.'") >= intervalo_actualizacion)')
               ->orWhereNull('ultima_actualizacion');
@@ -91,10 +97,12 @@ class ProcessMonitorQueueWorker implements ShouldQueue
                 ProcessProduct::dispatch($producto);
                 break;
               case 'Paris':
-                ProcessParisProduct::dispatch($producto);
+                //disabled Paris products
+                // ProcessParisProduct::dispatch($producto);
                 break;
               case 'LaPolar':
-                ProcessLaPolarProduct::dispatch($producto);
+                //disabled LaPolar products
+                //ProcessLaPolarProduct::dispatch($producto);
                 break;
               case 'Hites':
                 ProcessHitesProduct::dispatch($producto);
