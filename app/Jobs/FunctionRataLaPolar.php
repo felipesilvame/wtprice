@@ -151,17 +151,7 @@ class FunctionRataLaPolar implements ShouldQueue
                         ];
                         return $res;
                     } else {
-                        $res = [
-                            'nombre' => null,
-                            'img' => null,
-                            'url' => null,
-                            'sku' => null,
-                            'precio_normal' => null,
-                            'precio_oferta' => null,
-                            'precio_tarjeta' => null,
-                            'descuento' => -1,
-                        ];
-                        return $res;
+                        return null;
                     }
                 }));
                 // filtered is the products that has the % 
