@@ -6,3 +6,4 @@ it's the backend from a page
 
 Forked from Laravel 5.8 Boilerplate and upgraded to Laravel 7.x
 ### Official Documentation
+[Click here for the official documentation](http://laravel-boilerplate.com)
