@@ -120,7 +120,9 @@ class FunctionRataParis implements ShouldQueue
             try {
                 // filtered is the products that has the % 
                 $filtered = $data->filter(function($item, $key){
-                    return $item['descuento'] >= $this->discount;
+                    if ($item && isset($item['descuento'])) {
+                        return $item['descuento'] >= $this->discount;
+                    } else return false;
                 });
                 foreach ($filtered->values() as $key => $item) {
                     $sospecha = \App\Models\SospechaRata::where('id_tienda', $tienda->id)->where('sku', $item['sku'])->first();
