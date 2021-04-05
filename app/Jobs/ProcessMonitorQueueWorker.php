@@ -105,7 +105,7 @@ class ProcessMonitorQueueWorker implements ShouldQueue
                 //ProcessLaPolarProduct::dispatch($producto);
                 break;
               case 'Hites':
-                ProcessHitesProduct::dispatch($producto);
+                //ProcessHitesProduct::dispatch($producto);
                 break;
               default:
                 ProcessProduct::dispatch($producto);

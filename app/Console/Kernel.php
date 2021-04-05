@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use App\Jobs\FunctionRataParis;
 use App\Jobs\FunctionRataLaPolar;
 use App\Jobs\SearchOfertasLaPolar;
+use App\Jobs\SearchOfertasHites;
 
 /**
  * Class Kernel.
@@ -127,7 +128,8 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
         $schedule->job(new UpdateAllCatalogs)->everyFifteenMinutes()->runInBackground();
         $schedule->job(new SearchOfertasParis())->everyFiveMinutes()->runInBackground();
-        $schedule->job(new SearchOfertasLaPolar())->everyFiveMinutes()->runInBackground();
+        $schedule->job(new SearchOfertasLaPolar())->everyMinute()->runInBackground();
+        $schedule->job(new SearchOfertasHites())->everyMinute()->runInBackground();
 
         //$schedule->job(new SearchOfertasParis)->everyMinute()->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();

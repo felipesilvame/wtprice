@@ -47,6 +47,6 @@ class UpdateAllCatalogs implements ShouldQueue
         //UpdateCatalogRipley::dispatch()->onQueue('ripley');
         //UpdateCatalogParis::dispatch();
         //UpdateCatalogLaPolar::dispatch();
-        UpdateCatalogHites::dispatch();
+        //UpdateCatalogHites::dispatch();
     }
 }
