@@ -88,7 +88,7 @@ class FunctionRataParis implements ShouldQueue
             try {
                 $url = $this->protocol.'://'.$this->uri;
                 $url .= $category.$this->suffix;
-                Log::debug('Getting url: '.$url);
+                //Log::debug('Getting url: '.$url);
                 $crawler = $client->request($this->method, $url);
                 if ($client->getResponse()->getStatusCode() !== 200) throw new \Exception("Not Valid Request", 1);
                 $elements = (int)preg_replace('/[^0-9]/','', trim($crawler->filter('div.total-products')->first()->filter('span')->first()->text()));

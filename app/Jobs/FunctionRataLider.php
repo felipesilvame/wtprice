@@ -87,7 +87,7 @@ class FunctionRataLider implements ShouldQueue
             try {
                 $page_start = 1;
                 $url = $this->protocol.'://'.$this->uri;
-                Log::debug('Getting url: '.$url);
+                //Log::debug('Getting url: '.$url);
                 $body = [
                     "categories" => $category,
                     "page" => $page_start,

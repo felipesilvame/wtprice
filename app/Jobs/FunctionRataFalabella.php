@@ -85,7 +85,7 @@ class FunctionRataFalabella implements ShouldQueue
           //get response
           $url = $this->protocol.'://'.$this->uri;
           $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25+dcto+y+más&f.derived.variant.sellerId=FALABELLA";
-          Log::debug('Getting url: '.$url);
+          //Log::debug('Getting url: '.$url);
           $response = null;
           $data = null;
           $total_pages = 0;
@@ -122,7 +122,7 @@ class FunctionRataFalabella implements ShouldQueue
               throw new \Exception("Error Processing Request", 1);
             }
             if (ArrHelper::get($data, 'responseType', 'Success') === 'alt') {
-              Log::debug('1 item: '.ArrHelper::get($data, 'data.altUrl', null));
+              //Log::debug('1 item: '.ArrHelper::get($data, 'data.altUrl', null));
               //only 1 response, search producto with this sku
               try {
                 $url = ArrHelper::get($data, 'data.altUrl', null);
@@ -170,7 +170,7 @@ class FunctionRataFalabella implements ShouldQueue
             $page_start = ArrHelper::get($data, $this->current_page_field, 0);
             //extract all sku for tienda and put them into database
             $results = ArrHelper::get($data, $this->results_field, []);
-            Log::debug('Sospecha Rata: '.count($results).' items');
+            //Log::debug('Sospecha Rata: '.count($results).' items');
             foreach ($results as $key => $row) {
               $sku = (string)ArrHelper::get($row, $this->sku_field, null);
               if (!$sku) continue;
@@ -239,12 +239,12 @@ class FunctionRataFalabella implements ShouldQueue
             }
           }
           //total pages is fullfilled
-          Log::debug("total pages for sospecha rata: $total_pages");
+          //Log::debug("total pages for sospecha rata: $total_pages");
           if ($page_start <= $total_pages) {
             for ($pages = $page_start; $pages <= $total_pages ; $pages++) {
               //FALABELLA BLOCKS THE F*KING REQUESTS!!!!
               usleep(700000);
-              Log::debug("making request for page $pages of $total_pages for cat $category");
+              //Log::debug("making request for page $pages of $total_pages for cat $category");
               //get response
               $url = $this->protocol.'://'.$this->uri;
               $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=70%25+dcto+y+más";

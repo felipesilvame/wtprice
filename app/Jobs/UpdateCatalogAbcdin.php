@@ -71,7 +71,7 @@ class UpdateCatalogAbcdin implements ShouldQueue
       $client = new \GuzzleHttp\Client();
       $tienda = null;
       if ($tienda  = \App\Models\Tienda::whereNombre('ABCDin')->first()) {
-        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
         //Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
 
@@ -221,7 +221,7 @@ class UpdateCatalogAbcdin implements ShouldQueue
           }
 
         }
-        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

@@ -74,7 +74,7 @@ class UpdateCatalogCorona implements ShouldQueue
       $client = new \GuzzleHttp\Client();
       $tienda = null;
       if ($tienda = \App\Models\Tienda::whereNombre('Corona')->first()) {
-        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
         //Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
 
@@ -199,7 +199,7 @@ class UpdateCatalogCorona implements ShouldQueue
             Log::error("Error obteniendo info de ".$tienda->nombre);
           }
         }
-        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

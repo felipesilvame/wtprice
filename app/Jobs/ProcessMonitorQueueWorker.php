@@ -54,7 +54,7 @@ class ProcessMonitorQueueWorker implements ShouldQueue
           ->with(['tienda' => function($builder){$builder->select(['id','nombre']);}])
           ->where('actualizacion_pendiente', true)
           ->whereHas('tienda', function($query){
-            $query->whereNotIn('nombre', ['LaPolar', 'Paris', 'Ripley']);
+            $query->whereNotIn('nombre', ['LaPolar', 'Paris', 'Ripley', 'Hites']);
           })
           ->where(function ($builder) use ($now){
             $builder->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.$now.'") >= intervalo_actualizacion)')
@@ -66,7 +66,7 @@ class ProcessMonitorQueueWorker implements ShouldQueue
         \App\Models\Producto::where('estado', 'Activo')
           ->where('actualizacion_pendiente', true)
           ->whereHas('tienda', function($query){
-            $query->whereNotIn('nombre', ['LaPolar', 'Paris', 'Ripley']);
+            $query->whereNotIn('nombre', ['LaPolar', 'Paris', 'Ripley', 'Hites']);
           })
           ->where(function ($builder) use ($now){
             $builder->whereRaw('(TIMESTAMPDIFF(MINUTE, ultima_actualizacion, "'.$now.'") >= intervalo_actualizacion)')

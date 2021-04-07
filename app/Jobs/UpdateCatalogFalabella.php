@@ -82,7 +82,7 @@ class UpdateCatalogFalabella implements ShouldQueue
       $tienda = null;
       $total_pages = 0;
       if ($tienda = \App\Models\Tienda::whereNombre('Falabella')->first()) {
-        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
         //Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
         //try foreach category
@@ -212,7 +212,7 @@ class UpdateCatalogFalabella implements ShouldQueue
             Log::error("Error obteniendo info de ".$tienda->nombre);
           }
         }
-        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

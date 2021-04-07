@@ -71,7 +71,7 @@ class UpdateCatalogJumbo implements ShouldQueue
       $tienda = null;
       $client = new \GuzzleHttp\Client();
       if ($tienda = \App\Models\Tienda::whereNombre('Jumbo')->first()) {
-        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
         //Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
         //try foreach category
@@ -189,7 +189,7 @@ class UpdateCatalogJumbo implements ShouldQueue
             Log::error("Error obteniendo info de ".$tienda->nombre);
           }
         }
-        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

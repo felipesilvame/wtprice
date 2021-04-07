@@ -65,7 +65,7 @@ class UpdateCatalogParis implements ShouldQueue
         try {
           $tienda  = \App\Models\Tienda::whereNombre('Paris')->first();
           if (!$tienda) throw new \Exception("Tienda not found", 1);
-          Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+          //Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
           $client = new \Goutte\Client();
 
           foreach ($this->categories as $category) {
@@ -88,7 +88,7 @@ class UpdateCatalogParis implements ShouldQueue
                         if ($product->estado == "Detenido") {
                           $product->estado = "Activo";
                           $product->intentos_fallidos = 0;
-                          $producto->actualizacion_pendiente = 1;
+                          $product->actualizacion_pendiente = 1;
                           $product->save();
                         }
                       } else {
@@ -118,7 +118,7 @@ class UpdateCatalogParis implements ShouldQueue
               //continue
             }
           }
-          Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
+          //Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
         } catch (\Exception $e) {
           //calm down
         }
