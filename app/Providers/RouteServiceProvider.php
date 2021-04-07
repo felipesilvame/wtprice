@@ -28,11 +28,11 @@ class RouteServiceProvider extends ServiceProvider
         // Register route model bindings
 
         // Allow this to select all users regardless of status
-        $this->bind('user', function ($value) {
-            $user = new User;
+        //$this->bind('user', function ($value) {
+        //    $user = new User;
 
-            return User::withTrashed()->where($user->getRouteKeyName(), $value)->first();
-        });
+//            return User::withTrashed()->where($user->getRouteKeyName(), $value)->first();
+ //       });
 
         parent::boot();
     }
@@ -44,7 +44,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
 
-        $this->mapWebRoutes();
+        //$this->mapWebRoutes();
 
         //
     }

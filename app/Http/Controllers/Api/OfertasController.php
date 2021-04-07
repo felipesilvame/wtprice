@@ -12,7 +12,7 @@ class OfertasController extends Controller
     public function index(Request $request){
       $orderBy = $request->input('order', 'updated_at');
       $sort = $request->input('sort', 'DESC');
-      $paged = $request->input('items', 25);
+      $paged = $request->input('items', 15);
       $estado = $request->input('estado', 'Activo');
       $query = MinimoPrecio::with(['producto' => function ($query) use ($estado) {
         if ($estado != 'Todos') {
@@ -32,7 +32,7 @@ class OfertasController extends Controller
 
     public function ofertas_rata(Request $request){
       
-      $paged = $request->input('items', 24);
+      $paged = $request->input('items', 15);
       $estado = $request->input('estado', 'Activo');
       $tiendas = $request->input('id_tienda', []);
       $orderBy = $request->input('order', 'nombre');

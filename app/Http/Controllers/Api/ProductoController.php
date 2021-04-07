@@ -180,7 +180,7 @@ class ProductoController extends Controller
     public function legacy(Request $request){
       $orderBy = $request->input('order', 'updated_at');
       $sort = $request->input('sort', 'DESC');
-      $paged = $request->input('items', 12);
+      $paged = $request->input('items', 24);
       $estado = $request->input('estado', 'Activo');
       $query = MinimoPrecio::select(['precio_oferta', 'precio_referencia', 'precio_tarjeta', 'updated_at', 'id_producto', 'uuid'])
         ->with(['producto' => function ($query) use ($estado, $request) {
