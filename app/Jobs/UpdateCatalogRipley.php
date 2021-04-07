@@ -83,7 +83,7 @@ class UpdateCatalogRipley implements ShouldQueue
         $options['verify'] = false;
       }
       if ($tienda = \App\Models\Tienda::whereNombre('Ripley')->first()) {
-        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
         //Log::debug("Tienda found. ID: ".$tienda->id);
         // perform the query
         //try foreach category
@@ -97,6 +97,7 @@ class UpdateCatalogRipley implements ShouldQueue
             $url .= "*?categoryId=$category&pageSize=50&pageNumber=$page_start&facet=xquantity:({1+*}+1)";
             $response = null;
             $data = null;
+            $total_pages = 1;
             try {
               $response = $client->get($url, $options)->getBody()->getContents();
             } catch (\Exception $e) {
@@ -191,7 +192,7 @@ class UpdateCatalogRipley implements ShouldQueue
             Log::error("Error obteniendo info de ".$tienda->nombre);
           }
         }
-        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

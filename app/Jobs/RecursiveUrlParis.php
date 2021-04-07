@@ -87,7 +87,7 @@ class RecursiveUrlParis implements ShouldQueue
         usleep(300000);
         try {
             $url = $this->url;
-            Log::debug('Getting url: '.$url);
+            //Log::debug('Getting url: '.$url);
             $crawler = $client->request($this->method, $url);
             if ($client->getResponse()->getStatusCode() !== 200) throw new \Exception("Not Valid Request", 1);
         } catch (\Throwable $th) {

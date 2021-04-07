@@ -85,7 +85,7 @@ class FunctionRataLaPolar implements ShouldQueue
             try {
                 $url = $this->protocol.'://'.$this->uri;
                 $url .= $category.$this->suffix;
-                Log::debug('Getting url: '.$url);
+                //Log::debug('Getting url: '.$url);
                 $total_pages = 0;
                 $crawler = $client->request($this->method, $url);
                 if ($client->getResponse()->getStatusCode() !== 200) throw new \Exception("Not Valid Request", 1);

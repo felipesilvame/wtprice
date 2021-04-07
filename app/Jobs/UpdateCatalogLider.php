@@ -74,7 +74,7 @@ class UpdateCatalogLider implements ShouldQueue
       $tienda = null;
       $client = new \GuzzleHttp\Client();
       if ($tienda = \App\Models\Tienda::whereNombre('Lider')->first()) {
-        Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Iniciando barrido de catalogo para ".$tienda->nombre);
         //Log::debug("Tienda found. ID: $tienda->id");
         // perform the query
         //try foreach category
@@ -98,6 +98,7 @@ class UpdateCatalogLider implements ShouldQueue
             $url = $this->protocol.'://'.$this->uri;
             $response = null;
             $data = null;
+            $total_pages = 1;
             try {
               $response = $client->post($url, $options)->getBody()->getContents();
             } catch (\Exception $e) {
@@ -206,7 +207,7 @@ class UpdateCatalogLider implements ShouldQueue
             Log::error("Error obteniendo info de Lider");
           }
         }
-        Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
+        //Log::debug("Finalizando barrido de catalogo para ".$tienda->nombre);
       }
     }
 }

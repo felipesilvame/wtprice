@@ -45,13 +45,14 @@ class SearchRataFalabella implements ShouldQueue
     private $image_url_field;
     private $current_page_field;
     private $client;
+    private $webhook;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(string $webhook)
     {
       $this->categories = [
         'cat3770004', //Consolas
@@ -98,6 +99,7 @@ class SearchRataFalabella implements ShouldQueue
       $this->precio_tarjeta_field = 'prices:icons,cmr-icon,price.0';
       $this->buy_url_field = 'url';
       $this->image_url_field = 'https://falabella.scene7.com/is/image/Falabella/';
+      $this->webhook = config($webhook);
     }
 
     /**
@@ -118,7 +120,7 @@ class SearchRataFalabella implements ShouldQueue
           //get response
           $url = $this->protocol.'://'.$this->uri;
           $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=70%25+dcto+y+más";
-          Log::debug('Getting url: '.$url);
+          //Log::debug('Getting url: '.$url);
           $response = null;
           $data = null;
           $total_pages = 0;
@@ -155,7 +157,7 @@ class SearchRataFalabella implements ShouldQueue
               throw new \Exception("Error Processing Request", 1);
             }
             if (ArrHelper::get($data, 'responseType', 'Success') === 'alt') {
-              Log::debug('1 item: '.ArrHelper::get($data, 'data.altUrl', null));
+              //Log::debug('1 item: '.ArrHelper::get($data, 'data.altUrl', null));
               //only 1 response, search producto with this sku
               try {
                 $url = ArrHelper::get($data, 'data.altUrl', null);
@@ -190,7 +192,7 @@ class SearchRataFalabella implements ShouldQueue
                   ]);
 
                   // TODO: Notify sospecha (only url coz its the only what we have)
-                  Rata::sospechaRataUrl($url);
+                  Rata::sospechaRataUrl($url, $this->webhook);
                 }
               } catch (\Throwable $th) {
                 //throw $th;
@@ -203,7 +205,7 @@ class SearchRataFalabella implements ShouldQueue
             $page_start = ArrHelper::get($data, $this->current_page_field, 0);
             //extract all sku for tienda and put them into database
             $results = ArrHelper::get($data, $this->results_field, []);
-            Log::debug('Sospecha Rata: '.count($results).' items');
+            //Log::debug('Sospecha Rata: '.count($results).' items');
             foreach ($results as $key => $row) {
               $sku = (string)ArrHelper::get($row, $this->sku_field, null);
               if (!$sku) continue;
@@ -243,7 +245,7 @@ class SearchRataFalabella implements ShouldQueue
                 ]);
                 // TODO: Notify sospecha
                   try {
-                    Rata::sospechaRata($sospecha);
+                    Rata::sospechaRata($sospecha, $this->webhook);
                   } catch (\Throwable $th) {
                     //throw $th;
                     //nothing
@@ -272,12 +274,12 @@ class SearchRataFalabella implements ShouldQueue
             }
           }
           //total pages is fullfilled
-          Log::debug("total pages for sospecha rata: $total_pages");
+          //Log::debug("total pages for sospecha rata: $total_pages");
           if ($page_start <= $total_pages) {
             for ($pages = $page_start; $pages <= $total_pages ; $pages++) {
               //FALABELLA BLOCKS THE F*KING REQUESTS!!!!
               usleep(700000);
-              Log::debug("making request for page $pages of $total_pages for cat $category");
+              //Log::debug("making request for page $pages of $total_pages for cat $category");
               //get response
               $url = $this->protocol.'://'.$this->uri;
               $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=70%25+dcto+y+más";
@@ -350,7 +352,7 @@ class SearchRataFalabella implements ShouldQueue
                     // TODO: Notify sospecha
 
                     try {
-                      Rata::sospechaRata($sospecha);
+                      Rata::sospechaRata($sospecha, $this->webhook);
                     } catch (\Throwable $th) {
                       //nothing
                     }
