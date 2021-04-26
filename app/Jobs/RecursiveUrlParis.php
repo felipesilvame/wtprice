@@ -147,19 +147,21 @@ class RecursiveUrlParis implements ShouldQueue
                     // Update product
                     $producto = \App\Models\Producto::where('id_tienda', $tienda->id)->where('sku', $row['sku'])->first();
                     if ($producto){
-                        UpdateProduct::dispatch($producto, [
-                            'nombre' => $row['nombre'],
-                            'imagen_url' => $row['img'],
-                            'url_compra' => $row['url'],
-                            'precio_referencia' => $row['precio_normal'],
-                            'precio_oferta' => $row['precio_oferta'],
-                            'precio_tarjeta' => $row['precio_tarjeta'],
-                            'ultima_actualizacion' => now(),
-                            'actualizacion_pendiente' => 1,
-                            'categoria' => $category,
-                            'estado' => 'Activo',
-                            'disponible' => true,
-                        ]);
+                        /* This will not update because consumes much performance I/O
+                            
+                            UpdateProduct::dispatch($producto, [
+                                'nombre' => $row['nombre'],
+                                'imagen_url' => $row['img'],
+                                'url_compra' => $row['url'],
+                                'precio_referencia' => $row['precio_normal'],
+                                'precio_oferta' => $row['precio_oferta'],
+                                'precio_tarjeta' => $row['precio_tarjeta'],
+                                'ultima_actualizacion' => now(),
+                                'actualizacion_pendiente' => 1,
+                                'categoria' => $category,
+                                'estado' => 'Activo',
+                                'disponible' => true,
+                            ]); */
                     } else {
                         \App\Models\Producto::create([
                             'id_tienda' => $tienda->id,

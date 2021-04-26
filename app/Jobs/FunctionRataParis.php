@@ -51,7 +51,7 @@ class FunctionRataParis implements ShouldQueue
         $this->protocol = 'https';
         $this->method = 'GET';
         $this->uri = 'www.paris.cl/';
-        $this->suffix = '?srule=price-low-to-high&start=0&sz=90&format=ajax';
+        $this->suffix = '?prefn1=seller&prefv1=Paris.cl&srule=price-low-to-high&start=0&sz=90&format=ajax';
         $this->page_start = 1;
         $this->total_pages = 1;
         $this->tienda = null;
@@ -167,6 +167,8 @@ class FunctionRataParis implements ShouldQueue
                         // Update product
                         $producto = \App\Models\Producto::where('id_tienda', $tienda->id)->where('sku', $row['sku'])->first();
                         if ($producto){
+                            /* This will not update because consumes much performance I/O
+                            
                             UpdateProduct::dispatch($producto, [
                                 'nombre' => $row['nombre'],
                                 'imagen_url' => $row['img'],
@@ -179,7 +181,7 @@ class FunctionRataParis implements ShouldQueue
                                 'categoria' => $category,
                                 'estado' => 'Activo',
                                 'disponible' => true,
-                            ]);
+                            ]); */
                         } else {
                             \App\Models\Producto::create([
                                 'id_tienda' => $tienda->id,

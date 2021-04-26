@@ -210,6 +210,8 @@ class FunctionRataHites implements ShouldQueue
                         // Update product
                         $producto = \App\Models\Producto::where('id_tienda', $tienda->id)->where('sku', $row['sku'])->first();
                         if ($producto){
+                            /* This will not update because consumes much performance I/O
+                            
                             UpdateProduct::dispatch($producto, [
                                 'nombre' => $row['nombre'],
                                 'imagen_url' => $row['img'],
@@ -222,7 +224,7 @@ class FunctionRataHites implements ShouldQueue
                                 'categoria' => $category,
                                 'estado' => 'Activo',
                                 'disponible' => true,
-                            ]);
+                            ]); */
                         } else {
                             \App\Models\Producto::create([
                                 'id_tienda' => $tienda->id,
