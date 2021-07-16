@@ -116,7 +116,7 @@ class ProcessProduct implements ShouldQueue
           } catch (\Exception $e) {
             //option: retry with proxy
             try {
-              if ((boolean)env('APP_PROXY')) {
+              if ((boolean)env('APP_PROXY') && (boolean)env('APP_PROXY_ENABLED')) {
                 $options['proxy'] = env('APP_PROXY');
                 $options['verify'] = false;
                 $options['timeout'] = 15;
