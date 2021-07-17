@@ -253,19 +253,19 @@ class FunctionRataFalabella implements ShouldQueue
               //Log::debug("making request for page $pages of $total_pages for cat $category");
               //get response
               $url = $this->protocol.'://'.$this->uri;
-              $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=70%25+dcto+y+más";
+              $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25+dcto+y+más&f.derived.variant.sellerId=FALABELLA";
               $response = null;
               $data = null;
               try {
                 //deprecated, using classic curl
-                //$response = $client->get($url)->getBody()->getContents();
-                $ch = curl_init();
+                $response = $client->get($url, $options)->getBody()->getContents();
+                /* $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_POST, 0);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $response = curl_exec($ch);
                 $err = curl_error($ch);  //if you need
-                curl_close($ch);
+                curl_close($ch); */
               } catch (\Exception $e) {
                 Log::warning("No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
                 throw new \Exception("Error Processing Request", 1);
