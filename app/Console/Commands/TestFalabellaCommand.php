@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class TestFalabellaCommand extends Command
 {
@@ -43,6 +44,7 @@ class TestFalabellaCommand extends Command
         $tienda = \App\Models\Tienda::whereNombre('Falabella')->first();
         $_d = (string)'40';
         $category = 'cat7090034';
+        $page_start = 1;
         $url = 'https://www.falabella.com/s/browse/v1/listing/cl';
         $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25+dcto+y+más&f.derived.variant.sellerId=FALABELLA::SODIMAC::TOTTUS";
         $response = null;
