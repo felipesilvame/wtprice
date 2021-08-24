@@ -84,7 +84,7 @@ class FunctionRataFalabella implements ShouldQueue
           $page_start = 1;
           //get response
           $url = $this->protocol.'://'.$this->uri;
-          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25+dcto+y+más&f.derived.variant.sellerId=FALABELLA";
+          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25+dcto+y+más&f.derived.variant.sellerId=FALABELLA%3A%3ASODIMAC%3A%3ATOTTUS";
           //Log::debug('Getting url: '.$url);
           $response = null;
           $data = null;
@@ -253,7 +253,7 @@ class FunctionRataFalabella implements ShouldQueue
               //Log::debug("making request for page $pages of $total_pages for cat $category");
               //get response
               $url = $this->protocol.'://'.$this->uri;
-              $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25+dcto+y+más&f.derived.variant.sellerId=FALABELLA";
+              $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25+dcto+y+más&f.derived.variant.sellerId=FALABELLA%3A%3ASODIMAC%3A%3ATOTTUS";
               $response = null;
               $data = null;
               try {
