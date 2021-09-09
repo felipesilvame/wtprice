@@ -13,6 +13,7 @@
         "albertcht/invisible-recaptcha": "^1.9",
         "arcanedev/log-viewer": "^7.0",
         "beyondcode/laravel-self-diagnosis": "^1.4",
+        "campo/random-user-agent": "^1.3",
         "creativeorange/gravatar": "~1.0",
         "davejamesmiller/laravel-breadcrumbs": "^5.0",
         "divineomega/laravel-password-exposed-validation-rule": "^2.2",

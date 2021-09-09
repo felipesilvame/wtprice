@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Campo\UserAgent;
 
 class TestFalabellaCommand extends Command
 {
@@ -66,6 +67,7 @@ class TestFalabellaCommand extends Command
             usleep(1400000);
             if (1) {
                 //deprecated, using classic curl
+                $options['headers']['User-Agent'] = UserAgent::random(['os_type' => ['Android', 'iOS', 'Windows', 'OS X', 'Linux'],'device_type' => ['Mobile', 'Tablet', 'Desktop']]);
                 $response = $client->get($url, $options)->getBody()->getContents();
             }
         } catch (\Exception $e) {

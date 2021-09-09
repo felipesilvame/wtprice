@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Helpers\General\Arr as ArrHelper;
 use App\Models\SospechaRata;
 use App\Helpers\General\Rata;
+use Campo\UserAgent;
 
 class FunctionRataFalabella implements ShouldQueue
 {
@@ -105,6 +106,7 @@ class FunctionRataFalabella implements ShouldQueue
             usleep(1400000);
             if (1) {
               //deprecated, using classic curl
+              $options['headers']['User-Agent'] = UserAgent::random(['os_type' => ['Android', 'iOS', 'Windows', 'OS X', 'Linux'],'device_type' => ['Mobile', 'Tablet', 'Desktop']]);
               $response = $client->get($url, $options)->getBody()->getContents();
             }
             /* else {
@@ -253,11 +255,12 @@ class FunctionRataFalabella implements ShouldQueue
               //Log::debug("making request for page $pages of $total_pages for cat $category");
               //get response
               $url = $this->protocol.'://'.$this->uri;
-              $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25+dcto+y+más&f.derived.variant.sellerId=FALABELLA::SODIMAC::TOTTUS";
+              $url .= "?categoryId=$category&page=$pages&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25+dcto+y+más&f.derived.variant.sellerId=FALABELLA%3A%3ASODIMAC%3A%3ATOTTUS";
               $response = null;
               $data = null;
               try {
                 //deprecated, using classic curl
+                $options['headers']['User-Agent'] = UserAgent::random(['os_type' => ['Android', 'iOS', 'Windows', 'OS X', 'Linux'],'device_type' => ['Mobile', 'Tablet', 'Desktop']]);
                 $response = $client->get($url, $options)->getBody()->getContents();
                 /* $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
