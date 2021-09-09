@@ -46,7 +46,7 @@ class TestFalabellaCommand extends Command
         $category = 'cat7090034';
         $page_start = 1;
         $url = 'https://www.falabella.com/s/browse/v1/listing/cl';
-        $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25dcto+y+m%C3%A1s&f.derived.variant.sellerId=FALABELLA::SODIMAC::TOTTUS";
+        $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25dcto+y+más&f.derived.variant.sellerId=FALABELLA::SODIMAC::TOTTUS";
         $response = null;
         $data = null;
         $total_pages = 0;
@@ -70,7 +70,7 @@ class TestFalabellaCommand extends Command
             }
         } catch (\Exception $e) {
             Log::warning("SearchRataFalabella: No se ha obtenido respuesta satisfactoria de parte del request" . $tienda->nombre);
-            throw new \Exception("Error Processing Request", 1);
+            throw $e;
         }
         if ((boolean) $response) {
             return 'Success';

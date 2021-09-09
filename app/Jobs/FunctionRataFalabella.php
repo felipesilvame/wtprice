@@ -84,7 +84,7 @@ class FunctionRataFalabella implements ShouldQueue
           $page_start = 1;
           //get response
           $url = $this->protocol.'://'.$this->uri;
-          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25dcto+y+m%C3%A1s&f.derived.variant.sellerId=FALABELLA::SODIMAC::TOTTUS";
+          $url .= "?categoryId=$category&page=$page_start&zone=13&channel=app&sortBy=product.attribute.newIconExpiryDate,desc&f.range.derived.variant.discount=$_d%25dcto+y+más&f.derived.variant.sellerId=FALABELLA::SODIMAC::TOTTUS";
           //Log::debug('Getting url: '.$url);
           $response = null;
           $data = null;
