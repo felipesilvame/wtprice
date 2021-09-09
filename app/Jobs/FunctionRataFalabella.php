@@ -91,7 +91,7 @@ class FunctionRataFalabella implements ShouldQueue
           $total_pages = 0;
           $options = [
             'headers' => [
-                'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9',
+                'User-Agent' => 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
                 'Accept'     => 'application/json',
               ]
             ];
