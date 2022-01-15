@@ -25,7 +25,6 @@
         "hieu-le/active": "^7.0",
         "hisorange/browser-detect": "^4.0",
         "kriswallsmith/buzz": "^1.1",
-        "laravel-notification-channels/webpush": "^5.0",
         "laravel/framework": "^7.0",
         "laravel/slack-notification-channel": "^2.0",
         "laravel/socialite": "^4.1",
