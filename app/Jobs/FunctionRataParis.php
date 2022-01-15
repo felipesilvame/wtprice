@@ -16,28 +16,28 @@ class FunctionRataParis implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $categories;
-    private $method;
-    private $protocol;
-    private $uri;
-    private $page_start;
-    private $tienda;
-    private $total_elements_field;
-    private $per_page_field;
-    private $results_field;
-    private $sku_field;
-    private $nombre_field;
-    private $precio_referencia_field;
-    private $precio_oferta_field;
-    private $precio_tarjeta_field;
-    private $buy_url_field;
-    private $image_url_field;
-    private $current_page_field;
-    private $client;
-    private $discount;
-    private $discount_field;
-    private $webhook;
-    private $suffix;
+    public $categories;
+    public $method;
+    public $protocol;
+    public $uri;
+    public $page_start;
+    public $tienda;
+    public $total_elements_field;
+    public $per_page_field;
+    public $results_field;
+    public $sku_field;
+    public $nombre_field;
+    public $precio_referencia_field;
+    public $precio_oferta_field;
+    public $precio_tarjeta_field;
+    public $buy_url_field;
+    public $image_url_field;
+    public $current_page_field;
+    public $client;
+    public $discount;
+    public $discount_field;
+    public $webhook;
+    public $suffix;
 
     /**
      * Create a new job instance.
@@ -51,7 +51,7 @@ class FunctionRataParis implements ShouldQueue
         $this->protocol = 'https';
         $this->method = 'GET';
         $this->uri = 'www.paris.cl/';
-        $this->suffix = '?prefn1=seller&prefv1=Paris.cl&srule=price-low-to-high&start=0&sz=90&format=ajax';
+        $this->suffix = '?prefn1=seller&prefv1=Paris.cl&srule=price-low-to-high&start=0&sz=60&format=ajax';
         $this->page_start = 1;
         $this->total_pages = 1;
         $this->tienda = null;
@@ -95,6 +95,7 @@ class FunctionRataParis implements ShouldQueue
                 if ($elements > 0) {
                     $pages = ceil($elements / (float)$epp);
                 }
+                Log::debug("Tienda {$tienda->nombre} - Category {$category} - Total Pages: {$pages}");
             } catch (\Exception $e) {
                 Log::warning("FunctionRataParis: No se ha obtenido respuesta satisfactoria de parte del request".$tienda->nombre);
                 throw new \Exception("Error Processing Request", 1);
@@ -107,6 +108,7 @@ class FunctionRataParis implements ShouldQueue
             }
             // Getted data, parse each
             $data = $data->merge($this->filterElements($items));
+            Log::debug("Tienda {$tienda->nombre} - Category {$category} - Total Elements: {$data->count()}");
             $start += $epp;
             for ($i=1; $i < $pages; $i++) {
                 try {
@@ -212,7 +214,7 @@ class FunctionRataParis implements ShouldQueue
     /**
      * 
      */
-    private function filterElements($items){
+    public function filterElements($items){
         return $items->each(function($node){
             $nombre = null;
             $img = null;
@@ -230,23 +232,23 @@ class FunctionRataParis implements ShouldQueue
             } catch (\Throwable $th) {
                 //nothing
             }
+            $arreglo_precios = $node->filter('.price__text,.price__text-sm')->each(function ($node){ return $node->text(); });
             try {
-                $p_normal = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_referencia_field)->first()->filter('span')->first()->text()));
+                if (count($arreglo_precios) == 3){
+                    $p_tarjeta = (integer)preg_replace('/[^0-9]/','', trim($arreglo_precios[0]));
+                    $p_oferta = (integer)preg_replace('/[^0-9]/','', trim($arreglo_precios[1]));
+                    $p_normal = (integer)preg_replace('/[^0-9]/','', trim($arreglo_precios[2]));
+                } elseif (count($arreglo_precios) == 2){
+                    $p_oferta = (integer)preg_replace('/[^0-9]/','', trim($arreglo_precios[0]));
+                    $p_normal = (integer)preg_replace('/[^0-9]/','', trim($arreglo_precios[1]));
+                } elseif (count($arreglo_precios) == 1){
+                    $p_normal = (integer)preg_replace('/[^0-9]/','', trim($arreglo_precios[0]));
+                }
             } catch (\Throwable $th) {
                 //throw $th;
             }
             try {
-                $p_oferta = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_oferta_field)->first()->filter('span')->first()->text()));
-            } catch (\Throwable $th) {
-                //throw $th;
-            }
-            try {
-                $p_tarjeta = (integer)preg_replace('/[^0-9]/','', trim($node->filter($this->precio_tarjeta_field)->first()->filter('span')->first()->text()));
-            } catch (\Throwable $th) {
-                //throw $th;
-            }
-            try {
-                $discount = preg_replace("/[^0-9]/", "", $node->filter($this->discount_field)->first()->text());
+                $discount = preg_replace("/[^0-9]/", "", $node->filter('.price__badge')->first()->text());
             } catch (\Throwable $th) {
                 //throw $th;
             }
