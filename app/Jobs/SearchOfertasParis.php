@@ -56,7 +56,7 @@ class SearchOfertasParis implements ShouldQueue
      */
     public function handle()
     {
-        \App\Jobs\FunctionRataParis::dispatch($this->paris_tecno_70, '70','rata.webhook_rata_ropa');
+        \App\Jobs\FunctionRataParis::dispatch($this->paris_tecno_70, '70','rata.webhook_rata_tecno');
         \App\Jobs\FunctionRataParis::dispatch($this->paris_ropa_setenta, '70','rata.webhook_rata_ropa');
     }
 }
