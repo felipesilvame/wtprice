@@ -141,7 +141,11 @@ class FunctionRataHites implements ShouldQueue
                         //throw $th;
                     }
                     try {
-                        $discount = preg_replace("/[^0-9]/", "", $node->filter($this->discount_field)->first()->text());
+                        //$discount = preg_replace("/[^0-9]/", "", $node->filter($this->discount_field)->first()->text());
+                        // Descuento se calcula de forma manual
+                        if ($p_normal && $p_oferta) {
+                            $discount = (integer)((float)($p_normal - $p_oferta) / $p_normal * 100.0);
+                        }
                     } catch (\Throwable $th) {
                         //throw $th;
                     }

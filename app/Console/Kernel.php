@@ -118,18 +118,18 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->job(new FunctionRataFalabella($this->cincuenta_por_ciento, '50', 'rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
-        $schedule->job(new FunctionRataFalabella($this->sesenta_por_ciento, '60','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
-        $schedule->job(new FunctionRataFalabella($this->array_parent_categories, '70', 'rata.webhook_rata_tecno'))->cron('*/2 * * * *')->runInBackground();
-        $schedule->job(new FunctionRataFalabella($this->falabella_ropa_categories, '70', 'rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
-        $schedule->job(new FunctionRataLider($this->lider_sesenta_por_ciento, '59','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
-        $schedule->job(new FunctionRataLider($this->lider_cincuenta_por_ciento, '49','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
-        $schedule->job(new FunctionRataLider($this->lider_ropa_cat, '60','rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
-        $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
-        $schedule->job(new UpdateAllCatalogs)->everyFifteenMinutes()->runInBackground();
-        $schedule->job(new SearchOfertasParis())->everyFiveMinutes()->runInBackground();
-        $schedule->job(new SearchOfertasLaPolar())->everyMinute()->runInBackground();
-        $schedule->job(new SearchOfertasHites())->everyMinute()->runInBackground();
+        // $schedule->job(new FunctionRataFalabella($this->cincuenta_por_ciento, '50', 'rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        // $schedule->job(new FunctionRataFalabella($this->sesenta_por_ciento, '60','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        // $schedule->job(new FunctionRataFalabella($this->array_parent_categories, '70', 'rata.webhook_rata_tecno'))->cron('*/2 * * * *')->runInBackground();
+        // $schedule->job(new FunctionRataFalabella($this->falabella_ropa_categories, '70', 'rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
+        // $schedule->job(new FunctionRataLider($this->lider_sesenta_por_ciento, '59','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        // $schedule->job(new FunctionRataLider($this->lider_cincuenta_por_ciento, '49','rata.webhook_rata_tecno'))->everyMinute()->runInBackground();
+        // $schedule->job(new FunctionRataLider($this->lider_ropa_cat, '60','rata.webhook_rata_ropa'))->everyFiveMinutes()->runInBackground();
+        // $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
+        // $schedule->job(new UpdateAllCatalogs)->everyFifteenMinutes()->runInBackground();
+        // $schedule->job(new SearchOfertasParis())->everyFiveMinutes()->runInBackground();
+        // $schedule->job(new SearchOfertasLaPolar())->everyMinute()->runInBackground();
+        $schedule->job(new SearchOfertasHites())->cron('*/3 * * * *')->runInBackground();
 
         //$schedule->job(new SearchOfertasParis)->everyMinute()->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();
