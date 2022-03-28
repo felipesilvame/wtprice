@@ -58,11 +58,11 @@ class FunctionRataHites implements ShouldQueue
         $this->tienda = null;
         $this->discount_field = 'span.discount-badge';
         $this->sku_field = '';
-        $this->nombre_field = 'a.link.product-name';
+        $this->nombre_field = 'a.link.product-name--bundle';
         $this->precio_referencia_field = 'span.price-item.list.strike-through.only-normal-price,span.price-item.list.strike-through';
         $this->precio_oferta_field = 'span.price-item.sales.strike-through,span.price-item.sales';
         $this->precio_tarjeta_field = 'span.price-item.hites-price';
-        $this->buy_url_field = 'a.link.product-name';
+        $this->buy_url_field = 'a.link.product-name--bundle';
         $this->image_url_field = 'img.tile-image';
         $this->webhook = config($webhook);
     }

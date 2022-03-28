@@ -17,6 +17,7 @@ class SearchOfertasHites implements ShouldQueue
         'tecnologia',
         'electrohogar',
         'telefonia',
+        'smartphones',
         'herramientas-menu',
     ];
 
@@ -24,6 +25,10 @@ class SearchOfertasHites implements ShouldQueue
         'dormitorio',
         'muebles',
         'decohogar',
+        'hogar',
+        'hombre',
+        'mujer',
+        'liquidacion',
     ];
 
     /**
