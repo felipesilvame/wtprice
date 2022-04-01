@@ -96,7 +96,7 @@ class RecursiveUrlParis implements ShouldQueue
         }
         try {
             $data = collect([]);
-            $items = $crawler->filter('li.js-product-position,div.onecolumn');
+            $items = $crawler->filter('li.flex-grid__item');
             $data = $data->merge($this->filterElements($items));
             // filtered is the products that has the % 
             $filtered = $data->filter(function($item, $key){

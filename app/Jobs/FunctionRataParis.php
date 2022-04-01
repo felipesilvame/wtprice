@@ -51,7 +51,7 @@ class FunctionRataParis implements ShouldQueue
         $this->protocol = 'https';
         $this->method = 'GET';
         $this->uri = 'www.paris.cl/';
-        $this->suffix = '?prefn1=seller&prefv1=Paris.cl&srule=price-low-to-high&start=0&sz=60&format=ajax';
+        $this->suffix = '?srule=price-low-to-high&start=0&sz=60&format=ajax';
         $this->page_start = 1;
         $this->total_pages = 1;
         $this->tienda = null;
@@ -83,7 +83,7 @@ class FunctionRataParis implements ShouldQueue
             $start = 0;
             $total_pages = 0;
             $pages = 1;
-            $epp = 90; // elements per page
+            $epp = 60; // elements per page
             usleep(1000000);
             try {
                 $url = $this->protocol.'://'.$this->uri;
@@ -102,7 +102,7 @@ class FunctionRataParis implements ShouldQueue
             }
             $data = collect([]);
             try {
-                $items = $crawler->filter('li.js-product-position,div.onecolumn');
+                $items = $crawler->filter('li.flex-grid__item');
             } catch (\Throwable $th) {
                 continue;
             }

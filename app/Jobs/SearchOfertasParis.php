@@ -37,6 +37,8 @@ class SearchOfertasParis implements ShouldQueue
         'decohogar/ofertas',
         'dormitorio',
         'muebles',
+        'hombre/moda',
+        'mujer/moda',
     ];
 
     /**
