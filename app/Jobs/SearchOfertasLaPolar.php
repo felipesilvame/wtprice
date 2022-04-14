@@ -20,7 +20,15 @@ class SearchOfertasLaPolar implements ShouldQueue
     private $polar_ropa_70 = [
         'dormitorio',
         'muebles',
-        'decohogar'
+        'decohogar',
+        'otras-lineas',
+        'deportes',
+    ];
+
+    private $polar_ropa_60 = [
+        'Hombre',
+        'Mujer',
+        'belleza',
     ];
 
     /**
@@ -42,5 +50,6 @@ class SearchOfertasLaPolar implements ShouldQueue
     {
         FunctionRataLaPolar::dispatch($this->polar_tecno_70, '70','rata.webhook_rata_tecno');
         FunctionRataLaPolar::dispatch($this->polar_ropa_70, '70','rata.webhook_rata_ropa');
+        FunctionRataLaPolar::dispatch($this->polar_ropa_60, '60','rata.webhook_rata_ropa');
     }
 }

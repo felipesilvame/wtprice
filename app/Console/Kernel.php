@@ -128,7 +128,7 @@ class Kernel extends ConsoleKernel
         // $schedule->job(new ProcessMonitorQueueWorker)->everyMinute()->withoutOverlapping()->runInBackground();
         // $schedule->job(new UpdateAllCatalogs)->everyFifteenMinutes()->runInBackground();
         $schedule->job(new SearchOfertasParis())->everyFiveMinutes()->runInBackground();
-        // $schedule->job(new SearchOfertasLaPolar())->everyMinute()->runInBackground();
+        $schedule->job(new SearchOfertasLaPolar())->cron('*/4 * * * *')->runInBackground();
         $schedule->job(new SearchOfertasHites())->cron('*/3 * * * *')->runInBackground();
 
         //$schedule->job(new SearchOfertasParis)->everyMinute()->runInBackground();
