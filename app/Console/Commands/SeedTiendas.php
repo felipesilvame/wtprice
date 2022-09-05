@@ -224,5 +224,21 @@ class SeedTiendas extends Command
           'campo_imagen_url' => 'html > body div.product-detail div.primary-carousel div.carousel-item img'
         ]
       );
+      \App\Models\Tienda::updateOrcreate(['nombre' => 'Entel'],
+        [
+          'protocolo' => 'https',
+          'prefix_api' => 'miportal.entel.cl/catalogo/celulares',
+          'suffix_api' => '?No=0&Nrpp=9990&Ns=listPrice|0&contentPath=/pages/storechilepp/catalogo/celulares&eIdx=6&sIdx=1&subPath=main[1]&format=json-rest',
+          'request_body_sku' => 'html > body .product-detail',
+          'campo_nombre_producto' => 'html > body div.product-detail .product-name',
+          'campo_precio_oferta' => 'html > body div.product-detail div.product-price .price .price-item.sales span.value',
+          'campo_precio_referencia' => 'html > body div.product-detail div.product-price .price .price-item.list span.value',
+          'campo_precio_tarjeta' => 'html > body div.product-detail div.product-price .price .price-item.hites-price span.value',
+          'url_prefix_compra' => 'https://www.entel.cl/',
+          'url_suffix_compra' => null,
+          'campo_slug_compra' => null,
+          'campo_imagen_url' => 'html > body div.product-detail div.primary-carousel div.carousel-item img'
+        ]
+      );
     }
 }

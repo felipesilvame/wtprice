@@ -15,6 +15,7 @@ use App\Jobs\FunctionRataParis;
 use App\Jobs\FunctionRataLaPolar;
 use App\Jobs\SearchOfertasLaPolar;
 use App\Jobs\SearchOfertasHites;
+use App\Jobs\FunctionRataEntel;
 
 /**
  * Class Kernel.
@@ -130,7 +131,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SearchOfertasParis())->everyFiveMinutes()->runInBackground();
         $schedule->job(new SearchOfertasLaPolar())->cron('*/4 * * * *')->runInBackground();
         $schedule->job(new SearchOfertasHites())->cron('*/3 * * * *')->runInBackground();
-
+        $schedule->job(new FunctionRataEntel('70', 'rata.webhook_rata_tecno'))->cron('*/2 * * * *')->runInBackground();
         //$schedule->job(new SearchOfertasParis)->everyMinute()->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('01:58')->runInBackground();
         //$schedule->job(new UpdateAllCatalogs)->dailyAt('08:08')->runInBackground();
